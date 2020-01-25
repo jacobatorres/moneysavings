@@ -12,14 +12,10 @@ class App extends Component {
 
   valuePlannedChanged = event => {
     this.setState({ planned: event.target.value });
-    console.log('VSC ey');
-    console.log(this.state);
   };
 
   valueSpentChanged = event => {
     this.setState({ spent: event.target.value });
-    console.log('VSP ey');
-    console.log(this.state);
   };
 
   render() {
