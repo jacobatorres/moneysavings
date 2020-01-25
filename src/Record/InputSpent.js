@@ -4,7 +4,7 @@ const RecordInputSpent = props => {
   return (
     <div>
       <p>Enter spent:</p>
-      <input type="text"></input>
+      <input type="text" value={props.value} onChange={props.changed}></input>
     </div>
   );
 };
