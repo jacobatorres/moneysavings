@@ -18,6 +18,10 @@ class App extends Component {
     this.setState({ spent: event.target.value });
   };
 
+  sayhi = event => {
+    console.log('hi!');
+  };
+
   render() {
     let saved_val =
       parseFloat(this.state.planned) >= parseFloat(this.state.spent)
@@ -40,6 +44,7 @@ class App extends Component {
         <p>
           Result: <strong>{result_saved}</strong>
         </p>
+        <button onClick={this.sayhi}>Save</button>
       </div>
     );
   }
