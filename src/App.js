@@ -18,7 +18,7 @@ class App extends Component {
     this.setState({ spent: event.target.value });
   };
 
-  sayhi = event => {
+  saveRecordtoDB = event => {
     console.log('hi!');
   };
 
@@ -44,7 +44,7 @@ class App extends Component {
         <p>
           Result: <strong>{result_saved}</strong>
         </p>
-        <button onClick={this.sayhi}>Save</button>
+        <button onClick={this.saveRecordtoDB}>Save</button>
       </div>
     );
   }
