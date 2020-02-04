@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const express = require('express');
+const bodyparser = require('body-parser');
 
 const Record = require('./Schemas/record');
 const API_PORT = 3001;
@@ -17,5 +18,15 @@ db.once('open', () => console.log('connected to the database'));
 
 // checks if connection with the database is successful
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+
+app.get('/sayHi', (req, res) => {
+  res.send('hey!');
+});
+
+app.post('/saveRecord', (req, res) => {
+  let data = new Record();
+  console.log('ya got me');
+  console.log(req.body);
+});
 
 app.listen(API_PORT, () => console.log(`LISTENING ON UHH PORT ${API_PORT}`));

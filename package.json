@@ -1,0 +1,23 @@
+{
+  "name": "moneysavings",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "concurrently \"cd backend && node server.js\" \"cd frontend && npm start\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jacobatorres/moneysavings.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jacobatorres/moneysavings/issues"
+  },
+  "homepage": "https://github.com/jacobatorres/moneysavings#readme",
+  "dependencies": {
+    "concurrently": "^5.1.0"
+  }
+}

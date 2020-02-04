@@ -20,7 +20,18 @@ class App extends Component {
   };
 
   saveRecordtoDB = event => {
-    console.log('hi!');
+    console.log('i made it here');
+    axios
+      .post('http://localhost:3001/saveRecord', {
+        plannedValue: this.state.planned,
+        spentValue: this.state.spent
+      })
+      .then(response => {
+        console.log(response);
+      })
+      .catch(error => {
+        console.log(error.response);
+      });
   };
 
   render() {
