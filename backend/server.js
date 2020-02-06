@@ -1,11 +1,14 @@
 const mongoose = require('mongoose');
 const express = require('express');
 const bodyparser = require('body-parser');
+const cors = require('cors');
 
 const Record = require('./Schemas/record');
 const API_PORT = 3001;
 app = express();
+app.use(bodyparser.json());
 
+app.use(cors());
 const dbRoute =
   'mongodb+srv://jacob:YySvDqpXIKqWLPBA@cluster0-zs4uc.mongodb.net/test?retryWrites=true&w=majority';
 
@@ -24,7 +27,9 @@ app.get('/sayHi', (req, res) => {
 });
 
 app.post('/saveRecord', (req, res) => {
-  let data = new Record();
+  console.log('entered post');
+  console.log(req.query);
+
   console.log('ya got me');
   console.log(req.body);
 });

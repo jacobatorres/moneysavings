@@ -20,18 +20,32 @@ class App extends Component {
   };
 
   saveRecordtoDB = event => {
+    event.preventDefault();
     console.log('i made it here');
+
+    // Send a POST request
+
+    console.log(this.state);
     axios
       .post('http://localhost:3001/saveRecord', {
-        plannedValue: this.state.planned,
-        spentValue: this.state.spent
+        planned: this.state.planned,
+        spent: this.state.spent
       })
       .then(response => {
+        console.log('tumama i guess');
         console.log(response);
       })
       .catch(error => {
+        console.log('nagkamali');
         console.log(error.response);
       });
+
+    // console.log(this.state);
+    // axios({
+    //   method: 'post',
+    //   url: 'http://localhost:3001/saveRecord',
+    //   data: this.state
+    // });
   };
 
   render() {
@@ -45,18 +59,20 @@ class App extends Component {
     return (
       <div>
         hi!
-        <RecordInputPlanned
-          changed={this.valuePlannedChanged}
-          value={this.state.planned}
-        />
-        <RecordInputSpent
-          changed={this.valueSpentChanged}
-          value={this.state.spent}
-        />
-        <p>
-          Result: <strong>{result_saved}</strong>
-        </p>
-        <button onClick={this.saveRecordtoDB}>Save</button>
+        <form onSubmit={this.saveRecordtoDB}>
+          <RecordInputPlanned
+            changed={this.valuePlannedChanged}
+            value={this.state.planned}
+          />
+          <RecordInputSpent
+            changed={this.valueSpentChanged}
+            value={this.state.spent}
+          />
+          <p>
+            Result: <strong>{result_saved}</strong>
+          </p>
+          <button type="Submit">Save</button>
+        </form>
       </div>
     );
   }
