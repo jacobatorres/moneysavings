@@ -32,6 +32,21 @@ app.post('/saveRecord', (req, res) => {
 
   console.log('ya got me');
   console.log(req.body);
+
+  const record_data = {
+    plannedValue: parseFloat(req.body.planned),
+    spentValue: parseFloat(req.body.spent)
+  };
+
+  // save the Record
+  Record.create(record_data, function(err, newRecord) {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log(newRecord);
+      res.redirect('/');
+    }
+  });
 });
 
 app.listen(API_PORT, () => console.log(`LISTENING ON UHH PORT ${API_PORT}`));
