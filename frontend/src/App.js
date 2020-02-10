@@ -56,6 +56,8 @@ class App extends Component {
 
     let result_saved = saved_val ? 'good!' : 'over the limit!';
 
+    let color_result = saved_val ? 'green' : 'red';
+
     return (
       <div>
         hi!
@@ -68,7 +70,7 @@ class App extends Component {
             changed={this.valueSpentChanged}
             value={this.state.spent}
           />
-          <p>
+          <p className={color_result}>
             Result: <strong>{result_saved}</strong>
           </p>
           <button type="Submit">Save</button>
