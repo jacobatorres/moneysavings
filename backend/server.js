@@ -29,24 +29,27 @@ app.get('/sayHi', (req, res) => {
 });
 
 app.post('/saveRecord', (req, res) => {
-  console.log('entered post');
-  console.log(req.query);
-
-  console.log('ya got me');
   console.log(req.body);
-
+  console.log('testing here');
   const day_data = {
-    plannedValue: parseFloat(req.body.planned),
-    spentValue: parseFloat(req.body.spent)
+    bill_value: parseFloat(req.body.bill_value),
+    bill_label: 'billlabel',
+    food_value: parseFloat(req.body.food_value),
+    food_label: 'billlabel',
+    tr_value: parseFloat(req.body.tr_value),
+    tr_label: 'billlabel',
+    leisure_value: parseFloat(req.body.leisure_value),
+    leisure_label: 'billlabel',
+    timestamp: Date.now()
   };
 
   // save the Record
-  Record.create(record_data, function(err, newRecord) {
+  Day.create(day_data, function(err, newRecord) {
     if (err) {
       console.log(err);
     } else {
       console.log(newRecord);
-      res.redirect('/');
+      // res.redirect('/');
     }
   });
 });
