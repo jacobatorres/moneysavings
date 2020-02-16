@@ -3,7 +3,7 @@ import React from 'react';
 const RecordInputPlanned = props => {
   return (
     <div>
-      <p>Enter planned savings:</p>
+      <p>{props.label}</p>
       <input type="text" value={props.value} onChange={props.changed}></input>
     </div>
   );

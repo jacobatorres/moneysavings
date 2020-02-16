@@ -7,16 +7,26 @@ import RecordInputSpent from './Record/InputSpent';
 
 class App extends Component {
   state = {
-    planned: 0,
-    spent: 0
+    bill_value: 0,
+    food_value: 0,
+    tr_value: 0,
+    leisure_value: 0
   };
 
-  valuePlannedChanged = event => {
-    this.setState({ planned: event.target.value });
+  valuePlannedChangedBill = event => {
+    this.setState({ bill_value: event.target.value });
   };
 
-  valueSpentChanged = event => {
-    this.setState({ spent: event.target.value });
+  valuePlannedChangedFood = event => {
+    this.setState({ food_value: event.target.value });
+  };
+
+  valuePlannedChangedTr = event => {
+    this.setState({ tr_value: event.target.value });
+  };
+
+  valuePlannedChangedLeisure = event => {
+    this.setState({ leisure_value: event.target.value });
   };
 
   saveRecordtoDB = event => {
@@ -28,8 +38,10 @@ class App extends Component {
     console.log(this.state);
     axios
       .post('http://localhost:3001/saveRecord', {
-        planned: this.state.planned,
-        spent: this.state.spent
+        bill_value: this.state.bill_value,
+        food_value: this.state.food_value,
+        tr_value: this.state.tr_value,
+        leisure_value: this.state.leisure_value
       })
       .then(response => {
         console.log('tumama i guess');
@@ -49,30 +61,43 @@ class App extends Component {
   };
 
   render() {
-    let saved_val =
-      parseFloat(this.state.planned) >= parseFloat(this.state.spent)
-        ? true
-        : false;
+    // let saved_val =
+    //   parseFloat(this.state.planned) >= parseFloat(this.state.spent)
+    //     ? true
+    //     : false;
 
-    let result_saved = saved_val ? 'good!' : 'over the limit!';
+    // let result_saved = saved_val ? 'good!' : 'over the limit!';
 
-    let color_result = saved_val ? 'green' : 'red';
+    // let color_result = saved_val ? 'green' : 'red';
 
     return (
       <div>
-        hi!
+        MoneySavingsApp
         <form onSubmit={this.saveRecordtoDB}>
-          <RecordInputPlanned
-            changed={this.valuePlannedChanged}
-            value={this.state.planned}
+          <RecordInputSpent
+            label="Bills"
+            changed={this.valuePlannedChangedBill}
+            value={this.state.bill_value}
           />
           <RecordInputSpent
-            changed={this.valueSpentChanged}
-            value={this.state.spent}
+            label="Food"
+            changed={this.valuePlannedChangedFood}
+            value={this.state.food_value}
           />
-          <p className={color_result}>
+          <RecordInputSpent
+            label="Transportation"
+            changed={this.valuePlannedChangedTr}
+            value={this.state.tr_value}
+          />
+
+          <RecordInputSpent
+            label="Leisure"
+            changed={this.valuePlannedChangedLeisure}
+            value={this.state.leisure_value}
+          />
+          {/* <p className={color_result}>
             Result: <strong>{result_saved}</strong>
-          </p>
+          </p> */}
           <button type="Submit">Save</button>
         </form>
       </div>

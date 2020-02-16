@@ -35,7 +35,7 @@ app.post('/saveRecord', (req, res) => {
   console.log('ya got me');
   console.log(req.body);
 
-  const record_data = {
+  const day_data = {
     plannedValue: parseFloat(req.body.planned),
     spentValue: parseFloat(req.body.spent)
   };
