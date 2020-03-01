@@ -4,7 +4,6 @@ import './App.css';
 
 import RecordInputPlanned from './Record/InputPlanned';
 import RecordInputSpent from './Record/InputSpent';
-import flatpickr from 'flatpickr';
 
 class App extends Component {
   state = {
@@ -15,18 +14,8 @@ class App extends Component {
     tr_value: 0,
     tr_label: 'transportation label',
     leisure_value: 0,
-    leisure_label: 'leisure label',
-    datePicker: React.createRef()
+    leisure_label: 'leisure label'
   };
-  onChange(selectedDates, dateStr, instance) {
-    console.log(selectedDates);
-  }
-
-  componentDidMount() {
-    flatpickr(this.state.datePicker, {
-      onChange: this.onChange
-    });
-  }
 
   valuePlannedChangedBill = event => {
     this.setState({ bill_value: event.target.value });
@@ -74,8 +63,7 @@ class App extends Component {
         bill_label: this.state.bill_value,
         food_label: this.state.food_value,
         tr_label: this.state.tr_value,
-        leisure_label: this.state.leisure_value,
-        timestamp: this.state.datePicker
+        leisure_label: this.state.leisure_value
       })
       .then(response => {
         console.log('tumama i guess');
@@ -151,11 +139,6 @@ class App extends Component {
           {/* <p className={color_result}>
             Result: <strong>{result_saved}</strong>
           </p> */}
-          <input
-            type="date"
-            ref={this.state.datePicker}
-            value={this.state.datePicker}
-          />
 
           <button type="Submit">Save</button>
         </form>
