@@ -74,7 +74,8 @@ class App extends Component {
         bill_label: this.state.bill_value,
         food_label: this.state.food_value,
         tr_label: this.state.tr_value,
-        leisure_label: this.state.leisure_value
+        leisure_label: this.state.leisure_value,
+        timestamp: this.state.datePicker
       })
       .then(response => {
         console.log('tumama i guess');
@@ -150,7 +151,11 @@ class App extends Component {
           {/* <p className={color_result}>
             Result: <strong>{result_saved}</strong>
           </p> */}
-          <input type="date" ref={this.state.datePicker} />
+          <input
+            type="date"
+            ref={this.state.datePicker}
+            value={this.state.datePicker}
+          />
 
           <button type="Submit">Save</button>
         </form>
