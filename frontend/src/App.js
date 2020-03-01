@@ -4,6 +4,8 @@ import './App.css';
 
 import RecordInputPlanned from './Record/InputPlanned';
 import RecordInputSpent from './Record/InputSpent';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 class App extends Component {
   state = {
@@ -14,13 +16,16 @@ class App extends Component {
     tr_value: 0,
     tr_label: 'transportation label',
     leisure_value: 0,
-    leisure_label: 'leisure label'
+    leisure_label: 'leisure label',
+    startDate: new Date()
   };
 
-  onchange = newdate => {
-    this.setState({ date: newdate });
+  handleChange = date => {
+    console.log(date);
+    this.setState({
+      startDate: date
+    });
   };
-
   valuePlannedChangedBill = event => {
     this.setState({ bill_value: event.target.value });
   };
@@ -143,6 +148,11 @@ class App extends Component {
           {/* <p className={color_result}>
             Result: <strong>{result_saved}</strong>
           </p> */}
+          <DatePicker
+            selected={this.state.startDate}
+            onChange={this.handleChange}
+            placeholderText="mm/dd/yyyy"
+          />
 
           <button type="Submit">Save</button>
         </form>
