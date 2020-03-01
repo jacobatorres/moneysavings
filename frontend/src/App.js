@@ -17,6 +17,10 @@ class App extends Component {
     leisure_label: 'leisure label'
   };
 
+  onchange = newdate => {
+    this.setState({ date: newdate });
+  };
+
   valuePlannedChangedBill = event => {
     this.setState({ bill_value: event.target.value });
   };
