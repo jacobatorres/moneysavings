@@ -72,7 +72,8 @@ class App extends Component {
         bill_label: this.state.bill_value,
         food_label: this.state.food_value,
         tr_label: this.state.tr_value,
-        leisure_label: this.state.leisure_value
+        leisure_label: this.state.leisure_value,
+        timestamp: this.state.startDate
       })
       .then(response => {
         console.log('tumama i guess');
@@ -151,7 +152,6 @@ class App extends Component {
           <DatePicker
             selected={this.state.startDate}
             onChange={this.handleChange}
-            placeholderText="mm/dd/yyyy"
           />
 
           <button type="Submit">Save</button>

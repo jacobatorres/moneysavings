@@ -40,7 +40,7 @@ app.post('/saveRecord', (req, res) => {
     tr_label: 'billlabel',
     leisure_value: parseFloat(req.body.leisure_value),
     leisure_label: 'billlabel',
-    timestamp: Date.now()
+    timestamp: req.body.timestamp
   };
 
   // save the Record
