@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const express = require('express');
 const bodyparser = require('body-parser');
 const cors = require('cors');
+const moment = require('moment');
 
 const Record = require('./Schemas/record');
 const Day = require('./Schemas/day');
@@ -30,24 +31,35 @@ app.get('/sayHi', (req, res) => {
 
 app.post('/saveRecord', (req, res) => {
   console.log(req.body);
-  console.log('testing here');
+  const time_dmy = moment(
+    req.body.timestamp,
+    moment.HTML5_FMT.DATETIME_LOCAL_MS
+  );
+
+  const month = time_dmy.format('MM') - 1; // minus 1 because month is 0 based
+  const day = time_dmy.format('DD') - 1; // minus 1 because for some reason it adds one.
+  const year = time_dmy.format('YYYY');
+
   const day_data = {
     bill_value: parseFloat(req.body.bill_value),
-    bill_label: 'billlabel',
+    bill_label: req.body.bill_label,
     food_value: parseFloat(req.body.food_value),
-    food_label: 'billlabel',
+    food_label: req.body.food_label,
     tr_value: parseFloat(req.body.tr_value),
-    tr_label: 'billlabel',
+    tr_label: req.body.tr_label,
     leisure_value: parseFloat(req.body.leisure_value),
-    leisure_label: 'billlabel',
-    timestamp: req.body.timestamp
+    leisure_label: req.body.leisure_label,
+    timestamp: new Date(year, month, day)
   };
+  console.log('to save');
+  console.log(day_data);
 
   // save the Record
   Day.create(day_data, function(err, newRecord) {
     if (err) {
       console.log(err);
     } else {
+      console.log('saved properly');
       console.log(newRecord);
       // res.redirect('/');
     }

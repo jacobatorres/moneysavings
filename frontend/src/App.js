@@ -69,10 +69,10 @@ class App extends Component {
         tr_value: this.state.tr_value,
         leisure_value: this.state.leisure_value,
 
-        bill_label: this.state.bill_value,
-        food_label: this.state.food_value,
-        tr_label: this.state.tr_value,
-        leisure_label: this.state.leisure_value,
+        bill_label: this.state.bill_label,
+        food_label: this.state.food_label,
+        tr_label: this.state.tr_label,
+        leisure_label: this.state.leisure_label,
         timestamp: this.state.startDate
       })
       .then(response => {
@@ -143,7 +143,7 @@ class App extends Component {
           />
           <RecordInputSpent
             label="Leisure Label"
-            changed={this.valuePlannedChangedBill}
+            changed={this.labelPlannedChangedleisure}
             value={this.state.leisure_label}
           />
           {/* <p className={color_result}>
