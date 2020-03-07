@@ -106,58 +106,59 @@ class App extends Component {
     return (
       <div>
         <Toolbar />
-        MoneySavingsApp
-        <form onSubmit={this.saveRecordtoDB}>
-          <RecordInputSpent
-            label="Bills"
-            changed={this.valuePlannedChangedBill}
-            value={this.state.bill_value}
-          />
-          <RecordInputSpent
-            label="Bills Label"
-            changed={this.labelPlannedChangedBill}
-            value={this.state.bill_label}
-          />
-          <RecordInputSpent
-            label="Food"
-            changed={this.valuePlannedChangedFood}
-            value={this.state.food_value}
-          />
-          <RecordInputSpent
-            label="Food Label"
-            changed={this.labelPlannedChangedFood}
-            value={this.state.food_label}
-          />
-          <RecordInputSpent
-            label="Transportation"
-            changed={this.valuePlannedChangedTr}
-            value={this.state.tr_value}
-          />
-          <RecordInputSpent
-            label="Transportation Label"
-            changed={this.labelPlannedChangedTr}
-            value={this.state.tr_label}
-          />
-          <RecordInputSpent
-            label="Leisure"
-            changed={this.valuePlannedChangedLeisure}
-            value={this.state.leisure_value}
-          />
-          <RecordInputSpent
-            label="Leisure Label"
-            changed={this.labelPlannedChangedleisure}
-            value={this.state.leisure_label}
-          />
-          {/* <p className={color_result}>
+        <main style={{ marginTop: '64px' }}>
+          <form onSubmit={this.saveRecordtoDB}>
+            <RecordInputSpent
+              label="Bills"
+              changed={this.valuePlannedChangedBill}
+              value={this.state.bill_value}
+            />
+            <RecordInputSpent
+              label="Bills Label"
+              changed={this.labelPlannedChangedBill}
+              value={this.state.bill_label}
+            />
+            <RecordInputSpent
+              label="Food"
+              changed={this.valuePlannedChangedFood}
+              value={this.state.food_value}
+            />
+            <RecordInputSpent
+              label="Food Label"
+              changed={this.labelPlannedChangedFood}
+              value={this.state.food_label}
+            />
+            <RecordInputSpent
+              label="Transportation"
+              changed={this.valuePlannedChangedTr}
+              value={this.state.tr_value}
+            />
+            <RecordInputSpent
+              label="Transportation Label"
+              changed={this.labelPlannedChangedTr}
+              value={this.state.tr_label}
+            />
+            <RecordInputSpent
+              label="Leisure"
+              changed={this.valuePlannedChangedLeisure}
+              value={this.state.leisure_value}
+            />
+            <RecordInputSpent
+              label="Leisure Label"
+              changed={this.labelPlannedChangedleisure}
+              value={this.state.leisure_label}
+            />
+            {/* <p className={color_result}>
             Result: <strong>{result_saved}</strong>
           </p> */}
-          <DatePicker
-            selected={this.state.startDate}
-            onChange={this.handleChange}
-          />
+            <DatePicker
+              selected={this.state.startDate}
+              onChange={this.handleChange}
+            />
 
-          <button type="Submit">Save</button>
-        </form>
+            <button type="Submit">Save</button>
+          </form>
+        </main>
       </div>
     );
   }
