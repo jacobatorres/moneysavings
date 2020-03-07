@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import './App.css';
+
+import Toolbar from './components/Toolbar/Toolbar';
 
 import RecordInputPlanned from './Record/InputPlanned';
 import RecordInputSpent from './Record/InputSpent';
@@ -104,6 +105,7 @@ class App extends Component {
 
     return (
       <div>
+        <Toolbar />
         MoneySavingsApp
         <form onSubmit={this.saveRecordtoDB}>
           <RecordInputSpent
