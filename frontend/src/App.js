@@ -21,7 +21,15 @@ class App extends Component {
     tr_label: 'transportation label',
     leisure_value: 0,
     leisure_label: 'leisure label',
-    startDate: new Date()
+    startDate: new Date(),
+
+    isSideDrawerOpen: false
+  };
+
+  drawerToggleClickHandler = () => {
+    this.setState(prevState => {
+      return { isSideDrawerOpen: !prevState.isSideDrawerOpen };
+    });
   };
 
   handleChange = date => {
@@ -106,11 +114,21 @@ class App extends Component {
 
     // let color_result = saved_val ? 'green' : 'red';
 
+    let sideDrawer;
+    let backdrop;
+
+    if (this.state.isSideDrawerOpen) {
+      sideDrawer = <SideDrawer />;
+      backdrop = <Backdrop />;
+    }
+
     return (
       <div style={{ height: '100%' }}>
-        <Toolbar />
-        <SideDrawer />
-        <Backdrop />
+        <Toolbar changesidedrawerstate={this.drawerToggleClickHandler} />
+
+        {sideDrawer}
+        {backdrop}
+
         <main style={{ marginTop: '64px' }}>
           <form onSubmit={this.saveRecordtoDB}>
             <RecordInputSpent
