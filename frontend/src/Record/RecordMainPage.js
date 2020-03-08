@@ -1,26 +1,11 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
-import Toolbar from './components/Toolbar/Toolbar';
-
-import SideDrawer from './components/SideDrawer/SideDrawer';
-
-import Backdrop from './components/Backdrop/Backdrop';
-
+import RecordInputSpent from './InputSpent';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
-import './App.css';
-
-// import the other files
-import RecordMainPage from './Record/RecordMainPage';
-
-import Plan from './Plan/Plan';
-import View from './View/View';
-
-import { BrowserRouter as Router, Route } from 'react-router-dom';
-
-class App extends Component {
+class RecordMainPage extends Component {
   state = {
     bill_value: 0,
     bill_label: '',
@@ -99,7 +84,6 @@ class App extends Component {
 
   saveRecordtoDB = event => {
     event.preventDefault();
-    console.log('i made it here');
 
     // Send a POST request
 
@@ -135,53 +119,67 @@ class App extends Component {
   };
 
   render() {
-    // let saved_val =
-    //   parseFloat(this.state.planned) >= parseFloat(this.state.spent)
-    //     ? true
-    //     : false;
-
-    // let result_saved = saved_val ? 'good!' : 'over the limit!';
-
-    // let color_result = saved_val ? 'green' : 'red';
-
-    let sideDrawer;
-    let backdrop;
-
-    if (this.state.isSideDrawerOpen) {
-      backdrop = <Backdrop click={this.backdropClickHandler} />;
-    }
-
     return (
-      <div className="container">
-        <Toolbar changesidedrawerstate={this.drawerToggleClickHandler} />
-        <SideDrawer show={this.state.isSideDrawerOpen} />
-        {backdrop}
+      <main style={{ marginTop: '100px' }}>
+        <form onSubmit={this.saveRecordtoDB} id="textalign">
+          <div id="textalign">
+            <p>Date</p>
+            <DatePicker
+              selected={this.state.startDate}
+              onChange={this.handleChange}
+            />
+          </div>
 
-        <main style={{ marginTop: '100px' }}>
-          {/* <Plan />
-          <View /> */}
-
-          <Router>
-            <div id="containerthree">
-              <a href="/plan">
-                <button id="planbutton">Plan</button>
-              </a>
-              <a href="/record">
-                <button id="recordbutton">Record</button>
-              </a>
-              <a href="/view">
-                <button id="viewbutton">View</button>
-              </a>
-            </div>
-
-            <Route path="/record" component={RecordMainPage} />
-            <Route path="/plan" component={Plan} />
-            <Route path="/view" component={View} />
-          </Router>
-        </main>
-      </div>
+          <RecordInputSpent
+            label="Bills"
+            changed={this.valuePlannedChangedBill}
+            value={this.state.bill_value}
+          />
+          <RecordInputSpent
+            hasbeentoggled={this.state.toggled_bill_value}
+            label="Bills Label"
+            changed={this.labelPlannedChangedBill}
+            value={this.state.bill_label}
+          />
+          <RecordInputSpent
+            label="Food"
+            changed={this.valuePlannedChangedFood}
+            value={this.state.food_value}
+          />
+          <RecordInputSpent
+            hasbeentoggled={this.state.toggled_food_value}
+            label="Food Label"
+            changed={this.labelPlannedChangedFood}
+            value={this.state.food_label}
+          />
+          <RecordInputSpent
+            label="Transportation"
+            changed={this.valuePlannedChangedTr}
+            value={this.state.tr_value}
+          />
+          <RecordInputSpent
+            hasbeentoggled={this.state.toggled_tr_value}
+            label="Transportation Label"
+            changed={this.labelPlannedChangedTr}
+            value={this.state.tr_label}
+          />
+          <RecordInputSpent
+            label="Leisure"
+            changed={this.valuePlannedChangedLeisure}
+            value={this.state.leisure_value}
+          />
+          <RecordInputSpent
+            hasbeentoggled={this.state.toggled_leisure_value}
+            label="Leisure Label"
+            changed={this.labelPlannedChangedleisure}
+            value={this.state.leisure_label}
+          />
+          <p style={{ marginTop: '40px' }}></p>
+          <button type="Submit">Save</button>
+        </form>
+      </main>
     );
   }
 }
 
-export default App;
+export default RecordMainPage;
