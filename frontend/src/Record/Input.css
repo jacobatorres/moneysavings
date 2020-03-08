@@ -8,3 +8,7 @@
   display: block;
   margin: 0 auto;
 }
+
+.turn_invisible_label {
+  display: none;
+}

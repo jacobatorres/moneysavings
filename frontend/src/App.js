@@ -15,14 +15,19 @@ import './App.css';
 class App extends Component {
   state = {
     bill_value: 0,
-    bill_label: 'bill label',
+    bill_label: '',
     food_value: 0,
-    food_label: 'food label',
+    food_label: '',
     tr_value: 0,
-    tr_label: 'transportation label',
+    tr_label: '',
     leisure_value: 0,
-    leisure_label: 'leisure label',
+    leisure_label: '',
     startDate: new Date(),
+
+    toggled_bill_value: false,
+    toggled_food_value: false,
+    toggled_tr_value: false,
+    toggled_leisure_value: false,
 
     isSideDrawerOpen: false
   };
@@ -44,19 +49,31 @@ class App extends Component {
     });
   };
   valuePlannedChangedBill = event => {
-    this.setState({ bill_value: event.target.value });
+    this.setState({
+      bill_value: event.target.value,
+      toggled_bill_value: true
+    });
   };
 
   valuePlannedChangedFood = event => {
-    this.setState({ food_value: event.target.value });
+    this.setState({
+      food_value: event.target.value,
+      toggled_food_value: true
+    });
   };
 
   valuePlannedChangedTr = event => {
-    this.setState({ tr_value: event.target.value });
+    this.setState({
+      tr_value: event.target.value,
+      toggled_tr_value: true
+    });
   };
 
   valuePlannedChangedLeisure = event => {
-    this.setState({ leisure_value: event.target.value });
+    this.setState({
+      leisure_value: event.target.value,
+      toggled_leisure_value: true
+    });
   };
 
   labelPlannedChangedBill = event => {
@@ -135,17 +152,26 @@ class App extends Component {
         <main style={{ marginTop: '100px' }}>
           <div id="containerthree">
             <button id="planbutton">Plan</button>
-            <button id="viewbutton">View</button>
             <button id="recordbutton">Record</button>
+            <button id="viewbutton">View</button>
           </div>
 
           <form onSubmit={this.saveRecordtoDB} id="textalign">
+            <div id="textalign">
+              <p>Date</p>
+              <DatePicker
+                selected={this.state.startDate}
+                onChange={this.handleChange}
+              />
+            </div>
+
             <RecordInputSpent
               label="Bills"
               changed={this.valuePlannedChangedBill}
               value={this.state.bill_value}
             />
             <RecordInputSpent
+              hasbeentoggled={this.state.toggled_bill_value}
               label="Bills Label"
               changed={this.labelPlannedChangedBill}
               value={this.state.bill_label}
@@ -156,6 +182,7 @@ class App extends Component {
               value={this.state.food_value}
             />
             <RecordInputSpent
+              hasbeentoggled={this.state.toggled_food_value}
               label="Food Label"
               changed={this.labelPlannedChangedFood}
               value={this.state.food_label}
@@ -166,6 +193,7 @@ class App extends Component {
               value={this.state.tr_value}
             />
             <RecordInputSpent
+              hasbeentoggled={this.state.toggled_tr_value}
               label="Transportation Label"
               changed={this.labelPlannedChangedTr}
               value={this.state.tr_label}
@@ -176,17 +204,12 @@ class App extends Component {
               value={this.state.leisure_value}
             />
             <RecordInputSpent
+              hasbeentoggled={this.state.toggled_leisure_value}
               label="Leisure Label"
               changed={this.labelPlannedChangedleisure}
               value={this.state.leisure_label}
             />
-            <p id="textalign">
-              <p>Date</p>
-              <DatePicker
-                selected={this.state.startDate}
-                onChange={this.handleChange}
-              />
-            </p>
+            <p style={{ marginTop: '40px' }}></p>
             <button type="Submit">Save</button>
           </form>
         </main>

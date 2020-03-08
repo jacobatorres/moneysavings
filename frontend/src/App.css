@@ -17,7 +17,7 @@
   text-align: center;
 }
 
-#viewbutton {
+#recordbutton {
   font-family: -apple-system, system-ui, BlinkMacSystemFont, 'Segoe UI', Roboto,
     'Helvetica Neue', Arial, sans-serif;
   color: black;
@@ -25,7 +25,7 @@
   width: 34%;
 }
 
-#recordbutton {
+#viewbutton {
   border-radius: 0px 5px 5px 0px;
   font-family: -apple-system, system-ui, BlinkMacSystemFont, 'Segoe UI', Roboto,
     'Helvetica Neue', Arial, sans-serif;
