@@ -32,6 +32,10 @@ class App extends Component {
     });
   };
 
+  backdropClickHandler = () => {
+    this.setState({ isSideDrawerOpen: false });
+  };
+
   handleChange = date => {
     console.log(date);
     this.setState({
@@ -119,7 +123,7 @@ class App extends Component {
 
     if (this.state.isSideDrawerOpen) {
       sideDrawer = <SideDrawer />;
-      backdrop = <Backdrop />;
+      backdrop = <Backdrop click={this.backdropClickHandler} />;
     }
 
     return (
