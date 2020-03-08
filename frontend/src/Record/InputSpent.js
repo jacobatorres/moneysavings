@@ -1,12 +1,11 @@
 import React from 'react';
 
+import './Input.css';
 const RecordInputSpent = props => {
   return (
-    <div>
-      <p>
-        {props.label}:
-        <input type="text" value={props.value} onChange={props.changed}></input>
-      </p>
+    <div className="font">
+      <p> {props.label}</p>
+      <input type="text" value={props.value} onChange={props.changed}></input>
     </div>
   );
 };

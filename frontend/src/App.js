@@ -11,6 +11,7 @@ import RecordInputSpent from './Record/InputSpent';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
+import './App.css';
 class App extends Component {
   state = {
     bill_value: 0,
@@ -126,14 +127,19 @@ class App extends Component {
     }
 
     return (
-      <div style={{ height: '100%' }}>
+      <div className="container">
         <Toolbar changesidedrawerstate={this.drawerToggleClickHandler} />
-
         <SideDrawer show={this.state.isSideDrawerOpen} />
         {backdrop}
 
-        <main style={{ marginTop: '64px' }}>
-          <form onSubmit={this.saveRecordtoDB}>
+        <main style={{ marginTop: '100px' }}>
+          <div id="containerthree">
+            <button id="planbutton">Plan</button>
+            <button id="viewbutton">View</button>
+            <button id="recordbutton">Record</button>
+          </div>
+
+          <form onSubmit={this.saveRecordtoDB} id="textalign">
             <RecordInputSpent
               label="Bills"
               changed={this.valuePlannedChangedBill}
@@ -174,14 +180,13 @@ class App extends Component {
               changed={this.labelPlannedChangedleisure}
               value={this.state.leisure_label}
             />
-            {/* <p className={color_result}>
-            Result: <strong>{result_saved}</strong>
-          </p> */}
-            <DatePicker
-              selected={this.state.startDate}
-              onChange={this.handleChange}
-            />
-
+            <p id="textalign">
+              <p>Date</p>
+              <DatePicker
+                selected={this.state.startDate}
+                onChange={this.handleChange}
+              />
+            </p>
             <button type="Submit">Save</button>
           </form>
         </main>
