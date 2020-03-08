@@ -3,6 +3,7 @@ import axios from 'axios';
 
 import Toolbar from './components/Toolbar/Toolbar';
 
+import SideDrawer from './components/SideDrawer/SideDrawer';
 import RecordInputPlanned from './Record/InputPlanned';
 import RecordInputSpent from './Record/InputSpent';
 import DatePicker from 'react-datepicker';
@@ -104,8 +105,9 @@ class App extends Component {
     // let color_result = saved_val ? 'green' : 'red';
 
     return (
-      <div>
+      <div style={{ height: '100%' }}>
         <Toolbar />
+        <SideDrawer />
         <main style={{ marginTop: '64px' }}>
           <form onSubmit={this.saveRecordtoDB}>
             <RecordInputSpent
