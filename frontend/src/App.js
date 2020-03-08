@@ -4,6 +4,8 @@ import axios from 'axios';
 import Toolbar from './components/Toolbar/Toolbar';
 
 import SideDrawer from './components/SideDrawer/SideDrawer';
+
+import Backdrop from './components/Backdrop/Backdrop';
 import RecordInputPlanned from './Record/InputPlanned';
 import RecordInputSpent from './Record/InputSpent';
 import DatePicker from 'react-datepicker';
@@ -108,6 +110,7 @@ class App extends Component {
       <div style={{ height: '100%' }}>
         <Toolbar />
         <SideDrawer />
+        <Backdrop />
         <main style={{ marginTop: '64px' }}>
           <form onSubmit={this.saveRecordtoDB}>
             <RecordInputSpent
