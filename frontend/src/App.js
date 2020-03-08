@@ -18,7 +18,7 @@ import RecordMainPage from './Record/RecordMainPage';
 import Plan from './Plan/Plan';
 import View from './View/View';
 
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 
 class App extends Component {
   state = {
@@ -152,34 +152,35 @@ class App extends Component {
     }
 
     return (
-      <div className="container">
-        <Toolbar changesidedrawerstate={this.drawerToggleClickHandler} />
-        <SideDrawer show={this.state.isSideDrawerOpen} />
-        {backdrop}
+      <Router>
+        <div className="container">
+          <Toolbar changesidedrawerstate={this.drawerToggleClickHandler} />
+          <SideDrawer show={this.state.isSideDrawerOpen} />
+          {backdrop}
 
-        <main style={{ marginTop: '100px' }}>
-          {/* <Plan />
+          <main style={{ marginTop: '100px' }}>
+            {/* <Plan />
           <View /> */}
 
-          <Router>
             <div id="containerthree">
-              <a href="/plan">
+              <Link to="/plan">
                 <button id="planbutton">Plan</button>
-              </a>
-              <a href="/record">
+              </Link>
+              <Link to="/record">
                 <button id="recordbutton">Record</button>
-              </a>
-              <a href="/view">
+              </Link>
+
+              <Link to="/view">
                 <button id="viewbutton">View</button>
-              </a>
+              </Link>
             </div>
 
             <Route path="/record" component={RecordMainPage} />
             <Route path="/plan" component={Plan} />
             <Route path="/view" component={View} />
-          </Router>
-        </main>
-      </div>
+          </main>
+        </div>
+      </Router>
     );
   }
 }
