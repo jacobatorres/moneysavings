@@ -6,7 +6,7 @@ import './Toolbar.css';
 const toolbar = props => (
   <header className="toolbar">
     <nav className="toolbar_nav">
-      <div>
+      <div className="toolbar-togglebutton">
         <DrawerToggleButton click={props.changesidedrawerstate} />
       </div>
       <div className="toolbar_logo">

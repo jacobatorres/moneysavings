@@ -122,7 +122,6 @@ class App extends Component {
     let backdrop;
 
     if (this.state.isSideDrawerOpen) {
-      sideDrawer = <SideDrawer />;
       backdrop = <Backdrop click={this.backdropClickHandler} />;
     }
 
@@ -130,7 +129,7 @@ class App extends Component {
       <div style={{ height: '100%' }}>
         <Toolbar changesidedrawerstate={this.drawerToggleClickHandler} />
 
-        {sideDrawer}
+        <SideDrawer show={this.state.isSideDrawerOpen} />
         {backdrop}
 
         <main style={{ marginTop: '64px' }}>

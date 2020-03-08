@@ -48,3 +48,19 @@
 .space-right {
   flex: 1;
 }
+
+@media (max-width: 768px) {
+  .toolbar_navitems {
+    display: none;
+  }
+}
+
+@media (min-width: 769px) {
+  .toolbar-togglebutton {
+    display: none;
+  }
+
+  .toolbar_logo {
+    margin-left: 0;
+  }
+}
