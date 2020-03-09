@@ -41,6 +41,34 @@ class Plan extends Component {
     });
   };
 
+  doesMonthPlanExist = event => {
+    event.preventDefault();
+
+    const month_number_rn = new Date().getMonth() + 1;
+    const year_number_rn = new Date().getFullYear();
+
+    console.log(month_number_rn);
+    console.log(year_number_rn);
+    // Optionally the request above could also be done as
+    axios
+      .get('/getMonthPlan', {
+        params: {
+          month_number: month_number_rn,
+          year_number: year_number_rn
+        }
+      })
+      .then(function(response) {
+        console.log(response);
+      })
+      .catch(function(error) {
+        console.log(error);
+      })
+      .then(function() {
+        // always executed
+        console.log('dont 4get to like and subscribe');
+      });
+  };
+
   saveMonthPlantoDB = event => {
     event.preventDefault();
 

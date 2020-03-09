@@ -16,7 +16,8 @@ const daySchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Month'
     },
-    month_year_label: String
+    month_number: Number,
+    year_number: Number
   }
 });
 

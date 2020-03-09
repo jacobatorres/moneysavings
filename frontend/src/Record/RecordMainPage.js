@@ -118,7 +118,52 @@ class RecordMainPage extends Component {
     // });
   };
 
+  componentDidMount() {
+    const month_number_rn = new Date().getMonth() + 1;
+    const year_number_rn = new Date().getFullYear();
+
+    console.log(month_number_rn);
+    console.log(year_number_rn);
+
+    const get_url_link = 'http://localhost:3001/getMonthPlan';
+
+    console.log(get_url_link);
+    // Optionally the request above could also be done as
+    // Make a request for a user with a given ID
+    axios
+      .get('http://localhost:3001/getMonthPlan', {
+        month_number: month_number_rn,
+        year_number: year_number_rn
+      })
+      .then(response => {
+        console.log('tumama i guess');
+        console.log(response);
+      })
+      .catch(error => {
+        console.log('nagkamali');
+        console.log(error.response);
+      });
+
+    console.log('i am trued;');
+    // // Make a request for a user with a given ID
+    // axios
+    //   .get('/user?ID=12345')
+    //   .then(function(response) {
+    //     // handle success
+    //     console.log(response);
+    //   })
+    //   .catch(function(error) {
+    //     // handle error
+    //     console.log(error);
+    //   })
+    //   .then(function() {
+    //     // always executed
+    //   });
+  }
+
   render() {
+    // check if month-plan exists
+
     return (
       <main style={{ marginTop: '100px' }}>
         <form onSubmit={this.saveRecordtoDB} id="textalign">

@@ -29,6 +29,16 @@ app.get('/sayHi', (req, res) => {
   res.send('hey!');
 });
 
+app.get('/getMonthPlan', (req, res) => {
+  console.log('I made it here na');
+  const month_number_rn = new Date().getMonth() + 1;
+  const year_number_rn = new Date().getFullYear();
+
+  console.log(month_number_rn);
+  console.log(year_number_rn);
+  res.send();
+});
+
 app.post('/saveRecord', (req, res) => {
   console.log(req.body);
   const time_dmy = moment(
