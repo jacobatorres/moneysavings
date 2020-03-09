@@ -66,4 +66,41 @@ app.post('/saveRecord', (req, res) => {
   });
 });
 
+app.post('/saveMonthPlan', (req, res) => {
+  console.log('got here month');
+  console.log(req.body);
+  const time_dmy = moment(
+    req.body.timestamp,
+    moment.HTML5_FMT.DATETIME_LOCAL_MS
+  );
+
+  const month = time_dmy.format('MM') - 1;
+  const day = time_dmy.format('DD');
+  const year = time_dmy.format('YYYY');
+
+  const month_data = {
+    total_bill: parseFloat(req.body.total_bill),
+    total_food: parseFloat(req.body.total_food),
+    total_tr: parseFloat(req.body.total_tr),
+    total_leisure: parseFloat(req.body.total_leisure),
+    month_number: parseFloat(req.body.month_number) + 1,
+    year_number: parseFloat(req.body.year_number),
+    timestamp: new Date(year, month, day)
+  };
+
+  console.log('MONTH DATA:');
+  console.log(month_data);
+
+  // save the Record
+  Month.create(month_data, function(err, newMonth) {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log('saved properly (month)');
+      console.log(newMonth);
+      // res.redirenewMonthct('/');
+    }
+  });
+});
+
 app.listen(API_PORT, () => console.log(`LISTENING ON UHH PORT ${API_PORT}`));

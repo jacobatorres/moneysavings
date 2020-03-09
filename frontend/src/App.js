@@ -174,10 +174,10 @@ class App extends Component {
                 <button id="viewbutton">View</button>
               </Link>
             </div>
-
             <Route path="/record" component={RecordMainPage} />
             <Route path="/plan" component={Plan} />
             <Route path="/view" component={View} />
+            <Route path="/" exact component={RecordMainPage} />
           </main>
         </div>
       </Router>
