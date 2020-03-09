@@ -9,7 +9,15 @@ const daySchema = new mongoose.Schema({
   tr_label: String,
   leisure_value: Number,
   leisure_label: String,
-  timestamp: Date
+  timestamp: Date,
+
+  month_parent: {
+    id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Month'
+    },
+    month_year_label: String
+  }
 });
 
 console.log('This is at Day Schema');

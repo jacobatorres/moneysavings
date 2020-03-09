@@ -4,8 +4,8 @@ const bodyparser = require('body-parser');
 const cors = require('cors');
 const moment = require('moment');
 
-const Record = require('./Schemas/record');
 const Day = require('./Schemas/day');
+const Month = require('./Schemas/month');
 
 const API_PORT = 3001;
 app = express();
