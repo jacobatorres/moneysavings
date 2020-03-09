@@ -129,6 +129,7 @@ class RecordMainPage extends Component {
               onChange={this.handleChange}
             />
           </div>
+          <p style={{ marginTop: '50px' }}></p>
 
           <RecordInputSpent
             label="Bills"

@@ -162,7 +162,7 @@ class App extends Component {
             {/* <Plan />
           <View /> */}
 
-            <div id="containerthree">
+            <div className="containerthree">
               <Link to="/plan">
                 <button id="planbutton">Plan</button>
               </Link>

@@ -1,8 +1,9 @@
-#containerthree {
+.containerthree {
   top: 56px;
   left: 0;
   position: fixed;
   width: 100%;
+  z-index: 1;
 }
 
 #planbutton {
@@ -15,6 +16,7 @@
 }
 #textalign {
   text-align: center;
+  z-index: 100;
 }
 
 #recordbutton {
