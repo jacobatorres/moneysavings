@@ -31,6 +31,13 @@ class RecordMainPage extends Component {
       food: 0,
       transportation: 0,
       leisure: 0
+    },
+
+    running_totals: {
+      bill: 0,
+      food: 0,
+      transportation: 0,
+      leisure: 0
     }
   };
 
@@ -59,7 +66,7 @@ class RecordMainPage extends Component {
         console.log(this.state);
       })
       .catch(error => {
-        console.log('nagkamali');
+        console.log('nagkamali sa get month');
         console.log(error.response);
       });
 
@@ -83,17 +90,17 @@ class RecordMainPage extends Component {
         Object.keys(response.data).map(function(key, index) {
           running_totals.bill += response.data[key].bill_value;
           running_totals.food += response.data[key].food_value;
-
           running_totals.transportation += response.data[key].tr_value;
-
           running_totals.leisure += response.data[key].leisure_value;
         });
 
+        this.state.running_totals = running_totals;
+
         console.log('pls word');
-        console.log(running_totals);
+        console.log(this.state.running_totals);
       })
       .catch(error => {
-        console.log('nagkamali');
+        console.log('nagkamali sa running totals');
         console.log(error.response);
       });
   }
