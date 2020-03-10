@@ -29,29 +29,37 @@ app.get('/sayHi', (req, res) => {
   res.send('hey!');
 });
 
-// app.get('/getMonthPlan', (req, res) => {
-//   console.log('I made it here na');
-//   const month_number_rn = parseFloat(new Date().getMonth() + 1);
-//   const year_number_rn = parseFloat(new Date().getFullYear());
+app.get('/getMonthPlan', (req, res) => {
+  console.log('I made it here na');
+  const month_number_rn = parseFloat(new Date().getMonth() + 1);
+  const year_number_rn = parseFloat(new Date().getFullYear());
 
-//   console.log(month_number_rn);
-//   console.log(year_number_rn);
+  console.log(month_number_rn);
+  console.log(year_number_rn);
 
-//   // check the existense of month-plan given the two arguments
+  // check the existense of month-plan given the two arguments
 
-//   Month.findOne(
-//     { month_number: month_number_rn, year_number: year_number_rn },
-//     function(err, month) {
-//       if (err) {
-//         console.log(err);
-//       } else {
-//         console.log('wagi');
-//         console.log(month);
-//         res.end(JSON.stringify(month));
-//       }
-//     }
-//   );
-// });
+  Month.findOne(
+    { month_number: month_number_rn, year_number: year_number_rn },
+    function(err, month) {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log('wagi');
+        console.log(month);
+        res.end(JSON.stringify(month));
+      }
+    }
+  );
+});
+
+// month_record: {
+//   bills: 0,
+//   food: 0,
+//   transportation: 0,
+//   leisure: 0
+// }
+// };
 
 app.post('/saveRecord', (req, res) => {
   console.log(req.body);
