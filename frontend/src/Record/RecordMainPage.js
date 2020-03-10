@@ -34,6 +34,70 @@ class RecordMainPage extends Component {
     }
   };
 
+  componentDidMount() {
+    // given the month and year,
+    // get the plan of the month
+
+    axios
+      .get('http://localhost:3001/getMonthPlan')
+      .then(response => {
+        console.log('I got the month');
+        console.log(response);
+
+        // as of now I am sure that the data exists...
+
+        // get the bill, food, transportation, leisure
+
+        this.setState({
+          month_record: {
+            bills: parseFloat(response.data.total_bill),
+            food: parseFloat(response.data.total_food),
+            transportation: parseFloat(response.data.total_tr),
+            leisure: parseFloat(response.data.total_leisure)
+          }
+        });
+        console.log(this.state);
+      })
+      .catch(error => {
+        console.log('nagkamali');
+        console.log(error.response);
+      });
+
+    // get total
+
+    axios
+      .get('http://localhost:3001/getAllFourCurrentTotal')
+      .then(response => {
+        console.log('I got the all four!!!');
+        console.log(response);
+
+        // get the running total for bill, food, transportation, leisure
+
+        let running_totals = {
+          bill: 0,
+          food: 0,
+          transportation: 0,
+          leisure: 0
+        };
+
+        Object.keys(response.data).map(function(key, index) {
+          running_totals.bill += response.data[key].bill_value;
+          running_totals.food += response.data[key].food_value;
+
+          running_totals.transportation += response.data[key].tr_value;
+
+          running_totals.leisure += response.data[key].leisure_value;
+        });
+
+        console.log('pls word');
+        console.log(running_totals);
+      })
+      .catch(error => {
+        console.log('nagkamali');
+        console.log(error.response);
+      });
+  }
+
   getNumDaysinMonthYear = () => {
     const month_number_rn = parseFloat(new Date().getMonth() + 1);
     const year_number_rn = parseFloat(new Date().getFullYear());
@@ -140,36 +204,6 @@ class RecordMainPage extends Component {
     //   data: this.state
     // });
   };
-
-  componentDidMount() {
-    // given the month and year,
-    // get the plan of the month
-
-    axios
-      .get('http://localhost:3001/getMonthPlan')
-      .then(response => {
-        console.log('I got the month');
-        console.log(response);
-
-        // as of now I am sure that the data exists...
-
-        // get the bill, food, transportation, leisure
-
-        this.setState({
-          month_record: {
-            bills: parseFloat(response.data.total_bill),
-            food: parseFloat(response.data.total_food),
-            transportation: parseFloat(response.data.total_tr),
-            leisure: parseFloat(response.data.total_leisure)
-          }
-        });
-        console.log(this.state);
-      })
-      .catch(error => {
-        console.log('nagkamali');
-        console.log(error.response);
-      });
-  }
 
   showMessage = (average, user_input) => {
     if (average < parseFloat(user_input)) {

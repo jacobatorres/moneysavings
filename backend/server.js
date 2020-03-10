@@ -53,14 +53,6 @@ app.get('/getMonthPlan', (req, res) => {
   );
 });
 
-// month_record: {
-//   bills: 0,
-//   food: 0,
-//   transportation: 0,
-//   leisure: 0
-// }
-// };
-
 app.post('/saveRecord', (req, res) => {
   console.log(req.body);
   const time_dmy = moment(
@@ -156,6 +148,40 @@ app.post('/saveMonthPlan', (req, res) => {
       // res.redirenewMonthct('/');
     }
   });
+});
+
+app.get('/getAllFourCurrentTotal', (req, res) => {
+  // get the ID of the current month
+
+  // then return as a JSON the totals...
+
+  // get the correct month where this is from, and save it using that id
+  const month_number_rn = parseFloat(new Date().getMonth() + 1);
+  const year_number_rn = parseFloat(new Date().getFullYear());
+
+  Month.findOne(
+    { month_number: month_number_rn, year_number: year_number_rn },
+    function(err, month) {
+      if (err) {
+        console.log(err);
+      } else {
+        // month found, use its ID
+
+        // get all record
+
+        let month_id = month._id;
+
+        Day.find({ 'month_parent.id': month_id }, function(err, allDays) {
+          if (err) {
+            console.log(err);
+          } else {
+            console.log('Goet em!!!');
+            res.end(JSON.stringify(allDays));
+          }
+        });
+      }
+    }
+  );
 });
 
 app.listen(API_PORT, () => console.log(`LISTENING ON UHH PORT ${API_PORT}`));
