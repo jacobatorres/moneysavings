@@ -29,15 +29,29 @@ app.get('/sayHi', (req, res) => {
   res.send('hey!');
 });
 
-app.get('/getMonthPlan', (req, res) => {
-  console.log('I made it here na');
-  const month_number_rn = new Date().getMonth() + 1;
-  const year_number_rn = new Date().getFullYear();
+// app.get('/getMonthPlan', (req, res) => {
+//   console.log('I made it here na');
+//   const month_number_rn = parseFloat(new Date().getMonth() + 1);
+//   const year_number_rn = parseFloat(new Date().getFullYear());
 
-  console.log(month_number_rn);
-  console.log(year_number_rn);
-  res.send();
-});
+//   console.log(month_number_rn);
+//   console.log(year_number_rn);
+
+//   // check the existense of month-plan given the two arguments
+
+//   Month.findOne(
+//     { month_number: month_number_rn, year_number: year_number_rn },
+//     function(err, month) {
+//       if (err) {
+//         console.log(err);
+//       } else {
+//         console.log('wagi');
+//         console.log(month);
+//         res.end(JSON.stringify(month));
+//       }
+//     }
+//   );
+// });
 
 app.post('/saveRecord', (req, res) => {
   console.log(req.body);
@@ -61,19 +75,42 @@ app.post('/saveRecord', (req, res) => {
     leisure_label: req.body.leisure_label,
     timestamp: new Date(year, month, day)
   };
-  console.log('to save');
-  console.log(day_data);
 
-  // save the Record
-  Day.create(day_data, function(err, newRecord) {
-    if (err) {
-      console.log(err);
-    } else {
-      console.log('saved properly');
-      console.log(newRecord);
-      // res.redirect('/');
+  // get the correct month where this is from, and save it using that id
+  const month_number_rn = parseFloat(new Date().getMonth() + 1);
+  const year_number_rn = parseFloat(new Date().getFullYear());
+
+  Month.findOne(
+    { month_number: month_number_rn, year_number: year_number_rn },
+    function(err, month) {
+      if (err) {
+        console.log(err);
+      } else {
+        // success -- we got the correct month
+
+        day_data.month_parent = {
+          id: month._id,
+          month_number: month_number_rn,
+          year_number: year_number_rn
+        };
+
+        console.log('wagi');
+        console.log(month);
+        console.log(day_data);
+
+        // save the Record
+        Day.create(day_data, function(err, newRecord) {
+          if (err) {
+            console.log(err);
+          } else {
+            console.log('saved properly');
+            console.log(newRecord);
+            // res.redirect('/');
+          }
+        });
+      }
     }
-  });
+  );
 });
 
 app.post('/saveMonthPlan', (req, res) => {

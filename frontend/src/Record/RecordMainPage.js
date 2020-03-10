@@ -22,7 +22,9 @@ class RecordMainPage extends Component {
     toggled_tr_value: false,
     toggled_leisure_value: false,
 
-    isSideDrawerOpen: false
+    isSideDrawerOpen: false,
+
+    doesMonthPlanexist: false
   };
 
   drawerToggleClickHandler = () => {
@@ -99,7 +101,9 @@ class RecordMainPage extends Component {
         food_label: this.state.food_label,
         tr_label: this.state.tr_label,
         leisure_label: this.state.leisure_label,
-        timestamp: this.state.startDate
+        timestamp: this.state.startDate,
+        month_num: new Date().getMonth() + 1,
+        year_num: new Date().getFullYear()
       })
       .then(response => {
         console.log('tumama i guess');
@@ -117,49 +121,6 @@ class RecordMainPage extends Component {
     //   data: this.state
     // });
   };
-
-  componentDidMount() {
-    const month_number_rn = new Date().getMonth() + 1;
-    const year_number_rn = new Date().getFullYear();
-
-    console.log(month_number_rn);
-    console.log(year_number_rn);
-
-    const get_url_link = 'http://localhost:3001/getMonthPlan';
-
-    console.log(get_url_link);
-    // Optionally the request above could also be done as
-    // Make a request for a user with a given ID
-    axios
-      .get('http://localhost:3001/getMonthPlan', {
-        month_number: month_number_rn,
-        year_number: year_number_rn
-      })
-      .then(response => {
-        console.log('tumama i guess');
-        console.log(response);
-      })
-      .catch(error => {
-        console.log('nagkamali');
-        console.log(error.response);
-      });
-
-    console.log('i am trued;');
-    // // Make a request for a user with a given ID
-    // axios
-    //   .get('/user?ID=12345')
-    //   .then(function(response) {
-    //     // handle success
-    //     console.log(response);
-    //   })
-    //   .catch(function(error) {
-    //     // handle error
-    //     console.log(error);
-    //   })
-    //   .then(function() {
-    //     // always executed
-    //   });
-  }
 
   render() {
     // check if month-plan exists
