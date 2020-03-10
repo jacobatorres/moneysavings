@@ -113,6 +113,20 @@ app.post('/saveRecord', (req, res) => {
   );
 });
 
+// month_record: {
+//   bills: 0,
+//   food: 0,
+//   transportation: 0,
+//   leisure: 0
+// },
+
+// running_totals: {
+//   bill: 0,
+//   food: 0,
+//   transportation: 0,
+//   leisure: 0
+// }
+
 app.post('/saveMonthPlan', (req, res) => {
   console.log('got here month');
   console.log(req.body);

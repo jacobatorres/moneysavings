@@ -64,6 +64,40 @@ class RecordMainPage extends Component {
           }
         });
         console.log(this.state);
+
+        // once you get the totals, then get the day records
+
+        axios
+          .get('http://localhost:3001/getAllFourCurrentTotal')
+          .then(response => {
+            console.log('I got the all four!!!');
+            console.log(response);
+
+            // get the running total for bill, food, transportation, leisure
+
+            let running_totals = {
+              bill: 0,
+              food: 0,
+              transportation: 0,
+              leisure: 0
+            };
+
+            Object.keys(response.data).map(function(key, index) {
+              running_totals.bill += response.data[key].bill_value;
+              running_totals.food += response.data[key].food_value;
+              running_totals.transportation += response.data[key].tr_value;
+              running_totals.leisure += response.data[key].leisure_value;
+            });
+
+            this.state.running_totals = running_totals;
+
+            console.log('pls word');
+            console.log(this.state.running_totals);
+          })
+          .catch(error => {
+            console.log('nagkamali sa running totals');
+            console.log(error.response);
+          });
       })
       .catch(error => {
         console.log('nagkamali sa get month');
@@ -71,38 +105,6 @@ class RecordMainPage extends Component {
       });
 
     // get total
-
-    axios
-      .get('http://localhost:3001/getAllFourCurrentTotal')
-      .then(response => {
-        console.log('I got the all four!!!');
-        console.log(response);
-
-        // get the running total for bill, food, transportation, leisure
-
-        let running_totals = {
-          bill: 0,
-          food: 0,
-          transportation: 0,
-          leisure: 0
-        };
-
-        Object.keys(response.data).map(function(key, index) {
-          running_totals.bill += response.data[key].bill_value;
-          running_totals.food += response.data[key].food_value;
-          running_totals.transportation += response.data[key].tr_value;
-          running_totals.leisure += response.data[key].leisure_value;
-        });
-
-        this.state.running_totals = running_totals;
-
-        console.log('pls word');
-        console.log(this.state.running_totals);
-      })
-      .catch(error => {
-        console.log('nagkamali sa running totals');
-        console.log(error.response);
-      });
   }
 
   getNumDaysinMonthYear = () => {
@@ -115,6 +117,13 @@ class RecordMainPage extends Component {
   adivideb = (a, b) => {
     let ans = (a * 1.0) / b;
     return ans.toFixed(2);
+  };
+
+  aplusb = (a, b) => {
+    if (b == '0' || b == '') {
+      b = 0;
+    }
+    return parseFloat(a) + parseFloat(b);
   };
 
   drawerToggleClickHandler = () => {
@@ -228,6 +237,21 @@ class RecordMainPage extends Component {
     }
   };
 
+  showMessageRunningTotal = (running_total, allocated_value) => {
+    if (allocated_value < running_total) {
+      // bad
+      return (
+        'Running Total After Save: x / total: (' +
+        running_total +
+        ' / ' +
+        allocated_value +
+        ')'
+      );
+    } else {
+      return 'Under the ';
+    }
+  };
+
   render() {
     // check if month-plan exists
 
@@ -245,6 +269,30 @@ class RecordMainPage extends Component {
       bill_color = this.showColor(bill_average, this.state.bill_value);
     }
 
+    let bill_message2 = null;
+    let bill_color2 = null;
+
+    if (this.state.toggled_bill_value) {
+      // add the running total and the current input
+      // if sum is greater than allocated total, say that Running Total After Save: x / total
+      let running_total_bill = this.aplusb(
+        this.state.running_totals.bill,
+        this.state.bill_value
+      );
+
+      bill_message2 =
+        'Running Total After Save: (' +
+        running_total_bill +
+        ' / ' +
+        this.state.month_record.bills +
+        ')';
+
+      bill_color2 = this.showColor(
+        this.state.month_record.bills,
+        running_total_bill
+      ); // taking advantage of current function;
+    }
+
     let food_message = null;
     let food_color = null;
     if (this.state.toggled_food_value) {
@@ -259,6 +307,30 @@ class RecordMainPage extends Component {
       food_color = this.showColor(food_average, this.state.food_value);
     }
 
+    let food_message2 = null;
+    let food_color2 = null;
+
+    if (this.state.toggled_food_value) {
+      // add the running total and the current input
+      // if sum is greater than allocated total, say that Running Total After Save: x / total
+      let running_total_food = this.aplusb(
+        this.state.running_totals.food,
+        this.state.food_value
+      );
+
+      food_message2 =
+        'Running Total After Save: (' +
+        running_total_food +
+        ' / ' +
+        this.state.month_record.food +
+        ')';
+
+      food_color2 = this.showColor(
+        this.state.month_record.food,
+        running_total_food
+      ); // taking advantage of current function;
+    }
+
     let tr_message = null;
     let tr_color = null;
     if (this.state.toggled_tr_value) {
@@ -271,6 +343,30 @@ class RecordMainPage extends Component {
 
       tr_message = this.showMessage(tr_average, this.state.tr_value);
       tr_color = this.showColor(tr_average, this.state.tr_value);
+    }
+
+    let tr_message2 = null;
+    let tr_color2 = null;
+
+    if (this.state.toggled_tr_value) {
+      // add the running total and the current input
+      // if sum is greater than allocated total, say that Running Total After Save: x / total
+      let running_total_tr = this.aplusb(
+        this.state.running_totals.transportation,
+        this.state.tr_value
+      );
+
+      tr_message2 =
+        'Running Total After Save: (' +
+        running_total_tr +
+        ' / ' +
+        this.state.month_record.transportation +
+        ')';
+
+      tr_color2 = this.showColor(
+        this.state.month_record.transportation,
+        running_total_tr
+      ); // taking advantage of current function;
     }
 
     let leisure_message = null;
@@ -288,6 +384,30 @@ class RecordMainPage extends Component {
         this.state.leisure_value
       );
       leisure_color = this.showColor(leisure_average, this.state.leisure_value);
+    }
+
+    let leisure_message2 = null;
+    let leisure_color2 = null;
+
+    if (this.state.toggled_leisure_value) {
+      // add the running total and the current input
+      // if sum is greater than allocated total, say that Running Total After Save: x / total
+      let running_total_leisure = this.aplusb(
+        this.state.running_totals.leisure,
+        this.state.leisure_value
+      );
+
+      leisure_message2 =
+        'Running Total After Save: (' +
+        running_total_leisure +
+        ' / ' +
+        this.state.month_record.leisure +
+        ')';
+
+      leisure_color2 = this.showColor(
+        this.state.month_record.leisure,
+        running_total_leisure
+      ); // taking advantage of current function;
     }
 
     return (
@@ -308,6 +428,8 @@ class RecordMainPage extends Component {
             value={this.state.bill_value}
           />
           <div className={bill_color}>{bill_message}</div>
+          <div className={bill_color2}>{bill_message2}</div>
+
           <RecordInputSpent
             hasbeentoggled={this.state.toggled_bill_value}
             label="Bills Label"
@@ -320,6 +442,7 @@ class RecordMainPage extends Component {
             value={this.state.food_value}
           />
           <div className={food_color}>{food_message}</div>
+          <div className={food_color2}>{food_message2}</div>
 
           <RecordInputSpent
             hasbeentoggled={this.state.toggled_food_value}
@@ -333,6 +456,7 @@ class RecordMainPage extends Component {
             value={this.state.tr_value}
           />
           <div className={tr_color}>{tr_message}</div>
+          <div className={tr_color2}>{tr_message2}</div>
 
           <RecordInputSpent
             hasbeentoggled={this.state.toggled_tr_value}
@@ -346,6 +470,7 @@ class RecordMainPage extends Component {
             value={this.state.leisure_value}
           />
           <div className={leisure_color}>{leisure_message}</div>
+          <div className={leisure_color2}>{leisure_message2}</div>
 
           <RecordInputSpent
             hasbeentoggled={this.state.toggled_leisure_value}
