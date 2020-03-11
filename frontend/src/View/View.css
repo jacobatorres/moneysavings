@@ -21,8 +21,13 @@
   overflow: hidden;
 }
 
-.item {
-  border-top: 1px solid #44c76f;
+.item_good {
+  border-top: 1px solid ##4476c7;
+  overflow: hidden;
+}
+
+.item_bad {
+  border-top: 1px solid #c76544;
   overflow: hidden;
 }
 
@@ -30,7 +35,7 @@
   /* edit the bg color when successful */
   display: block;
   padding: 16px 20px;
-  background: #44c76f;
+  background: #4476c7;
   color: white;
   position: relative;
 }
@@ -68,7 +73,7 @@
   position: absolute;
   width: 6px;
   height: 100%;
-  background: #44c76f;
+  background: #4476c7;
   left: 0;
   top: 0;
   transition: 0.3s;
@@ -81,4 +86,12 @@
 
 .item:target .smenu {
   max-height: 10em;
+}
+
+.good {
+  background: #44c76f;
+}
+
+.bad {
+  background: #c76544;
 }
