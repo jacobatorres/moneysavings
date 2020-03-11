@@ -198,4 +198,23 @@ app.get('/getAllFourCurrentTotal', (req, res) => {
   );
 });
 
+app.delete('/deleteAll', function(req, res) {
+  //  remove all days and remove all months (probably only one record),
+  console.log('entered here');
+  Day.deleteMany({}, function(err, result) {
+    if (err) {
+      console.log('something wrong with deleting the days');
+    } else {
+      // then remove months
+      Month.deleteMany({}, function(err, result) {
+        if (err) {
+          console.log('wrong with months');
+        } else {
+          res.redirect('/');
+        }
+      });
+    }
+  });
+});
+
 app.listen(API_PORT, () => console.log(`LISTENING ON UHH PORT ${API_PORT}`));

@@ -3,6 +3,24 @@ import React from 'react';
 import DrawerToggleButton from '../SideDrawer/DrawerToggleButton';
 import './Toolbar.css';
 
+import axios from 'axios';
+
+function clearData() {
+  console.log('hello');
+  axios
+    .delete('http://localhost:3001/deleteAll')
+    .then(response => {
+      console.log('finish na (delete');
+      console.log(response);
+
+      // get the running total for bill, food, transportation, leisure
+    })
+    .catch(error => {
+      console.log('nagkamali sa delete');
+      console.log(error.response);
+    });
+}
+
 const toolbar = props => (
   <header className="toolbar">
     <nav className="toolbar_nav">
@@ -16,13 +34,7 @@ const toolbar = props => (
       <div className="toolbar_navitems">
         <ul>
           <li>
-            <a href="/">Login</a>
-          </li>
-          <li>
-            <a href="/">Logout</a>
-          </li>
-          <li>
-            <a href="/">Logmiddle</a>
+            <button onClick={clearData}>Clear Data</button>
           </li>
         </ul>
       </div>

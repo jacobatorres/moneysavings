@@ -1,6 +1,25 @@
 import React from 'react';
 
 import './SideDrawer.css';
+
+import axios from 'axios';
+
+function clearData() {
+  console.log('hello');
+  axios
+    .delete('http://localhost:3001/deleteAll')
+    .then(response => {
+      console.log('finish na (delete');
+      console.log(response);
+
+      // get the running total for bill, food, transportation, leisure
+    })
+    .catch(error => {
+      console.log('nagkamali sa delete');
+      console.log(error.response);
+    });
+}
+
 const sideDrawer = props => {
   let drawerClasses = 'side-drawer';
 
@@ -12,13 +31,7 @@ const sideDrawer = props => {
     <nav className={drawerClasses}>
       <ul>
         <li>
-          <a href="/">Login</a>
-        </li>
-        <li>
-          <a href="/">Logout</a>
-        </li>
-        <li>
-          <a href="/">Logmiddle boom</a>
+          <button onClick={clearData}>Clear Data</button>
         </li>
       </ul>
     </nav>
