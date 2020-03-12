@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const mongoose = require('mongoose');
 const express = require('express');
 const bodyparser = require('body-parser');
@@ -13,7 +15,9 @@ app.use(bodyparser.json());
 
 app.use(cors());
 const dbRoute =
-  'mongodb+srv://jacob:YySvDqpXIKqWLPBA@cluster0-zs4uc.mongodb.net/test?retryWrites=true&w=majority';
+  'mongodb+srv://jacob:' +
+  process.env.DB_PW +
+  '@cluster0-zs4uc.mongodb.net/test?retryWrites=true&w=majority';
 
 // connects our back end code with the database
 mongoose.connect(dbRoute, { useNewUrlParser: true });
