@@ -3,7 +3,8 @@ require('dotenv').config();
 const mongoose = require('mongoose');
 const express = require('express');
 const bodyparser = require('body-parser');
-// const cors = require('cors');
+
+const cors = require('cors');
 const moment = require('moment');
 const path = require('path');
 
@@ -12,21 +13,22 @@ const Month = require('./Schemas/month');
 
 app = express();
 app.use(bodyparser.json());
-// app.use(cors());
 
-// Enable CORS
-app.use(function(req, res, next) {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header(
-    'Access-Control-Allow-Methods',
-    'GET,HEAD,OPTIONS,POST,PUT,DELETE'
-  );
-  res.header(
-    'Access-Control-Allow-Headers',
-    'Origin, X-Requested-With, Content-Type, Accept, Authorization'
-  );
-  next();
-});
+app.use(cors());
+
+// // Enable CORS
+// app.use(function(req, res, next) {
+//   res.header('Access-Control-Allow-Origin', '*');
+//   res.header(
+//     'Access-Control-Allow-Methods',
+//     'GET,HEAD,OPTIONS,POST,PUT,DELETE'
+//   );
+//   res.header(
+//     'Access-Control-Allow-Headers',
+//     'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+//   );
+//   next();
+// });
 
 const dbRoute =
   process.env.MONGODB_URI || 'mongodb://localhost:27017/moneysavingsapp';
