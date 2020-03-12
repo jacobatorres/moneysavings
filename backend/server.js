@@ -29,15 +29,10 @@ app.use(cors());
 //   );
 //   next();
 // });
-
 const dbRoute =
   process.env.MONGODB_URI || 'mongodb://localhost:27017/moneysavingsapp';
 
 console.log(dbRoute);
-// 'mongodb+srv://jacob:' +
-//   process.env.DB_PW +
-//   '@cluster0-zs4uc.mongodb.net/test?retryWrites=true&w=majority';
-
 // connects our back end code with the database
 mongoose.connect(dbRoute, { useNewUrlParser: true });
 
