@@ -1,15 +1,15 @@
 require('dotenv').config();
+const Day = require('./Schemas/day');
+const Month = require('./Schemas/month');
 
 const mongoose = require('mongoose');
 const express = require('express');
 const bodyparser = require('body-parser');
 
-const cors = require('cors');
 const moment = require('moment');
 const path = require('path');
 
-const Day = require('./Schemas/day');
-const Month = require('./Schemas/month');
+const cors = require('cors');
 
 app = express();
 app.use(bodyparser.json());
@@ -243,6 +243,8 @@ app.delete('/deleteAll', function(req, res) {
 // step 3 from https://www.youtube.com/watch?v=e1LaekAnVIM&t=579s
 if (process.env.NODE_ENV === 'production') {
   app.use('../frontend/build');
+  console.log('i am hereee');
+  console.log(__dirname);
 
   app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'build', 'index.html'));
