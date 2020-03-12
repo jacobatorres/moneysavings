@@ -7,8 +7,16 @@ import axios from 'axios';
 
 function clearData() {
   console.log('hello');
+
+  let axios_url = 'https://moneysavings.herokuapp.com';
+  console.log(process.env.NODE_ENV);
+  if (process.env.NODE_ENV === 'development') {
+    axios_url = 'http://localhost:3001';
+  }
+  console.log(axios_url);
+
   axios
-    .delete('http://localhost:3001/deleteAll')
+    .delete(axios_url + '/deleteAll')
     .then(response => {
       console.log('finish na (delete');
       console.log(response);

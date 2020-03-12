@@ -53,6 +53,12 @@ class View extends Component {
   }
 
   componentDidMount() {
+    let axios_url = 'https://moneysavings.herokuapp.com';
+    console.log(process.env.NODE_ENV);
+    if (process.env.NODE_ENV === 'development') {
+      axios_url = 'http://localhost:3001';
+    }
+    console.log(axios_url);
     axios
       .get('http://localhost:3001/getMonthPlan')
       .then(response => {
@@ -74,6 +80,12 @@ class View extends Component {
         console.log(this.state);
 
         // once you get the totals, then get the day records
+        let axios_url = 'https://moneysavings.herokuapp.com';
+        console.log(process.env.NODE_ENV);
+        if (process.env.NODE_ENV === 'development') {
+          axios_url = 'http://localhost:3001';
+        }
+        console.log(axios_url);
 
         axios
           .get('http://localhost:3001/getAllFourCurrentTotal')

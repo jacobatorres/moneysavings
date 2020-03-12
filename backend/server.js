@@ -3,21 +3,38 @@ require('dotenv').config();
 const mongoose = require('mongoose');
 const express = require('express');
 const bodyparser = require('body-parser');
-const cors = require('cors');
+// const cors = require('cors');
 const moment = require('moment');
+const path = require('path');
 
 const Day = require('./Schemas/day');
 const Month = require('./Schemas/month');
 
-const API_PORT = 3001;
 app = express();
 app.use(bodyparser.json());
+// app.use(cors());
 
-app.use(cors());
+// Enable CORS
+app.use(function(req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header(
+    'Access-Control-Allow-Methods',
+    'GET,HEAD,OPTIONS,POST,PUT,DELETE'
+  );
+  res.header(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+  );
+  next();
+});
+
 const dbRoute =
-  'mongodb+srv://jacob:' +
-  process.env.DB_PW +
-  '@cluster0-zs4uc.mongodb.net/test?retryWrites=true&w=majority';
+  process.env.MONGODB_URI || 'mongodb://localhost:27017/moneysavingsapp';
+
+console.log(dbRoute);
+// 'mongodb+srv://jacob:' +
+//   process.env.DB_PW +
+//   '@cluster0-zs4uc.mongodb.net/test?retryWrites=true&w=majority';
 
 // connects our back end code with the database
 mongoose.connect(dbRoute, { useNewUrlParser: true });
@@ -221,4 +238,15 @@ app.delete('/deleteAll', function(req, res) {
   });
 });
 
-app.listen(API_PORT, () => console.log(`LISTENING ON UHH PORT ${API_PORT}`));
+// step 3 from https://www.youtube.com/watch?v=e1LaekAnVIM&t=579s
+if (process.env.NODE_ENV === 'production') {
+  app.use('../frontend/build');
+
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'build', 'index.html'));
+  });
+}
+
+app.listen(process.env.API_PORT, () =>
+  console.log(`LISTENING ON UHH PORT ${process.env.API_PORT}`)
+);

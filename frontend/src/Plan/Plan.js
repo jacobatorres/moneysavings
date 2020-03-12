@@ -50,6 +50,13 @@ class Plan extends Component {
     console.log(month_number_rn);
     console.log(year_number_rn);
     // Optionally the request above could also be done as
+    let axios_url = 'https://moneysavings.herokuapp.com';
+    console.log(process.env.NODE_ENV);
+    if (process.env.NODE_ENV === 'development') {
+      axios_url = 'http://localhost:3001';
+    }
+    console.log(axios_url);
+
     axios
       .get('/getMonthPlan', {
         params: {
@@ -73,8 +80,13 @@ class Plan extends Component {
     event.preventDefault();
 
     // Send a POST request
+    let axios_url = 'https://moneysavings.herokuapp.com';
+    console.log(process.env.NODE_ENV);
+    if (process.env.NODE_ENV === 'development') {
+      axios_url = 'http://localhost:3001';
+    }
+    console.log(axios_url);
 
-    console.log(this.state);
     axios
       .post('http://localhost:3001/saveMonthPlan', {
         total_bill: this.state.bill,
@@ -141,7 +153,7 @@ class Plan extends Component {
             changed={this.valueChangedTotalLeisure}
           />
           <p style={{ marginTop: '40px' }}></p>
-          <button type="Submit">Save (Can't be Undone)</button>
+          <button type="Submit">Save</button>
         </form>
       </main>
     );

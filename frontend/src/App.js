@@ -7,7 +7,6 @@ import SideDrawer from './components/SideDrawer/SideDrawer';
 
 import Backdrop from './components/Backdrop/Backdrop';
 
-import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
 import './App.css';

@@ -45,8 +45,14 @@ class RecordMainPage extends Component {
     // given the month and year,
     // get the plan of the month
 
+    let axios_url = 'https://moneysavings.herokuapp.com';
+    console.log(process.env.NODE_ENV);
+    if (process.env.NODE_ENV === 'development') {
+      axios_url = 'http://localhost:3001';
+    }
+    console.log(axios_url);
     axios
-      .get('http://localhost:3001/getMonthPlan')
+      .get(axios_url + '/getMonthPlan')
       .then(response => {
         console.log('I got the month');
         console.log(response);
@@ -67,8 +73,14 @@ class RecordMainPage extends Component {
 
         // once you get the totals, then get the day records
 
+        let axios_url = 'https://moneysavings.herokuapp.com';
+        console.log(process.env.NODE_ENV);
+        if (process.env.NODE_ENV === 'development') {
+          axios_url = 'http://localhost:3001';
+        }
+        console.log(axios_url);
         axios
-          .get('http://localhost:3001/getAllFourCurrentTotal')
+          .get(axios_url + '/getAllFourCurrentTotal')
           .then(response => {
             console.log('I got the all four!!!');
             console.log(response);
@@ -187,10 +199,18 @@ class RecordMainPage extends Component {
     event.preventDefault();
 
     // Send a POST request
+    console.log('testtt');
 
-    console.log(this.state);
+    let axios_url = 'https://moneysavings.herokuapp.com';
+    console.log(process.env.NODE_ENV);
+    if (process.env.NODE_ENV === 'development') {
+      axios_url = 'http://localhost:3001';
+    }
+    console.log(axios_url);
+
+    console.log(axios_url);
     axios
-      .post('http://localhost:3001/saveRecord', {
+      .post(axios_url + '/saveRecord', {
         bill_value: this.state.bill_value,
         food_value: this.state.food_value,
         tr_value: this.state.tr_value,
