@@ -6,7 +6,8 @@
   "scripts": {
     "test": "concurrently \"cd backend && node server.js\" \"cd frontend && npm start\"",
     "start": "cd backend && node server.js",
-    "stop": "taskkill -f -im node.exe"
+    "stop": "taskkill -f -im node.exe",
+    "heroku-postbuild": "cd frontend && npm install && npm run build"
   },
   "repository": {
     "type": "git",
