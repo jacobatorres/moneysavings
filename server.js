@@ -240,7 +240,7 @@ app.delete('/deleteAll', function(req, res) {
 
 // step 3 from https://www.youtube.com/watch?v=e1LaekAnVIM&t=579s
 if (process.env.NODE_ENV === 'production') {
-  app.use('frontend/build');
+  app.use(express.static('frontend/build'));
   console.log('i am hereee');
   console.log(__dirname);
 
