@@ -9,7 +9,7 @@ class View extends Component {
       bills: 0,
       food: 0,
       transportation: 0,
-      leisure: 0
+      leisure: 0W
     },
     running_totals: {
       bill: 0,
@@ -60,7 +60,7 @@ class View extends Component {
     }
     console.log(axios_url);
     axios
-      .get('http://localhost:3001/getMonthPlan')
+      .get(axios_url + '/getMonthPlan')
       .then(response => {
         console.log('I got the month');
         console.log(response);
@@ -88,7 +88,7 @@ class View extends Component {
         console.log(axios_url);
 
         axios
-          .get('http://localhost:3001/getAllFourCurrentTotal')
+          .get(axios_url + '/getAllFourCurrentTotal')
           .then(response => {
             console.log('I got the all four!!!');
             console.log(response);
