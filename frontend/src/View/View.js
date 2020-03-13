@@ -9,7 +9,7 @@ class View extends Component {
       bills: 0,
       food: 0,
       transportation: 0,
-      leisure: 0W
+      leisure: 0
     },
     running_totals: {
       bill: 0,
