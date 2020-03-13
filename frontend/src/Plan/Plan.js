@@ -88,7 +88,7 @@ class Plan extends Component {
     console.log(axios_url);
 
     axios
-      .post('http://localhost:3001/saveMonthPlan', {
+      .post(axios_url + '/saveMonthPlan', {
         total_bill: this.state.bill,
         total_food: this.state.food,
         total_tr: this.state.transportation,

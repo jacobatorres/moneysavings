@@ -11,6 +11,7 @@ const path = require('path');
 
 const cors = require('cors');
 
+let API_PORT = process.env.PORT || 3001;
 app = express();
 app.use(bodyparser.json());
 
@@ -239,15 +240,13 @@ app.delete('/deleteAll', function(req, res) {
 
 // step 3 from https://www.youtube.com/watch?v=e1LaekAnVIM&t=579s
 if (process.env.NODE_ENV === 'production') {
-  app.use('../frontend/build');
+  app.use('frontend/build');
   console.log('i am hereee');
   console.log(__dirname);
 
   app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'build', 'index.html'));
+    res.sendFile(path.join(__dirname, 'build', 'index.html'));
   });
 }
 
-app.listen(process.env.API_PORT, () =>
-  console.log(`LISTENING ON UHH PORT ${process.env.API_PORT}`)
-);
+app.listen(API_PORT, () => console.log(`LISTENING ON UHH PORT ${API_PORT}`));
