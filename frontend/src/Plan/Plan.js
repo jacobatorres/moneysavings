@@ -164,6 +164,15 @@ class Plan extends Component {
       .then(response => {
         console.log('tumama i guess');
         console.log(response);
+        this.setState({ doesMonthPlanExiststate: true });
+        this.setState({
+          month_record: {
+            bills: parseFloat(response.data.total_bill),
+            food: parseFloat(response.data.total_food),
+            transportation: parseFloat(response.data.total_tr),
+            leisure: parseFloat(response.data.total_leisure)
+          }
+        });
       })
       .catch(error => {
         console.log('nagkamali');
@@ -224,6 +233,18 @@ class Plan extends Component {
       });
   }
 
+  getNumDaysinMonthYear = () => {
+    const month_number_rn = parseFloat(new Date().getMonth() + 1);
+    const year_number_rn = parseFloat(new Date().getFullYear());
+
+    return new Date(year_number_rn, month_number_rn, 0).getDate();
+  };
+
+  adivideb = (a, b) => {
+    let ans = (a * 1.0) / b;
+    return ans.toFixed(2);
+  };
+
   render() {
     let months = [
       'January',
@@ -245,47 +266,85 @@ class Plan extends Component {
 
     let year_result = this.getYear();
 
+    let bill_average = null,
+      food_average = null,
+      tr_average = null,
+      leisure_average = null;
     let turntodisabled = null;
     if (this.state.doesMonthPlanExiststate) {
       turntodisabled = true;
+
+      // the change could either be greater or smaller than average
+      bill_average = this.adivideb(
+        this.state.month_record.bills,
+        this.getNumDaysinMonthYear()
+      );
+
+      food_average = this.adivideb(
+        this.state.month_record.food,
+        this.getNumDaysinMonthYear()
+      );
+
+      tr_average = this.adivideb(
+        this.state.month_record.transportation,
+        this.getNumDaysinMonthYear()
+      );
+
+      leisure_average = this.adivideb(
+        this.state.month_record.leisure,
+        this.getNumDaysinMonthYear()
+      );
     }
 
     return (
       <div>
         {this.state.doesMonthPlanExiststate ? (
-          <main style={{ marginTop: '100px' }}>
-            <form onSubmit={this.saveMonthPlantoDB} id="textalign">
+          <main style={{ marginTop: '100px' }} id="textalign">
+            <div>
               For {month_result} {year_result}
-              <RecordInputSpent
-                label="Bills"
-                value={this.state.month_record.bills}
-                turntodisabled="true"
-              />
-              <RecordInputSpent
-                label="Food"
-                value={this.state.month_record.food}
-                turntodisabled="true"
-              />
-              <RecordInputSpent
-                label="Transportation"
-                value={this.state.month_record.transportation}
-                turntodisabled="true"
-              />
-              <RecordInputSpent
-                label="Leisure"
-                value={this.state.month_record.leisure}
-                turntodisabled="true"
-              />
-              <p style={{ marginTop: '40px' }}></p>
-              <button type="Submit" disabled>
-                Save
-              </button>
-            </form>
+            </div>
+            <p style={{ marginTop: '50px' }}></p>
+
+            <RecordInputSpent
+              label="Bills"
+              value={this.state.month_record.bills}
+              turntodisabled="true"
+            />
+            <p>Daily Average for Bills: {bill_average}</p>
+            <p style={{ marginTop: '30px' }}></p>
+
+            <RecordInputSpent
+              label="Food"
+              value={this.state.month_record.food}
+              turntodisabled="true"
+            />
+
+            <p>Daily Average for Food: {food_average}</p>
+            <p style={{ marginTop: '30px' }}></p>
+
+            <RecordInputSpent
+              label="Transportation"
+              value={this.state.month_record.transportation}
+              turntodisabled="true"
+            />
+
+            <p>Daily Average for Transportation: {tr_average}</p>
+            <p style={{ marginTop: '30px' }}></p>
+
+            <RecordInputSpent
+              label="Leisure"
+              value={this.state.month_record.leisure}
+              turntodisabled="true"
+            />
+
+            <p>Daily Average for Leisure: {leisure_average}</p>
+            <p style={{ marginTop: '30px' }}></p>
           </main>
         ) : (
           <main style={{ marginTop: '100px' }}>
             <form onSubmit={this.saveMonthPlantoDB} id="textalign">
               For {month_result} {year_result}
+              <p style={{ marginTop: '50px' }}></p>
               <RecordInputSpent
                 label="Bills"
                 changed={this.valueChangedTotalBill}

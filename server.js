@@ -180,7 +180,7 @@ app.post('/saveMonthPlan', (req, res) => {
     } else {
       console.log('saved properly (month)');
       console.log(newMonth);
-      // res.redirenewMonthct('/');
+      res.end(JSON.stringify(newMonth));
     }
   });
 });
