@@ -9,7 +9,14 @@ class Plan extends Component {
     bill: 0,
     food: 0,
     transportation: 0,
-    leisure: 0
+    leisure: 0,
+    doesMonthPlanExiststate: true,
+    month_record: {
+      bills: 0,
+      food: 0,
+      transportation: 0,
+      leisure: 0
+    }
   };
 
   getMonthIndex = () => {
@@ -41,21 +48,50 @@ class Plan extends Component {
     });
   };
 
-  doesMonthPlanExist = event => {
-    event.preventDefault();
-
-    const month_number_rn = new Date().getMonth() + 1;
-    const year_number_rn = new Date().getFullYear();
-
-    console.log(month_number_rn);
-    console.log(year_number_rn);
-    // Optionally the request above could also be done as
+  getMonthTotals = event => {
     let axios_url = 'https://moneysavings.herokuapp.com';
     console.log(process.env.NODE_ENV);
     if (process.env.NODE_ENV === 'development') {
       axios_url = 'http://localhost:3001';
     }
     console.log(axios_url);
+    console.log('i am here at doesmonth plan');
+
+    // axios
+    // .get(axios_url + '/getMonthPlan')
+    // .then(response => {
+    //   console.log('I got the month');
+    //   console.log(response);
+
+    //   // as of now I am sure that the data exists...
+
+    //   // get the bill, food, transportation, leisure
+
+    //   this.setState({
+    //     month_record: {
+    //       bills: parseFloat(response.data.total_bill),
+    //       food: parseFloat(response.data.total_food),
+    //       transportation: parseFloat(response.data.total_tr),
+    //       leisure: parseFloat(response.data.total_leisure)
+    //     }
+    //   });
+    //   console.log(this.state);
+    // }
+  };
+
+  doesMonthPlanExist = event => {
+    // Send a POST request
+    const month_number_rn = new Date().getMonth() + 1;
+    const year_number_rn = new Date().getFullYear();
+    let end_result = null;
+
+    let axios_url = 'https://moneysavings.herokuapp.com';
+    console.log(process.env.NODE_ENV);
+    if (process.env.NODE_ENV === 'development') {
+      axios_url = 'http://localhost:3001';
+    }
+    console.log(axios_url);
+    console.log('i am here at doesmonth plan');
 
     axios
       .get('/getMonthPlan', {
@@ -64,16 +100,44 @@ class Plan extends Component {
           year_number: year_number_rn
         }
       })
-      .then(function(response) {
+      .then(response => {
         console.log(response);
+        console.log('success');
+        if (response.data == null) {
+          this.setState({ doesMonthPlanExiststate: false });
+          this.setState({
+            month_record: {
+              bills: parseFloat(response.data.total_bill),
+              food: parseFloat(response.data.total_food),
+              transportation: parseFloat(response.data.total_tr),
+              leisure: parseFloat(response.data.total_leisure)
+            }
+          });
+        } else {
+          this.setState({ doesMonthPlanExiststate: true });
+        }
       })
       .catch(function(error) {
         console.log(error);
-      })
-      .then(function() {
-        // always executed
-        console.log('dont 4get to like and subscribe');
+        end_result = error;
+        return false;
       });
+
+    return true;
+    // event.preventDefault();
+
+    // const month_number_rn = new Date().getMonth() + 1;
+    // const year_number_rn = new Date().getFullYear();
+
+    // console.log(month_number_rn);
+    // console.log(year_number_rn);
+    // // Optionally the request above could also be done as
+    // let axios_url = 'https://moneysavings.herokuapp.com';
+    // console.log(process.env.NODE_ENV);
+    // if (process.env.NODE_ENV === 'development') {
+    //   axios_url = 'http://localhost:3001';
+    // }
+    // console.log(axios_url);
   };
 
   saveMonthPlantoDB = event => {
@@ -114,6 +178,52 @@ class Plan extends Component {
     // });
   };
 
+  componentDidMount() {
+    // Send a POST request
+    const month_number_rn = new Date().getMonth() + 1;
+    const year_number_rn = new Date().getFullYear();
+    let end_result = null;
+
+    let axios_url = 'https://moneysavings.herokuapp.com';
+    console.log(process.env.NODE_ENV);
+    if (process.env.NODE_ENV === 'development') {
+      axios_url = 'http://localhost:3001';
+    }
+    console.log(axios_url);
+    console.log('i am here at doesmonth plan');
+
+    axios
+      .get('/getMonthPlan', {
+        params: {
+          month_number: month_number_rn,
+          year_number: year_number_rn
+        }
+      })
+      .then(response => {
+        console.log(response);
+        console.log('success');
+        if (response.data == null) {
+          this.setState({ doesMonthPlanExiststate: false });
+
+          console.log('im false');
+        } else {
+          this.setState({ doesMonthPlanExiststate: true });
+          this.setState({
+            month_record: {
+              bills: parseFloat(response.data.total_bill),
+              food: parseFloat(response.data.total_food),
+              transportation: parseFloat(response.data.total_tr),
+              leisure: parseFloat(response.data.total_leisure)
+            }
+          });
+        }
+      })
+      .catch(function(error) {
+        console.log(error);
+        end_result = error;
+      });
+  }
+
   render() {
     let months = [
       'January',
@@ -135,27 +245,69 @@ class Plan extends Component {
 
     let year_result = this.getYear();
 
+    let turntodisabled = null;
+    if (this.state.doesMonthPlanExiststate) {
+      turntodisabled = true;
+    }
+
     return (
-      <main style={{ marginTop: '100px' }}>
-        <form onSubmit={this.saveMonthPlantoDB} id="textalign">
-          For {month_result} {year_result}
-          <RecordInputSpent
-            label="Bills"
-            changed={this.valueChangedTotalBill}
-          />
-          <RecordInputSpent label="Food" changed={this.valueChangedTotalFood} />
-          <RecordInputSpent
-            label="Transportation"
-            changed={this.valueChangedTotalTr}
-          />
-          <RecordInputSpent
-            label="Leisure"
-            changed={this.valueChangedTotalLeisure}
-          />
-          <p style={{ marginTop: '40px' }}></p>
-          <button type="Submit">Save</button>
-        </form>
-      </main>
+      <div>
+        {this.state.doesMonthPlanExiststate ? (
+          <main style={{ marginTop: '100px' }}>
+            <form onSubmit={this.saveMonthPlantoDB} id="textalign">
+              For {month_result} {year_result}
+              <RecordInputSpent
+                label="Bills"
+                value={this.state.month_record.bills}
+                turntodisabled="true"
+              />
+              <RecordInputSpent
+                label="Food"
+                value={this.state.month_record.food}
+                turntodisabled="true"
+              />
+              <RecordInputSpent
+                label="Transportation"
+                value={this.state.month_record.transportation}
+                turntodisabled="true"
+              />
+              <RecordInputSpent
+                label="Leisure"
+                value={this.state.month_record.leisure}
+                turntodisabled="true"
+              />
+              <p style={{ marginTop: '40px' }}></p>
+              <button type="Submit" disabled>
+                Save
+              </button>
+            </form>
+          </main>
+        ) : (
+          <main style={{ marginTop: '100px' }}>
+            <form onSubmit={this.saveMonthPlantoDB} id="textalign">
+              For {month_result} {year_result}
+              <RecordInputSpent
+                label="Bills"
+                changed={this.valueChangedTotalBill}
+              />
+              <RecordInputSpent
+                label="Food"
+                changed={this.valueChangedTotalFood}
+              />
+              <RecordInputSpent
+                label="Transportation"
+                changed={this.valueChangedTotalTr}
+              />
+              <RecordInputSpent
+                label="Leisure"
+                changed={this.valueChangedTotalLeisure}
+              />
+              <p style={{ marginTop: '40px' }}></p>
+              <button type="Submit">Save</button>
+            </form>
+          </main>
+        )}
+      </div>
     );
   }
 }

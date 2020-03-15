@@ -15,7 +15,6 @@ function clearData() {
 
   axios
     .delete(axios_url + '/deleteAll')
-    .delete('http://localhost:3001/deleteAll')
     .then(response => {
       console.log('finish na (delete');
       console.log(response);

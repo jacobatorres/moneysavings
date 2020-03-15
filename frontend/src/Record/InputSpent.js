@@ -19,6 +19,17 @@ const RecordInputSpent = props => {
     }
   }
 
+  if (props.turntodisabled == 'true') {
+    input_result = (
+      <input
+        type="text"
+        value={props.value}
+        onChange={props.changed}
+        disabled
+      ></input>
+    );
+  }
+
   return (
     <div className="font">
       <p>{props.label}</p>
