@@ -204,16 +204,21 @@ app.get('/getAllFourCurrentTotal', (req, res) => {
 
         // get all record
 
-        let month_id = month._id;
+        if (month == null) {
+          // no record found, return blank
+          res.end(JSON.stringify(month));
+        } else {
+          let month_id = month._id;
 
-        Day.find({ 'month_parent.id': month_id }, function(err, allDays) {
-          if (err) {
-            console.log(err);
-          } else {
-            console.log('Goet em!!!');
-            res.end(JSON.stringify(allDays));
-          }
-        });
+          Day.find({ 'month_parent.id': month_id }, function(err, allDays) {
+            if (err) {
+              console.log(err);
+            } else {
+              console.log('Goet em!!!');
+              res.end(JSON.stringify(allDays));
+            }
+          });
+        }
       }
     }
   );

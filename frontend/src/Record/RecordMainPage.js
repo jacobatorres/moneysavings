@@ -57,18 +57,21 @@ class RecordMainPage extends Component {
         console.log('I got the month');
         console.log(response);
 
-        // as of now I am sure that the data exists...
-
+        if (response.data == null) {
+          this.setState({ doesMonthPlanexist: false });
+        } else {
+          this.setState({ doesMonthPlanexist: true });
+          this.setState({
+            month_record: {
+              bills: parseFloat(response.data.total_bill),
+              food: parseFloat(response.data.total_food),
+              transportation: parseFloat(response.data.total_tr),
+              leisure: parseFloat(response.data.total_leisure)
+            }
+          });
+        }
         // get the bill, food, transportation, leisure
 
-        this.setState({
-          month_record: {
-            bills: parseFloat(response.data.total_bill),
-            food: parseFloat(response.data.total_food),
-            transportation: parseFloat(response.data.total_tr),
-            leisure: parseFloat(response.data.total_leisure)
-          }
-        });
         console.log(this.state);
 
         // once you get the totals, then get the day records
@@ -272,6 +275,14 @@ class RecordMainPage extends Component {
     }
   };
 
+  getMonthIndex = () => {
+    return new Date().getMonth();
+  };
+
+  getYear = () => {
+    return new Date().getFullYear();
+  };
+
   render() {
     // check if month-plan exists
 
@@ -429,79 +440,111 @@ class RecordMainPage extends Component {
         running_total_leisure
       ); // taking advantage of current function;
     }
+    let months = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December'
+    ];
+    let month_index = this.getMonthIndex();
+
+    let month_result = months[month_index];
+
+    let year_result = this.getYear();
+
+    // if month-plan exists, show the input
+    // else, redirect them to the plan page
 
     return (
-      <main style={{ marginTop: '100px' }}>
-        <form onSubmit={this.saveRecordtoDB} id="textalign">
+      <div>
+        {this.state.doesMonthPlanexist ? (
+          <main style={{ marginTop: '100px' }}>
+            <form onSubmit={this.saveRecordtoDB} id="textalign">
+              <div id="textalign">
+                <p>Date</p>
+                <DatePicker
+                  selected={this.state.startDate}
+                  onChange={this.handleChange}
+                />
+              </div>
+              <p style={{ marginTop: '50px' }}></p>
+
+              <RecordInputSpent
+                label="Bills"
+                changed={this.valuePlannedChangedBill}
+                value={this.state.bill_value}
+              />
+              <div className={bill_color}>{bill_message}</div>
+              <div className={bill_color2}>{bill_message2}</div>
+
+              <RecordInputSpent
+                hasbeentoggled={this.state.toggled_bill_value}
+                label="Bills Label"
+                changed={this.labelPlannedChangedBill}
+                value={this.state.bill_label}
+              />
+              <RecordInputSpent
+                label="Food"
+                changed={this.valuePlannedChangedFood}
+                value={this.state.food_value}
+              />
+              <div className={food_color}>{food_message}</div>
+              <div className={food_color2}>{food_message2}</div>
+
+              <RecordInputSpent
+                hasbeentoggled={this.state.toggled_food_value}
+                label="Food Label"
+                changed={this.labelPlannedChangedFood}
+                value={this.state.food_label}
+              />
+              <RecordInputSpent
+                label="Transportation"
+                changed={this.valuePlannedChangedTr}
+                value={this.state.tr_value}
+              />
+              <div className={tr_color}>{tr_message}</div>
+              <div className={tr_color2}>{tr_message2}</div>
+
+              <RecordInputSpent
+                hasbeentoggled={this.state.toggled_tr_value}
+                label="Transportation Label"
+                changed={this.labelPlannedChangedTr}
+                value={this.state.tr_label}
+              />
+              <RecordInputSpent
+                label="Leisure"
+                changed={this.valuePlannedChangedLeisure}
+                value={this.state.leisure_value}
+              />
+              <div className={leisure_color}>{leisure_message}</div>
+              <div className={leisure_color2}>{leisure_message2}</div>
+
+              <RecordInputSpent
+                hasbeentoggled={this.state.toggled_leisure_value}
+                label="Leisure Label"
+                changed={this.labelPlannedChangedleisure}
+                value={this.state.leisure_label}
+              />
+              <p style={{ marginTop: '40px' }}></p>
+              <button type="Submit">Save</button>
+            </form>
+          </main>
+        ) : (
           <div id="textalign">
-            <p>Date</p>
-            <DatePicker
-              selected={this.state.startDate}
-              onChange={this.handleChange}
-            />
+            No plan yet for {month_result} {year_result}
+            <br />
+            <a href="/plan">Make a plan now! </a>{' '}
           </div>
-          <p style={{ marginTop: '50px' }}></p>
-
-          <RecordInputSpent
-            label="Bills"
-            changed={this.valuePlannedChangedBill}
-            value={this.state.bill_value}
-          />
-          <div className={bill_color}>{bill_message}</div>
-          <div className={bill_color2}>{bill_message2}</div>
-
-          <RecordInputSpent
-            hasbeentoggled={this.state.toggled_bill_value}
-            label="Bills Label"
-            changed={this.labelPlannedChangedBill}
-            value={this.state.bill_label}
-          />
-          <RecordInputSpent
-            label="Food"
-            changed={this.valuePlannedChangedFood}
-            value={this.state.food_value}
-          />
-          <div className={food_color}>{food_message}</div>
-          <div className={food_color2}>{food_message2}</div>
-
-          <RecordInputSpent
-            hasbeentoggled={this.state.toggled_food_value}
-            label="Food Label"
-            changed={this.labelPlannedChangedFood}
-            value={this.state.food_label}
-          />
-          <RecordInputSpent
-            label="Transportation"
-            changed={this.valuePlannedChangedTr}
-            value={this.state.tr_value}
-          />
-          <div className={tr_color}>{tr_message}</div>
-          <div className={tr_color2}>{tr_message2}</div>
-
-          <RecordInputSpent
-            hasbeentoggled={this.state.toggled_tr_value}
-            label="Transportation Label"
-            changed={this.labelPlannedChangedTr}
-            value={this.state.tr_label}
-          />
-          <RecordInputSpent
-            label="Leisure"
-            changed={this.valuePlannedChangedLeisure}
-            value={this.state.leisure_value}
-          />
-          <div className={leisure_color}>{leisure_message}</div>
-          <div className={leisure_color2}>{leisure_message2}</div>
-
-          <RecordInputSpent
-            hasbeentoggled={this.state.toggled_leisure_value}
-            label="Leisure Label"
-            changed={this.labelPlannedChangedleisure}
-            value={this.state.leisure_label}
-          />
-          <p style={{ marginTop: '40px' }}></p>
-          <button type="Submit">Save</button>
-        </form>
-      </main>
+        )}
+      </div>
     );
   }
 }

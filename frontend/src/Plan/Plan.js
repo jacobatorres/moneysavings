@@ -48,36 +48,36 @@ class Plan extends Component {
     });
   };
 
-  getMonthTotals = event => {
-    let axios_url = 'https://moneysavings.herokuapp.com';
-    console.log(process.env.NODE_ENV);
-    if (process.env.NODE_ENV === 'development') {
-      axios_url = 'http://localhost:3001';
-    }
-    console.log(axios_url);
-    console.log('i am here at doesmonth plan');
+  // getMonthTotals = event => {
+  //   let axios_url = 'https://moneysavings.herokuapp.com';
+  //   console.log(process.env.NODE_ENV);
+  //   if (process.env.NODE_ENV === 'development') {
+  //     axios_url = 'http://localhost:3001';
+  //   }
+  //   console.log(axios_url);
+  //   console.log('i am here at doesmonth plan');
 
-    // axios
-    // .get(axios_url + '/getMonthPlan')
-    // .then(response => {
-    //   console.log('I got the month');
-    //   console.log(response);
+  //   // axios
+  //   // .get(axios_url + '/getMonthPlan')
+  //   // .then(response => {
+  //   //   console.log('I got the month');
+  //   //   console.log(response);
 
-    //   // as of now I am sure that the data exists...
+  //   //   // as of now I am sure that the data exists...
 
-    //   // get the bill, food, transportation, leisure
+  //   //   // get the bill, food, transportation, leisure
 
-    //   this.setState({
-    //     month_record: {
-    //       bills: parseFloat(response.data.total_bill),
-    //       food: parseFloat(response.data.total_food),
-    //       transportation: parseFloat(response.data.total_tr),
-    //       leisure: parseFloat(response.data.total_leisure)
-    //     }
-    //   });
-    //   console.log(this.state);
-    // }
-  };
+  //   //   this.setState({
+  //   //     month_record: {
+  //   //       bills: parseFloat(response.data.total_bill),
+  //   //       food: parseFloat(response.data.total_food),
+  //   //       transportation: parseFloat(response.data.total_tr),
+  //   //       leisure: parseFloat(response.data.total_leisure)
+  //   //     }
+  //   //   });
+  //   //   console.log(this.state);
+  //   // }
+  // };
 
   doesMonthPlanExist = event => {
     // Send a POST request
@@ -105,6 +105,8 @@ class Plan extends Component {
         console.log('success');
         if (response.data == null) {
           this.setState({ doesMonthPlanExiststate: false });
+        } else {
+          this.setState({ doesMonthPlanExiststate: true });
           this.setState({
             month_record: {
               bills: parseFloat(response.data.total_bill),
@@ -113,8 +115,6 @@ class Plan extends Component {
               leisure: parseFloat(response.data.total_leisure)
             }
           });
-        } else {
-          this.setState({ doesMonthPlanExiststate: true });
         }
       })
       .catch(function(error) {
