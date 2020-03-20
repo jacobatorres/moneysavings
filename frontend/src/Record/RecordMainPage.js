@@ -5,6 +5,8 @@ import RecordInputSpent from './InputSpent';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
+import Backdrop from '../components/Backdrop/Backdrop';
+
 class RecordMainPage extends Component {
   state = {
     bill_value: 0,
@@ -38,7 +40,9 @@ class RecordMainPage extends Component {
       food: 0,
       transportation: 0,
       leisure: 0
-    }
+    },
+
+    clickSaveRecord: false
   };
 
   componentDidMount() {
@@ -242,6 +246,8 @@ class RecordMainPage extends Component {
     //   url: 'http://localhost:3001/saveRecord',
     //   data: this.state
     // });
+
+    this.setState({ clickSaveRecord: true });
   };
 
   showMessage = (average, user_input) => {
@@ -463,8 +469,17 @@ class RecordMainPage extends Component {
     // if month-plan exists, show the input
     // else, redirect them to the plan page
 
+    // if user clicked save, do something
+    // show backdrop
+    let showBackdropSaved = null;
+
+    if (this.state.clickSaveRecord) {
+      showBackdropSaved = <Backdrop />;
+    }
+
     return (
       <div>
+        {showBackdropSaved}
         {this.state.doesMonthPlanexist ? (
           <main style={{ marginTop: '100px' }}>
             <form onSubmit={this.saveRecordtoDB} id="textalign">
@@ -533,6 +548,7 @@ class RecordMainPage extends Component {
                 changed={this.labelPlannedChangedleisure}
                 value={this.state.leisure_label}
               />
+
               <p style={{ marginTop: '40px' }}></p>
               <button type="Submit">Save</button>
             </form>
