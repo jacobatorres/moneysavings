@@ -289,6 +289,28 @@ class RecordMainPage extends Component {
     return new Date().getFullYear();
   };
 
+  unshowBackdrop = event => {
+    this.setState({ clickSaveRecord: false });
+  };
+
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  // render
+
   render() {
     // check if month-plan exists
 
@@ -474,7 +496,7 @@ class RecordMainPage extends Component {
     let showBackdropSaved = null;
 
     if (this.state.clickSaveRecord) {
-      showBackdropSaved = <Backdrop />;
+      showBackdropSaved = <Backdrop clicked={this.unshowBackdrop} />;
     }
 
     return (
