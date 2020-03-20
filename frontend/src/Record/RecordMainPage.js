@@ -6,6 +6,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
 import Backdrop from '../components/Backdrop/Backdrop';
+import Modal from '../components/Modal/modal';
 
 class RecordMainPage extends Component {
   state = {
@@ -496,7 +497,12 @@ class RecordMainPage extends Component {
     let showBackdropSaved = null;
 
     if (this.state.clickSaveRecord) {
-      showBackdropSaved = <Backdrop clicked={this.unshowBackdrop} />;
+      showBackdropSaved = (
+        <div>
+          <Backdrop clicked={this.unshowBackdrop} />
+          <Modal clicked={this.unshowBackdrop} />
+        </div>
+      );
     }
 
     return (
