@@ -3,8 +3,8 @@ import React from 'react';
 const ViewLi = props => {
   const hrefval = '#' + props.idval;
 
-  let btn_class = 'btn';
-  let smenu_class = 'smenu';
+  let btn_class = null;
+  let smenu_class = null;
 
   if (props.colorsval == 'green') {
     btn_class = 'btn good';

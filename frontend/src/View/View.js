@@ -28,7 +28,9 @@ class View extends Component {
       food_list_label: [],
       transportation_list_label: [],
       leisure_list_label: []
-    }
+    },
+
+    doesMonthPlanExiststate: false
   };
 
   ConcatLabelValue(list1, list2) {
@@ -65,19 +67,23 @@ class View extends Component {
         console.log('I got the month');
         console.log(response);
 
-        // as of now I am sure that the data exists...
-
         // get the bill, food, transportation, leisure
 
-        this.setState({
-          month_record: {
-            bills: parseFloat(response.data.total_bill),
-            food: parseFloat(response.data.total_food),
-            transportation: parseFloat(response.data.total_tr),
-            leisure: parseFloat(response.data.total_leisure)
-          }
-        });
-        console.log(this.state);
+        if (response.data == null) {
+          this.setState({ doesMonthPlanExiststate: false });
+        } else {
+          this.setState({ doesMonthPlanExiststate: true });
+
+          this.setState({
+            month_record: {
+              bills: parseFloat(response.data.total_bill),
+              food: parseFloat(response.data.total_food),
+              transportation: parseFloat(response.data.total_tr),
+              leisure: parseFloat(response.data.total_leisure)
+            }
+          });
+          console.log(this.state);
+        }
 
         // once you get the totals, then get the day records
         let axios_url = 'https://moneysavings.herokuapp.com';
@@ -175,6 +181,14 @@ class View extends Component {
       });
   }
 
+  getMonthIndex = () => {
+    return new Date().getMonth();
+  };
+
+  getYear = () => {
+    return new Date().getFullYear();
+  };
+
   render() {
     let bill_name =
       this.state.running_totals.bill == 0
@@ -248,38 +262,67 @@ class View extends Component {
       this.state.running_totals.leisure <= this.state.month_record.leisure
         ? 'green'
         : 'red';
+    let months = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December'
+    ];
+    let month_index = this.getMonthIndex();
+
+    let month_result = months[month_index];
+
+    let year_result = this.getYear();
 
     return (
-      <div className="middle">
-        <div className="menu">
-          <ViewLi
-            idval="bill_id"
-            name={bill_name}
-            itemsval={itemsval_bill}
-            colorsval={colorsval_bill}
-          />
+      <div>
+        {this.state.doesMonthPlanExiststate ? (
+          <div className="middle">
+            <div className="menu">
+              <ViewLi
+                idval="bill_id"
+                name={bill_name}
+                itemsval={itemsval_bill}
+                colorsval={colorsval_bill}
+              />
 
-          <ViewLi
-            idval="food_id"
-            name={food_name}
-            itemsval={itemsval_food}
-            colorsval={colorsval_food}
-          />
+              <ViewLi
+                idval="food_id"
+                name={food_name}
+                itemsval={itemsval_food}
+                colorsval={colorsval_food}
+              />
 
-          <ViewLi
-            idval="tr_id"
-            name={tr_name}
-            itemsval={itemsval_tr}
-            colorsval={colorsval_tr}
-          />
+              <ViewLi
+                idval="tr_id"
+                name={tr_name}
+                itemsval={itemsval_tr}
+                colorsval={colorsval_tr}
+              />
 
-          <ViewLi
-            idval="leisure_id"
-            name={leisure_name}
-            itemsval={itemsval_leisure}
-            colorsval={colorsval_leisure}
-          />
-        </div>
+              <ViewLi
+                idval="leisure_id"
+                name={leisure_name}
+                itemsval={itemsval_leisure}
+                colorsval={colorsval_leisure}
+              />
+            </div>
+          </div>
+        ) : (
+          <div id="textalign">
+            No plan yet for {month_result} {year_result}
+            <br />
+            <a href="/plan">Make a plan now! </a>{' '}
+          </div>
+        )}
       </div>
     );
   }
