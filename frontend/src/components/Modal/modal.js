@@ -4,7 +4,7 @@ import './modal.css';
 
 const modal = props => (
   <div className="Modal" onClick={props.clicked}>
-    Record Saved!
+    {props.message}
   </div>
 );
 

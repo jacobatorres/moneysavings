@@ -3,9 +3,10 @@ import axios from 'axios';
 
 import Toolbar from './components/Toolbar/Toolbar';
 
-import SideDrawer from './components/SideDrawer/SideDrawer';
+// import SideDrawer from './components/SideDrawer/SideDrawer';
 
 import Backdrop from './components/Backdrop/Backdrop';
+import Modal from './components/Modal/modal';
 
 import 'react-datepicker/dist/react-datepicker.css';
 
@@ -36,7 +37,8 @@ class App extends Component {
     toggled_tr_value: false,
     toggled_leisure_value: false,
 
-    isSideDrawerOpen: false
+    isSideDrawerOpen: false,
+    clearedData: false
   };
 
   drawerToggleClickHandler = () => {
@@ -46,7 +48,7 @@ class App extends Component {
   };
 
   backdropClickHandler = () => {
-    this.setState({ isSideDrawerOpen: false });
+    this.setState({ isSideDrawerOpen: false, clearedData: false });
   };
 
   handleChange = date => {
@@ -133,6 +135,30 @@ class App extends Component {
     // });
   };
 
+  clearData = event => {
+    console.log('hello');
+    let axios_url = 'https://moneysavings.herokuapp.com';
+    console.log(process.env.NODE_ENV);
+    if (process.env.NODE_ENV === 'development') {
+      axios_url = 'http://localhost:3001';
+    }
+    console.log(axios_url);
+
+    axios
+      .delete(axios_url + '/deleteAll')
+      .then(response => {
+        console.log('finish na (delete');
+        console.log(response);
+
+        this.setState({ clearedData: true });
+      })
+      .catch(error => {
+        console.log('nagkamali sa delete dito sa clear data');
+        console.log(error.response);
+        this.setState({ clearedData: true });
+      });
+  };
+
   render() {
     // let saved_val =
     //   parseFloat(this.state.planned) >= parseFloat(this.state.spent)
@@ -144,18 +170,46 @@ class App extends Component {
     // let color_result = saved_val ? 'green' : 'red';
 
     let sideDrawer;
-    let backdrop;
+    let sd_and_backdrop;
+
+    let drawerClasses = 'side-drawer';
+
+    let deleteConfirm = null;
+
+    if (this.state.clearedData) {
+      deleteConfirm = (
+        <div>
+          <Backdrop clicked={this.backdropClickHandler} showafterSD="true" />
+          <Modal clicked={this.backdropClickHandler} message="Deleted Data" />
+        </div>
+      );
+    }
 
     if (this.state.isSideDrawerOpen) {
-      backdrop = <Backdrop click={this.backdropClickHandler} />;
+      drawerClasses = 'side-drawer open';
+
+      sd_and_backdrop = (
+        <div>
+          <nav className={drawerClasses}>
+            <ul>
+              <li>
+                <button onClick={this.clearData}>Clear Data</button>
+              </li>
+            </ul>
+          </nav>
+
+          <Backdrop clicked={this.backdropClickHandler} />
+        </div>
+      );
     }
 
     return (
       <Router>
         <div className="container">
           <Toolbar changesidedrawerstate={this.drawerToggleClickHandler} />
-          <SideDrawer show={this.state.isSideDrawerOpen} />
-          {backdrop}
+          {/* <SideDrawer show={this.state.isSideDrawerOpen} /> */}
+          {sd_and_backdrop}
+          {deleteConfirm}
 
           <main style={{ marginTop: '100px' }}>
             {/* <Plan />

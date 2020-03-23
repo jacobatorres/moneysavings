@@ -501,7 +501,7 @@ class RecordMainPage extends Component {
       showBackdropSaved = (
         <div>
           <Backdrop clicked={this.unshowBackdrop} />
-          <Modal clicked={this.unshowBackdrop} />
+          <Modal clicked={this.unshowBackdrop} message="Record Saved" />
         </div>
       );
     }

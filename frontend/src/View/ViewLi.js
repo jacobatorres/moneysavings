@@ -6,12 +6,12 @@ const ViewLi = props => {
   let btn_class = null;
   let smenu_class = null;
 
-  if (props.colorsval == 'green') {
-    btn_class = 'btn good';
-    smenu_class = 'smenu good';
-  } else {
+  if (props.colorsval == 'red') {
     btn_class = 'btn bad';
     smenu_class = 'smenu bad';
+  } else {
+    btn_class = 'btn good';
+    smenu_class = 'smenu good';
   }
 
   return (
