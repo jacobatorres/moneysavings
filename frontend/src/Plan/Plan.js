@@ -2,6 +2,10 @@ import React, { Component } from 'react';
 import axios from 'axios';
 
 import RecordInputSpent from '../Record/InputSpent';
+
+import Backdrop from '../components/Backdrop/Backdrop';
+import Modal from '../components/Modal/modal';
+
 import 'react-datepicker/dist/react-datepicker.css';
 
 class Plan extends Component {
@@ -16,7 +20,9 @@ class Plan extends Component {
       food: 0,
       transportation: 0,
       leisure: 0
-    }
+    },
+
+    clearedData: false
   };
 
   getMonthIndex = () => {
@@ -171,7 +177,8 @@ class Plan extends Component {
             food: parseFloat(response.data.total_food),
             transportation: parseFloat(response.data.total_tr),
             leisure: parseFloat(response.data.total_leisure)
-          }
+          },
+          clearedData: true
         });
       })
       .catch(error => {
@@ -245,6 +252,10 @@ class Plan extends Component {
     return ans.toFixed(2);
   };
 
+  unshowBackdrop = event => {
+    this.setState({ clearedData: false });
+  };
+
   render() {
     let months = [
       'January',
@@ -296,6 +307,17 @@ class Plan extends Component {
       );
     }
 
+    let displaySavedMessage = null;
+
+    if (this.state.clearedData) {
+      displaySavedMessage = (
+        <div>
+          <Backdrop clicked={this.unshowBackdrop} />
+          <Modal clicked={this.unshowBackdrop} message="Record Saved" />
+        </div>
+      );
+    }
+
     return (
       <div>
         {this.state.doesMonthPlanExiststate ? (
@@ -339,6 +361,7 @@ class Plan extends Component {
 
             <p>Daily Average for Leisure: {leisure_average}</p>
             <p style={{ marginTop: '30px' }}></p>
+            {displaySavedMessage}
           </main>
         ) : (
           <main style={{ marginTop: '100px' }}>
