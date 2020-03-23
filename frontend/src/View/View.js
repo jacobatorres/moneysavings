@@ -55,6 +55,8 @@ class View extends Component {
   }
 
   componentDidMount() {
+    window.scrollTo(0, 0);
+
     let axios_url = 'https://moneysavings.herokuapp.com';
     console.log(process.env.NODE_ENV);
     if (process.env.NODE_ENV === 'development') {

@@ -49,6 +49,7 @@ class RecordMainPage extends Component {
   componentDidMount() {
     // given the month and year,
     // get the plan of the month
+    window.scrollTo(0, 0);
 
     let axios_url = 'https://moneysavings.herokuapp.com';
     console.log(process.env.NODE_ENV);

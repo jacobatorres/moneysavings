@@ -41,6 +41,7 @@ class toolbar extends Component {
 
   unshowBackdrop = event => {
     this.setState({ clearedData: false });
+    window.location.reload(false);
   };
 
   render() {

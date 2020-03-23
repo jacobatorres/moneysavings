@@ -196,6 +196,9 @@ class Plan extends Component {
 
   componentDidMount() {
     // Send a POST request
+
+    window.scrollTo(0, 0);
+
     const month_number_rn = new Date().getMonth() + 1;
     const year_number_rn = new Date().getFullYear();
     let end_result = null;
