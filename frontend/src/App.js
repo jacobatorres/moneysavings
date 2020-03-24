@@ -14,6 +14,7 @@ import './App.css';
 
 // import the other files
 import RecordMainPage from './Record/RecordMainPage';
+import EditRecord from './Record/EditRecord';
 
 import Plan from './Plan/Plan';
 import View from './View/View';
@@ -230,6 +231,8 @@ class App extends Component {
             <Route path="/record" component={RecordMainPage} />
             <Route path="/plan" component={Plan} />
             <Route path="/view" component={View} />
+            <Route path="/editrecord/:thing?" component={EditRecord} />
+
             <Route path="/" exact component={RecordMainPage} />
           </main>
         </div>

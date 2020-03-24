@@ -1,4 +1,6 @@
 import React from 'react';
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import EditRecord from '../Record/EditRecord';
 
 const ViewLi = props => {
   const hrefval = '#' + props.idval;
@@ -24,13 +26,15 @@ const ViewLi = props => {
           <ul>
             <li className="alignleft">{item}</li>
             <li className="alignright">
-              <a className="link_color" href="/">
-                edit
-              </a>{' '}
-              |{' '}
-              <a className="link_color" href="/">
-                delete
-              </a>
+              <Link
+                to={{
+                  pathname: '/editrecord',
+                  value: 'pinagpailit'
+                }}
+              >
+                <a className="link_color">edit</a>
+              </Link>{' '}
+              | <a className="link_color">delete</a>
             </li>
           </ul>
         ))}
@@ -38,5 +42,11 @@ const ViewLi = props => {
     </li>
   );
 };
+
+// for delete:
+// when clicked, it invokes a function, that has an axios command
+// then it will tap the server, delete the data, then
+// the axios will say "deleted"
+// then the page will refresh
 
 export default ViewLi;
