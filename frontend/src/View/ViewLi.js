@@ -15,13 +15,24 @@ const ViewLi = props => {
   }
 
   return (
-    <li class="item" id={props.idval}>
-      <a href={hrefval} class={btn_class}>
+    <li className="item" id={props.idval}>
+      <a href={hrefval} className={btn_class}>
         {props.name}
       </a>
-      <div class="smenu">
+      <div className="smenu">
         {props.itemsval.map(item => (
-          <a href="">{item}</a>
+          <ul>
+            <li className="alignleft">{item}</li>
+            <li className="alignright">
+              <a className="link_color" href="/">
+                edit
+              </a>{' '}
+              |{' '}
+              <a className="link_color" href="/">
+                delete
+              </a>
+            </li>
+          </ul>
         ))}
       </div>
     </li>

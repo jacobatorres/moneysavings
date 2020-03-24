@@ -59,7 +59,7 @@
   max-height: 0;
 }
 
-.smenu a {
+.smenu li {
   display: block;
   padding: 16px 26px;
   color: white;
@@ -68,19 +68,18 @@
   position: relative;
 }
 
-.smenu a:before {
+.smenu li:before {
   content: '';
   position: absolute;
   width: 6px;
   height: 100%;
-  background: #4476c7;
   left: 0;
   top: 0;
   transition: 0.3s;
   opacity: 0;
 }
 
-.smenu a:hover::before {
+.smenu li:hover::before {
   opacity: 1;
 }
 
@@ -94,4 +93,21 @@
 
 .bad {
   background: #c76544;
+}
+
+.alignleft {
+  float: left;
+}
+
+.alignright {
+  float: right;
+}
+
+.li_ps {
+  clear: both;
+}
+
+.link_color {
+  color: white;
+  text-decoration: underline;
 }
