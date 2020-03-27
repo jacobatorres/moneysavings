@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import './View.css';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import Backdrop from '../components/Backdrop/Backdrop';
+import Modal from '../components/Modal/modal';
 
 class View extends Component {
   state = {
@@ -37,7 +39,20 @@ class View extends Component {
       leisure: []
     },
 
-    doesMonthPlanExiststate: false
+    doesMonthPlanExiststate: false,
+    clickDelete: false,
+
+    value_to_delete: {
+      bill_value: 0,
+      bill_label: '',
+      food_value: 0,
+      food_label: '',
+      tr_value: 0,
+      tr_label: '',
+      leisure_value: 0,
+      leisure_label: '',
+      startDate: new Date()
+    }
   };
 
   ConcatLabelValue(list1, list2, list_ids) {
@@ -218,6 +233,45 @@ class View extends Component {
     return new Date().getFullYear();
   };
 
+  unshowBackdrop = () => {
+    this.setState({ clickDelete: false });
+  };
+
+  deleteRecord = value_id => {
+    console.log(value_id);
+    console.log('WAWIJAWDLKAWW');
+    let axios_url = 'https://moneysavings.herokuapp.com';
+    console.log(process.env.NODE_ENV);
+    if (process.env.NODE_ENV === 'development') {
+      axios_url = 'http://localhost:3001';
+    }
+    console.log(axios_url);
+
+    axios
+      .get(axios_url + '/getDay?' + 'id=' + value_id)
+      .then(response => {
+        console.log('iv of speads');
+        this.setState({
+          value_to_delete: {
+            bill_value: response.data.bill_value,
+            bill_label: response.data.bill_label,
+            food_value: response.data.food_value,
+            food_label: response.data.food_label,
+            tr_value: response.data.tr_value,
+            tr_label: response.data.tr_label,
+            leisure_value: response.data.leisure_value,
+            leisure_label: response.data.leisure_label,
+            startDate: Date.parse(response.data.timestamp)
+          },
+          clickDelete: true
+        });
+      })
+      .catch(error => {
+        console.log('nagkamali sa running totals');
+        console.log(error.response);
+      });
+  };
+
   render() {
     let big_4_data = {
       bill_values: [],
@@ -350,15 +404,33 @@ class View extends Component {
     console.log(big_4_data);
     console.log('HE RRRRR');
 
-    Object.keys(big_4_data).map(function(key, index) {
-      console.log(big_4_data[key][0]);
-      console.log(big_4_data[key][1]);
-      console.log(big_4_data[key][2]);
-      console.log(big_4_data[key][3]);
-    });
+    let showBackdropSaved = null;
+
+    let message_modal = 'where are you\n and im so sorry\n i cannot sleep';
+
+    let list_for_modal = [];
+    Object.keys(this.state.value_to_delete).map(item =>
+      list_for_modal.push(this.state.value_to_delete[item])
+    );
+
+    if (this.state.clickDelete) {
+      showBackdropSaved = (
+        <div>
+          <Backdrop clicked={this.unshowBackdrop} />
+          <Modal
+            clicked={this.unshowBackdrop}
+            lis
+            message={message_modal}
+            longmessage="1"
+            values_list={list_for_modal}
+          />
+        </div>
+      );
+    }
 
     return (
       <div>
+        {showBackdropSaved}
         {this.state.doesMonthPlanExiststate ? (
           <div className="middle">
             <div className="menu">
@@ -386,7 +458,13 @@ class View extends Component {
                             >
                               <a className="link_color">edit</a>
                             </Link>{' '}
-                            | <a className="link_color">delete</a>
+                            |{' '}
+                            <p
+                              style={{ display: 'inline', cursor: 'pointer' }}
+                              onClick={() => this.deleteRecord(i[1])}
+                            >
+                              <a className="link_color">delete</a>
+                            </p>
                           </li>
                         </ul>
                       ))
