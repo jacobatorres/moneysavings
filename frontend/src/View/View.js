@@ -27,8 +27,14 @@ class View extends Component {
       bills_list_label: [],
       food_list_label: [],
       transportation_list_label: [],
-      leisure_list_label: [],
-      id_list: []
+      leisure_list_label: []
+    },
+
+    id_list: {
+      bills: [],
+      food: [],
+      transportation: [],
+      leisure: []
     },
 
     doesMonthPlanExiststate: false
@@ -125,8 +131,14 @@ class View extends Component {
               bills_list_label: [],
               food_list_label: [],
               transportation_list_label: [],
-              leisure_list_label: [],
-              id_list: []
+              leisure_list_label: []
+            };
+
+            let id_list = {
+              bills: [],
+              food: [],
+              transportation: [],
+              leisure: []
             };
 
             Object.keys(response.data).map(function(key, index) {
@@ -141,6 +153,8 @@ class View extends Component {
                 day_by_day.bills_list_value.push(
                   parseFloat(response.data[key].bill_value)
                 );
+
+                id_list.bills.push(response.data[key]._id);
               }
 
               if (parseFloat(response.data[key].food_value) != 0) {
@@ -149,6 +163,8 @@ class View extends Component {
                 day_by_day.food_list_value.push(
                   parseFloat(response.data[key].food_value)
                 );
+
+                id_list.food.push(response.data[key]._id);
               }
 
               if (parseFloat(response.data[key].tr_value) != 0) {
@@ -159,6 +175,7 @@ class View extends Component {
                 day_by_day.transportation_list_value.push(
                   parseFloat(response.data[key].tr_value)
                 );
+                id_list.transportation.push(response.data[key]._id);
               }
 
               if (parseFloat(response.data[key].leisure_value) != 0) {
@@ -169,13 +186,13 @@ class View extends Component {
                 day_by_day.leisure_list_value.push(
                   parseFloat(response.data[key].leisure_value)
                 );
+                id_list.leisure.push(response.data[key]._id);
               }
-
-              day_by_day.id_list.push(response.data[key]._id);
             });
 
             this.state.running_totals = running_totals;
             this.state.day_by_day = day_by_day;
+            this.state.id_list = id_list;
 
             console.log(this.state);
             console.log('watch:');
@@ -214,7 +231,7 @@ class View extends Component {
     let itemsval_bill = this.ConcatLabelValue(
       this.state.day_by_day.bills_list_label,
       this.state.day_by_day.bills_list_value,
-      this.state.day_by_day.id_list
+      this.state.id_list.bills
     );
     let colorsval_bill =
       this.state.running_totals.bill <= this.state.month_record.bills
@@ -233,7 +250,7 @@ class View extends Component {
     let itemsval_food = this.ConcatLabelValue(
       this.state.day_by_day.food_list_label,
       this.state.day_by_day.food_list_value,
-      this.state.day_by_day.id_list
+      this.state.id_list.food
     );
     let colorsval_food =
       this.state.running_totals.food <= this.state.month_record.food
@@ -252,7 +269,7 @@ class View extends Component {
     let itemsval_tr = this.ConcatLabelValue(
       this.state.day_by_day.transportation_list_label,
       this.state.day_by_day.transportation_list_value,
-      this.state.day_by_day.id_list
+      this.state.id_list.transportation
     );
     let colorsval_tr =
       this.state.running_totals.transportation <=
@@ -272,7 +289,7 @@ class View extends Component {
     let itemsval_leisure = this.ConcatLabelValue(
       this.state.day_by_day.leisure_list_label,
       this.state.day_by_day.leisure_list_value,
-      this.state.day_by_day.id_list
+      this.state.id_list.leisure
     );
     let colorsval_leisure =
       this.state.running_totals.leisure <= this.state.month_record.leisure

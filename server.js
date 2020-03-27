@@ -257,6 +257,37 @@ app.get('/getDay', function(req, res) {
   });
 });
 
+app.put('/updateDay', function(req, res) {
+  console.log('PUTTTTa');
+  console.log(req.body.timestamp);
+  let d4 = moment(req.body.timestamp);
+  console.log(d4.format('ll'));
+
+  const day_data = {
+    bill_value: parseFloat(req.body.bill_value),
+    bill_label: req.body.bill_label,
+    food_value: parseFloat(req.body.food_value),
+    food_label: req.body.food_label,
+    tr_value: parseFloat(req.body.tr_value),
+    tr_label: req.body.tr_label,
+    leisure_value: parseFloat(req.body.leisure_value),
+    leisure_label: req.body.leisure_label,
+    timestamp: d4
+  };
+
+  console.log(req.body.id);
+
+  Day.findByIdAndUpdate(req.body.id, day_data, function(err, updatedDay) {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log('yes fm!');
+      console.log(updatedDay);
+      res.end(JSON.stringify(updatedDay));
+    }
+  });
+});
+
 // step 3 from https://www.youtube.com/watch?v=e1LaekAnVIM&t=579s
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static('frontend/build'));

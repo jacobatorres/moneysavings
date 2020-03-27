@@ -20,6 +20,8 @@ class RecordMainPage extends Component {
     leisure_label: '',
     startDate: new Date(),
 
+    id: '',
+
     toggled_bill_value: false,
     toggled_food_value: false,
     toggled_tr_value: false,
@@ -230,9 +232,7 @@ class RecordMainPage extends Component {
   saveRecordtoDB = event => {
     event.preventDefault();
 
-    // Send a POST request
-    console.log('testtt');
-
+    // make a PUT request
     let axios_url = 'https://moneysavings.herokuapp.com';
     console.log(process.env.NODE_ENV);
     if (process.env.NODE_ENV === 'development') {
@@ -242,7 +242,7 @@ class RecordMainPage extends Component {
 
     console.log(axios_url);
     axios
-      .post(axios_url + '/saveRecord', {
+      .put(axios_url + '/updateDay', {
         bill_value: this.state.bill_value,
         food_value: this.state.food_value,
         tr_value: this.state.tr_value,
@@ -253,15 +253,14 @@ class RecordMainPage extends Component {
         tr_label: this.state.tr_label,
         leisure_label: this.state.leisure_label,
         timestamp: this.state.startDate,
-        month_num: new Date().getMonth() + 1,
-        year_num: new Date().getFullYear()
+        id: this.props.location.day_id
       })
       .then(response => {
-        console.log('tumama i guess');
+        console.log('r  update');
         console.log(response);
       })
       .catch(error => {
-        console.log('nagkamali');
+        console.log('wr ong update');
         console.log(error.response);
       });
 
