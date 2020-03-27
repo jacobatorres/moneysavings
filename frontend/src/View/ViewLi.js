@@ -1,9 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
-import EditRecord from '../Record/EditRecord';
 
 const ViewLi = props => {
-  const hrefval = '#' + props.idval;
+  const hrefval = '#' + props.idvalcss;
 
   let btn_class = null;
   let smenu_class = null;
@@ -17,19 +16,19 @@ const ViewLi = props => {
   }
 
   return (
-    <li className="item" id={props.idval}>
+    <li className="item" id={props.idvalcss}>
       <a href={hrefval} className={btn_class}>
         {props.name}
       </a>
       <div className="smenu">
         {props.itemsval.map(item => (
           <ul>
-            <li className="alignleft">{item}</li>
+            <li className="alignleft">{item[0]}</li>
             <li className="alignright">
               <Link
                 to={{
                   pathname: '/editrecord',
-                  value: 'pinagpailit'
+                  id: item[1]
                 }}
               >
                 <a className="link_color">edit</a>

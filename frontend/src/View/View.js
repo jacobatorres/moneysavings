@@ -27,17 +27,23 @@ class View extends Component {
       bills_list_label: [],
       food_list_label: [],
       transportation_list_label: [],
-      leisure_list_label: []
+      leisure_list_label: [],
+      id_list: []
     },
 
     doesMonthPlanExiststate: false
   };
 
-  ConcatLabelValue(list1, list2) {
+  ConcatLabelValue(list1, list2, list_ids) {
+    // this is gonna return be a list of lists
+    // [[label, id],[label, id]]
     let list3 = [];
 
     list1.map(function(key, index) {
-      list3.push(list1[index] + '  (' + list2[index] + ')');
+      let templist = [];
+      templist.push(list1[index] + '  (' + list2[index] + ')');
+      templist.push(list_ids[index]);
+      list3.push(templist);
     });
 
     return list3;
@@ -119,7 +125,8 @@ class View extends Component {
               bills_list_label: [],
               food_list_label: [],
               transportation_list_label: [],
-              leisure_list_label: []
+              leisure_list_label: [],
+              id_list: []
             };
 
             Object.keys(response.data).map(function(key, index) {
@@ -163,13 +170,16 @@ class View extends Component {
                   parseFloat(response.data[key].leisure_value)
                 );
               }
+
+              day_by_day.id_list.push(response.data[key]._id);
             });
 
             this.state.running_totals = running_totals;
             this.state.day_by_day = day_by_day;
 
             console.log(this.state);
-
+            console.log('watch:');
+            console.log(this.state.day_by_day);
             // get the day-by-day here
           })
           .catch(error => {
@@ -203,7 +213,8 @@ class View extends Component {
 
     let itemsval_bill = this.ConcatLabelValue(
       this.state.day_by_day.bills_list_label,
-      this.state.day_by_day.bills_list_value
+      this.state.day_by_day.bills_list_value,
+      this.state.day_by_day.id_list
     );
     let colorsval_bill =
       this.state.running_totals.bill <= this.state.month_record.bills
@@ -221,7 +232,8 @@ class View extends Component {
 
     let itemsval_food = this.ConcatLabelValue(
       this.state.day_by_day.food_list_label,
-      this.state.day_by_day.food_list_value
+      this.state.day_by_day.food_list_value,
+      this.state.day_by_day.id_list
     );
     let colorsval_food =
       this.state.running_totals.food <= this.state.month_record.food
@@ -239,7 +251,8 @@ class View extends Component {
 
     let itemsval_tr = this.ConcatLabelValue(
       this.state.day_by_day.transportation_list_label,
-      this.state.day_by_day.transportation_list_value
+      this.state.day_by_day.transportation_list_value,
+      this.state.day_by_day.id_list
     );
     let colorsval_tr =
       this.state.running_totals.transportation <=
@@ -258,7 +271,8 @@ class View extends Component {
 
     let itemsval_leisure = this.ConcatLabelValue(
       this.state.day_by_day.leisure_list_label,
-      this.state.day_by_day.leisure_list_value
+      this.state.day_by_day.leisure_list_value,
+      this.state.day_by_day.id_list
     );
     let colorsval_leisure =
       this.state.running_totals.leisure <= this.state.month_record.leisure
@@ -290,28 +304,28 @@ class View extends Component {
           <div className="middle">
             <div className="menu">
               <ViewLi
-                idval="bill_id"
+                idvalcss="bill_id"
                 name={bill_name}
                 itemsval={itemsval_bill}
                 colorsval={colorsval_bill}
               />
 
               <ViewLi
-                idval="food_id"
+                idvalcss="food_id"
                 name={food_name}
                 itemsval={itemsval_food}
                 colorsval={colorsval_food}
               />
 
               <ViewLi
-                idval="tr_id"
+                idvalcss="tr_id"
                 name={tr_name}
                 itemsval={itemsval_tr}
                 colorsval={colorsval_tr}
               />
 
               <ViewLi
-                idval="leisure_id"
+                idvalcss="leisure_id"
                 name={leisure_name}
                 itemsval={itemsval_leisure}
                 colorsval={colorsval_leisure}

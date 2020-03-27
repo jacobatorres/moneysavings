@@ -10,11 +10,13 @@ import Modal from '../components/Modal/modal';
 
 class ER extends Component {
   componentDidMount() {
+    window.scrollTo(0, 0);
+
     console.log(this.props);
   }
 
   render() {
-    return <div>eow, {this.props.location.value}</div>;
+    return <div>eow, booms {this.props.location.id}</div>;
   }
 }
 
