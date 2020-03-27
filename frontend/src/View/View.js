@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import ViewLi from './ViewLi';
 import './View.css';
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 
 class View extends Component {
   state = {
@@ -219,6 +219,14 @@ class View extends Component {
   };
 
   render() {
+    let big_4_data = {
+      bill_values: [],
+      food_values: [],
+      tr_values: [],
+      leisure_values: []
+    };
+
+    // bill
     let bill_name =
       this.state.running_totals.bill == 0
         ? 'Bill'
@@ -235,9 +243,15 @@ class View extends Component {
     );
     let colorsval_bill =
       this.state.running_totals.bill <= this.state.month_record.bills
-        ? 'green'
-        : 'red';
+        ? 'btn good'
+        : 'btn bad';
 
+    big_4_data.bill_values.push('bill_id');
+    big_4_data.bill_values.push(bill_name);
+    big_4_data.bill_values.push(itemsval_bill);
+    big_4_data.bill_values.push(colorsval_bill);
+
+    // food
     let food_name =
       this.state.running_totals.food == 0
         ? 'Food'
@@ -254,9 +268,15 @@ class View extends Component {
     );
     let colorsval_food =
       this.state.running_totals.food <= this.state.month_record.food
-        ? 'green'
-        : 'red';
+        ? 'btn good'
+        : 'btn bad';
 
+    big_4_data.food_values.push('food_id');
+    big_4_data.food_values.push(food_name);
+    big_4_data.food_values.push(itemsval_food);
+    big_4_data.food_values.push(colorsval_food);
+
+    // transportation
     let tr_name =
       this.state.running_totals.transportation == 0
         ? 'Transportation'
@@ -274,9 +294,15 @@ class View extends Component {
     let colorsval_tr =
       this.state.running_totals.transportation <=
       this.state.month_record.transportation
-        ? 'green'
-        : 'red';
+        ? 'btn good'
+        : 'btn bad';
 
+    big_4_data.tr_values.push('tr_id');
+    big_4_data.tr_values.push(tr_name);
+    big_4_data.tr_values.push(itemsval_tr);
+    big_4_data.tr_values.push(colorsval_tr);
+
+    // leisure
     let leisure_name =
       this.state.running_totals.leisure == 0
         ? 'Leisure'
@@ -293,8 +319,14 @@ class View extends Component {
     );
     let colorsval_leisure =
       this.state.running_totals.leisure <= this.state.month_record.leisure
-        ? 'green'
-        : 'red';
+        ? 'btn good'
+        : 'btn bad';
+
+    big_4_data.leisure_values.push('leisure_id');
+    big_4_data.leisure_values.push(leisure_name);
+    big_4_data.leisure_values.push(itemsval_leisure);
+    big_4_data.leisure_values.push(colorsval_leisure);
+
     let months = [
       'January',
       'February',
@@ -315,38 +347,53 @@ class View extends Component {
 
     let year_result = this.getYear();
 
+    console.log(big_4_data);
+    console.log('HE RRRRR');
+
+    Object.keys(big_4_data).map(function(key, index) {
+      console.log(big_4_data[key][0]);
+      console.log(big_4_data[key][1]);
+      console.log(big_4_data[key][2]);
+      console.log(big_4_data[key][3]);
+    });
+
     return (
       <div>
         {this.state.doesMonthPlanExiststate ? (
           <div className="middle">
             <div className="menu">
-              <ViewLi
-                idvalcss="bill_id"
-                name={bill_name}
-                itemsval={itemsval_bill}
-                colorsval={colorsval_bill}
-              />
-
-              <ViewLi
-                idvalcss="food_id"
-                name={food_name}
-                itemsval={itemsval_food}
-                colorsval={colorsval_food}
-              />
-
-              <ViewLi
-                idvalcss="tr_id"
-                name={tr_name}
-                itemsval={itemsval_tr}
-                colorsval={colorsval_tr}
-              />
-
-              <ViewLi
-                idvalcss="leisure_id"
-                name={leisure_name}
-                itemsval={itemsval_leisure}
-                colorsval={colorsval_leisure}
-              />
+              {Object.keys(big_4_data).map((key, index) => (
+                <li className="item" id={big_4_data[key][0]}>
+                  <a
+                    href={'#' + big_4_data[key][0]}
+                    className={big_4_data[key][3]}
+                  >
+                    {big_4_data[key][1]}
+                  </a>
+                  <div className="smenu">
+                    {big_4_data[key][2].length == 0 ? (
+                      <div></div>
+                    ) : (
+                      big_4_data[key][2].map(i => (
+                        <ul>
+                          <li className="alignleft">{i[0]}</li>
+                          <li className="alignright">
+                            <Link
+                              to={{
+                                pathname: '/editrecord',
+                                day_id: i[1]
+                              }}
+                            >
+                              <a className="link_color">edit</a>
+                            </Link>{' '}
+                            | <a className="link_color">delete</a>
+                          </li>
+                        </ul>
+                      ))
+                    )}
+                  </div>
+                </li>
+              ))}
             </div>
           </div>
         ) : (

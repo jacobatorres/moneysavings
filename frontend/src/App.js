@@ -19,6 +19,8 @@ import EditRecord from './Record/EditRecord';
 import Plan from './Plan/Plan';
 import View from './View/View';
 
+import DeleteConfirmation from './View/DeleteRecord';
+
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 
 class App extends Component {
@@ -231,8 +233,8 @@ class App extends Component {
             <Route path="/record" component={RecordMainPage} />
             <Route path="/plan" component={Plan} />
             <Route path="/view" component={View} />
-            <Route path="/editrecord/:thing?" component={EditRecord} />
-
+            <Route path="/editrecord" component={EditRecord} />
+            <Route path="/delete" component={DeleteConfirmation} />
             <Route path="/" exact component={RecordMainPage} />
           </main>
         </div>
