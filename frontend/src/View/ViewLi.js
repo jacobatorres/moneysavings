@@ -28,7 +28,7 @@ const ViewLi = props => {
               <Link
                 to={{
                   pathname: '/editrecord',
-                  id: item[1]
+                  day_id: item[1]
                 }}
               >
                 <a className="link_color">edit</a>

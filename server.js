@@ -243,6 +243,20 @@ app.delete('/deleteAll', function(req, res) {
   });
 });
 
+// given the ID, get the needed information
+app.get('/getDay', function(req, res) {
+  console.log('whos that girl?');
+
+  Day.findById(req.query.id, function(err, day) {
+    if (err) {
+      console.log('something wrong with day');
+    } else {
+      // get the day
+      res.end(JSON.stringify(day));
+    }
+  });
+});
+
 // step 3 from https://www.youtube.com/watch?v=e1LaekAnVIM&t=579s
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static('frontend/build'));
