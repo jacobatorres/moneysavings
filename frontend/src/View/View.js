@@ -235,6 +235,7 @@ class View extends Component {
 
   unshowBackdrop = () => {
     this.setState({ clickDelete: false });
+    window.location.reload(false);
   };
 
   deleteRecord = value_id => {
@@ -267,7 +268,17 @@ class View extends Component {
         });
       })
       .catch(error => {
-        console.log('nagkamali sa running totals');
+        console.log('nagkamali sa get day totals');
+        console.log(error.response);
+      });
+
+    axios
+      .delete(axios_url + '/deleteRecord?' + 'id=' + value_id)
+      .then(response => {
+        console.log('doneeee');
+      })
+      .catch(error => {
+        console.log('nagkamali sa delete totals');
         console.log(error.response);
       });
   };

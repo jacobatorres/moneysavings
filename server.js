@@ -288,6 +288,17 @@ app.put('/updateDay', function(req, res) {
   });
 });
 
+app.delete('/deleteRecord', function(req, res) {
+  Day.deleteOne({ _id: req.query.id }, function(err) {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log('gonee');
+      res.end('');
+    }
+  });
+});
+
 // step 3 from https://www.youtube.com/watch?v=e1LaekAnVIM&t=579s
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static('frontend/build'));

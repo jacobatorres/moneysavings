@@ -84,7 +84,7 @@
 }
 
 .item:target .smenu {
-  max-height: 500em;
+  max-height: 100%;
 }
 
 .good {
