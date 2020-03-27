@@ -110,12 +110,24 @@ class RecordMainPage extends Component {
               leisure: 0
             };
 
+            // you dont want to add the ID from the response data
+            console.log(response.data);
+
+            let id_to_omit = this.props.location.day_id;
+            console.log(id_to_omit);
+
             Object.keys(response.data).map(function(key, index) {
-              running_totals.bill += response.data[key].bill_value;
-              running_totals.food += response.data[key].food_value;
-              running_totals.transportation += response.data[key].tr_value;
-              running_totals.leisure += response.data[key].leisure_value;
+              console.log(response.data[key]._id);
+              if (response.data[key]._id != id_to_omit) {
+                running_totals.bill += response.data[key].bill_value;
+                running_totals.food += response.data[key].food_value;
+                running_totals.transportation += response.data[key].tr_value;
+                running_totals.leisure += response.data[key].leisure_value;
+              }
             });
+
+            console.log('tapos');
+            console.log(running_totals);
 
             this.state.running_totals = running_totals;
 
@@ -143,7 +155,7 @@ class RecordMainPage extends Component {
               });
           })
           .catch(error => {
-            console.log('nagkamali sa running totals');
+            console.log('nagkamali sa running totals ???');
             console.log(error.response);
           });
       })
