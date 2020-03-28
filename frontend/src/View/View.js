@@ -4,6 +4,8 @@ import './View.css';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import Backdrop from '../components/Backdrop/Backdrop';
 import Modal from '../components/Modal/modal';
+import { CSVLink, CSVDownload } from 'react-csv';
+import moment from 'moment';
 
 class View extends Component {
   state = {
@@ -52,7 +54,10 @@ class View extends Component {
       leisure_value: 0,
       leisure_label: '',
       startDate: new Date()
-    }
+    },
+
+    readyforDownload: false,
+    list_for_CSV: []
   };
 
   ConcatLabelValue(list1, list2, list_ids) {
@@ -213,6 +218,86 @@ class View extends Component {
             console.log('watch:');
             console.log(this.state.day_by_day);
             // get the day-by-day here
+
+            ///
+            ///
+            ///
+            axios
+              .get(axios_url + '/getAllDaysfromUser')
+              .then(response => {
+                console.log(response.data);
+                // get the timestamp, only the YYYY-MM-DD
+                let list_to_return_local = [['data', 'label', 'value']];
+                for (let i = 0; i < response.data.length; i++) {
+                  // timestamp
+                  // label and data
+
+                  // bill
+
+                  // food
+                  // tr
+                  // leisure
+                  let timestamp = moment(response.data[i].timestamp).format(
+                    'YYYY-MM-DD'
+                  );
+
+                  if (response.data[i].bill_value != 0) {
+                    let entry = [];
+                    entry.push(
+                      timestamp,
+                      response.data[i].bill_label,
+                      response.data[i].bill_value
+                    );
+
+                    list_to_return_local.push(entry);
+                  }
+
+                  // food
+                  if (response.data[i].food_value != 0) {
+                    let entry = [];
+                    entry.push(
+                      timestamp,
+                      response.data[i].food_label,
+                      response.data[i].food_value
+                    );
+
+                    list_to_return_local.push(entry);
+                  }
+
+                  // tr
+                  if (response.data[i].tr_value != 0) {
+                    let entry = [];
+                    entry.push(
+                      timestamp,
+                      response.data[i].tr_label,
+                      response.data[i].tr_value
+                    );
+
+                    list_to_return_local.push(entry);
+                  }
+
+                  // leisure
+                  if (response.data[i].leisure_value != 0) {
+                    let entry = [];
+                    entry.push(
+                      timestamp,
+                      response.data[i].leisure_label,
+                      response.data[i].leisure_value
+                    );
+
+                    list_to_return_local.push(entry);
+                  }
+                  console.log(list_to_return_local);
+                  console.log('plsss');
+                  this.state.list_for_CSV = list_to_return_local;
+                  this.setState({ readyforDownload: true });
+                  console.log(this.state.list_for_CSV);
+                }
+              })
+              .catch(error => {
+                console.log('nagkamali sa get day totals');
+                console.log(error.response);
+              });
           })
           .catch(error => {
             console.log('nagkamali sa running totals');
@@ -282,6 +367,93 @@ class View extends Component {
         console.log(error.response);
       });
   };
+
+  // generateCSVfile = () => {
+  //   // return a list of list, each row is a list
+  //   // date, label, value
+  //   // get the days (for all since there's no user)
+
+  //   this.state.list_for_CSV.push(['date', 'label', 'value']);
+  //   console.log('WAWIJAWDLKAWW');
+  //   let axios_url = 'https://moneysavings.herokuapp.com';
+  //   console.log(process.env.NODE_ENV);
+  //   if (process.env.NODE_ENV === 'development') {
+  //     axios_url = 'http://localhost:3001';
+  //   }
+  //   console.log(axios_url);
+
+  //   axios
+  //     .get(axios_url + '/getAllDaysfromUser')
+  //     .then(response => {
+  //       console.log(response.data);
+  //       // get the timestamp, only the YYYY-MM-DD
+
+  //       for (let i = 0; i < response.data.length; i++) {
+  //         // timestamp
+  //         // label and data
+
+  //         // bill
+
+  //         // food
+  //         // tr
+  //         // leisure
+  //         let timestamp = moment(response.data[i].timestamp).format(
+  //           'YYYY-MM-DD'
+  //         );
+
+  //         if (response.data[i].bill_value != 0) {
+  //           let entry = [];
+  //           entry.push(
+  //             timestamp,
+  //             response.data[i].bill_label,
+  //             response.data[i].bill_value
+  //           );
+
+  //           this.state.list_for_CSV.push(entry);
+  //         }
+
+  //         // food
+  //         if (response.data[i].food_value != 0) {
+  //           let entry = [];
+  //           entry.push(
+  //             timestamp,
+  //             response.data[i].food_label,
+  //             response.data[i].food_value
+  //           );
+
+  //           this.state.list_for_CSV.push(entry);
+  //         }
+
+  //         // tr
+  //         if (response.data[i].tr_value != 0) {
+  //           let entry = [];
+  //           entry.push(
+  //             timestamp,
+  //             response.data[i].tr_label,
+  //             response.data[i].tr_value
+  //           );
+
+  //           this.state.list_for_CSV.push(entry);
+  //         }
+
+  //         // leisure
+  //         if (response.data[i].leisure_value != 0) {
+  //           let entry = [];
+  //           entry.push(
+  //             timestamp,
+  //             response.data[i].leisure_label,
+  //             response.data[i].leisure_value
+  //           );
+
+  //           this.state.list_for_CSV.push(entry);
+  //         }
+  //       }
+  //     })
+  //     .catch(error => {
+  //       console.log('nagkamali sa get day totals');
+  //       console.log(error.response);
+  //     });
+  // };
 
   render() {
     let big_4_data = {
@@ -439,9 +611,16 @@ class View extends Component {
       );
     }
 
+    let link_for_download = (
+      <CSVLink data={this.state.list_for_CSV}>Get CSV File</CSVLink>
+    );
+
+    // month
+
     return (
       <div>
         {showBackdropSaved}
+
         {this.state.doesMonthPlanExiststate ? (
           <div className="middle">
             <div className="menu">
@@ -483,6 +662,9 @@ class View extends Component {
                   </div>
                 </li>
               ))}
+            </div>
+            <div style={{ 'margin-top': '1em', textAlign: 'center' }}>
+              {this.state.readyforDownload ? link_for_download : null}
             </div>
           </div>
         ) : (

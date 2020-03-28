@@ -299,6 +299,17 @@ app.delete('/deleteRecord', function(req, res) {
   });
 });
 
+app.get('/getAllDaysfromUser', function(req, res) {
+  Day.find({}, function(err, allDaysforUser) {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log('got tem!!!');
+      res.end(JSON.stringify(allDaysforUser));
+    }
+  });
+});
+
 // step 3 from https://www.youtube.com/watch?v=e1LaekAnVIM&t=579s
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static('frontend/build'));
