@@ -671,7 +671,7 @@ class View extends Component {
           <div id="textalign">
             No plan yet for {month_result} {year_result}
             <br />
-            <a href="/plan">Make a plan now! </a>{' '}
+            <Link to="/plan">Make a plan now!</Link>
           </div>
         )}
       </div>

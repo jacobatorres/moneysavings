@@ -7,6 +7,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 
 import Backdrop from '../components/Backdrop/Backdrop';
 import Modal from '../components/Modal/modal';
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 
 class RecordMainPage extends Component {
   state = {
@@ -205,8 +206,6 @@ class RecordMainPage extends Component {
   };
 
   saveRecordtoDB = event => {
-    event.preventDefault();
-
     // Send a POST request
     console.log('testtt');
 
@@ -293,7 +292,6 @@ class RecordMainPage extends Component {
 
   unshowBackdrop = event => {
     this.setState({ clickSaveRecord: false });
-    window.location.reload(false);
   };
 
   //
@@ -587,7 +585,8 @@ class RecordMainPage extends Component {
           <div id="textalign">
             No plan yet for {month_result} {year_result}
             <br />
-            <a href="/plan">Make a plan now! </a>{' '}
+            <Link to="/plan">Make a plan now!</Link>
+            {/* <a href="/plan"> </a>{' '} */}
           </div>
         )}
       </div>
