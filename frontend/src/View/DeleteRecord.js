@@ -71,7 +71,7 @@ class DeleteConfirmation extends Component {
       );
     }
 
-    return <div>{showBackdropSaved}</div>;
+    return <div>{this.state.clickSaveRecord ? showBackdropSaved : null}</div>;
   }
 }
 

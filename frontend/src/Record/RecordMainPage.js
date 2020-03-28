@@ -235,6 +235,7 @@ class RecordMainPage extends Component {
       .then(response => {
         console.log('tumama i guess');
         console.log(response);
+        this.setState({ clickSaveRecord: true });
       })
       .catch(error => {
         console.log('nagkamali');
@@ -247,8 +248,6 @@ class RecordMainPage extends Component {
     //   url: 'http://localhost:3001/saveRecord',
     //   data: this.state
     // });
-
-    this.setState({ clickSaveRecord: true });
   };
 
   showMessage = (average, user_input) => {

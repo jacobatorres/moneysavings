@@ -270,6 +270,7 @@ class RecordMainPage extends Component {
       .then(response => {
         console.log('r  update');
         console.log(response);
+        this.setState({ clickSaveRecord: true });
       })
       .catch(error => {
         console.log('wr ong update');
@@ -282,8 +283,6 @@ class RecordMainPage extends Component {
     //   url: 'http://localhost:3001/saveRecord',
     //   data: this.state
     // });
-
-    this.setState({ clickSaveRecord: true });
   };
 
   showMessage = (average, user_input) => {
