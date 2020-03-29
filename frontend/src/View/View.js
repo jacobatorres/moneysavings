@@ -320,10 +320,13 @@ class View extends Component {
   };
 
   unshowBackdrop = () => {
-    this.setState({ clickDelete: false });
-    this.setState(prevState => {
-      return { redirect: !prevState.redirect };
-    });
+    this.setState({ clickDelete: false, redirect: true });
+  };
+
+  goToRecord = () => {
+    if (this.state.redirect) {
+      return <Redirect to="/" />;
+    }
   };
 
   getRecordToDelete = value_id => {
@@ -690,6 +693,7 @@ class View extends Component {
             <Link to="/plan">Make a plan now!</Link>
           </div>
         )}
+        {this.goToRecord()}
       </div>
     );
   }

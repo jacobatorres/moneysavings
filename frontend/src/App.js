@@ -21,7 +21,13 @@ import View from './View/View';
 
 import DeleteConfirmation from './View/DeleteRecord';
 
-import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Route,
+  Link,
+  Switch,
+  Redirect
+} from 'react-router-dom';
 
 class App extends Component {
   state = {
@@ -41,7 +47,8 @@ class App extends Component {
     toggled_leisure_value: false,
 
     isSideDrawerOpen: false,
-    clearedData: false
+    clearedData: false,
+    redirect: false
   };
 
   drawerToggleClickHandler = () => {
@@ -51,9 +58,12 @@ class App extends Component {
   };
 
   backdropClickHandler = () => {
-    this.setState({ isSideDrawerOpen: false, clearedData: false });
+    this.setState({
+      isSideDrawerOpen: false,
+      clearedData: false,
+      redirect: true
+    });
     // window.location.reload(false);
-    window.location.reload(true);
   };
 
   handleChange = date => {
@@ -155,7 +165,7 @@ class App extends Component {
         console.log('finish na (delete');
         console.log(response);
 
-        this.setState({ clearedData: true });
+        this.setState({ clearedData: true, redirect: true });
         console.log('bye');
       })
       .catch(error => {
@@ -163,6 +173,10 @@ class App extends Component {
         console.log(error.response);
         this.setState({ clearedData: true });
       });
+  };
+
+  goToPlan = () => {
+    return <Redirect to="/" />;
   };
 
   render() {
@@ -212,6 +226,7 @@ class App extends Component {
 
     return (
       <Router>
+        {this.state.redirect ? this.goToPlan() : null}
         <div className="container">
           <Toolbar changesidedrawerstate={this.drawerToggleClickHandler} />
           {/* <SideDrawer show={this.state.isSideDrawerOpen} /> */}
@@ -241,7 +256,7 @@ class App extends Component {
               <Route path="/editrecord" component={EditRecord} />
               <Route path="/delete" component={DeleteConfirmation} />
               <Route path="/" exact component={RecordMainPage} />
-              <Route component={View} />
+              <Route component={Plan} />
             </Switch>
           </main>
         </div>

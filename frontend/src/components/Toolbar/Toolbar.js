@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import DrawerToggleButton from '../SideDrawer/DrawerToggleButton';
 import './Toolbar.css';
 
-import { browserHistory } from 'react-router';
+import { Redirect } from 'react-router-dom';
 
 import Backdrop from '../Backdrop/Backdrop';
 
@@ -13,7 +13,8 @@ import axios from 'axios';
 
 class toolbar extends Component {
   state = {
-    clearedData: false
+    clearedData: false,
+    redirect: false
   };
 
   clearData = event => {
@@ -31,7 +32,7 @@ class toolbar extends Component {
       .then(response => {
         console.log('finish na (delete');
         console.log(response);
-        this.setState({ clearedData: true });
+        this.setState({ clearedData: true, redirect: true });
 
         // get the running total for bill, food, transportation, leisure
       })
@@ -42,10 +43,13 @@ class toolbar extends Component {
       });
   };
 
+  goToPlan = () => {
+    return <Redirect to="/" />;
+  };
+
   unshowBackdrop = event => {
-    this.setState({ clearedData: false });
+    this.setState({ clearedData: false, redirect: true });
     // window.location.reload(false);
-    window.location.reload(true);
   };
 
   render() {
@@ -62,6 +66,7 @@ class toolbar extends Component {
 
     return (
       <header className="toolbar">
+        {this.state.redirect ? this.goToPlan() : null}
         <nav className="toolbar_nav">
           <div className="toolbar-togglebutton">
             <DrawerToggleButton click={this.props.changesidedrawerstate} />
