@@ -52,6 +52,7 @@ class App extends Component {
 
   backdropClickHandler = () => {
     this.setState({ isSideDrawerOpen: false, clearedData: false });
+    window.location.reload(false);
   };
 
   handleChange = date => {
@@ -154,6 +155,7 @@ class App extends Component {
         console.log(response);
 
         this.setState({ clearedData: true });
+        console.log('bye');
       })
       .catch(error => {
         console.log('nagkamali sa delete dito sa clear data');
@@ -173,16 +175,17 @@ class App extends Component {
     // let color_result = saved_val ? 'green' : 'red';
 
     let sideDrawer;
-    let sd_and_backdrop;
+    let sd_and_backdrop = null;
 
     let drawerClasses = 'side-drawer';
 
     let deleteConfirm = null;
 
     if (this.state.clearedData) {
+      console.log('plspks');
       deleteConfirm = (
         <div>
-          <Backdrop clicked={this.backdropClickHandler} showafterSD="true" />
+          <Backdrop clicked={this.backdropClickHandler} />
           <Modal clicked={this.backdropClickHandler} message="Deleted Data" />
         </div>
       );

@@ -75,6 +75,7 @@ app.get('/getMonthPlan', (req, res) => {
 });
 
 app.post('/saveRecord', (req, res) => {
+  console.log('i have entered here');
   console.log(req.body);
   const time_dmy = moment(
     req.body.timestamp,
@@ -126,7 +127,7 @@ app.post('/saveRecord', (req, res) => {
           } else {
             console.log('saved properly');
             console.log(newRecord);
-            // res.redirect('/');
+            res.end('');
           }
         });
       }
@@ -236,7 +237,8 @@ app.delete('/deleteAll', function(req, res) {
         if (err) {
           console.log('wrong with months');
         } else {
-          res.redirect('/');
+          console.log('returning...');
+          res.end();
         }
       });
     }
@@ -252,7 +254,7 @@ app.get('/getDay', function(req, res) {
       console.log('something wrong with day');
     } else {
       // get the day
-      res.end(JSON.stringify(day));
+      // res.end(JSON.stringify(day));
     }
   });
 });

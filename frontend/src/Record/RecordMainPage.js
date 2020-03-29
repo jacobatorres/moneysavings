@@ -206,6 +206,8 @@ class RecordMainPage extends Component {
   };
 
   saveRecordtoDB = event => {
+    event.preventDefault();
+
     // Send a POST request
     console.log('testtt');
 
@@ -215,7 +217,7 @@ class RecordMainPage extends Component {
       axios_url = 'http://localhost:3001';
     }
     console.log(axios_url);
-
+    console.log('boom');
     console.log(axios_url);
     axios
       .post(axios_url + '/saveRecord', {
@@ -234,14 +236,17 @@ class RecordMainPage extends Component {
       })
       .then(response => {
         console.log('tumama i guess');
+
         console.log(response);
         this.setState({ clickSaveRecord: true });
       })
       .catch(error => {
         console.log('nagkamali');
         console.log(error.response);
+        this.setState({ clickSaveRecord: true });
       });
 
+    console.log('maggg');
     // console.log(this.state);
     // axios({
     //   method: 'post',
@@ -291,6 +296,7 @@ class RecordMainPage extends Component {
 
   unshowBackdrop = event => {
     this.setState({ clickSaveRecord: false });
+    window.location.reload(false);
   };
 
   //
@@ -524,7 +530,6 @@ class RecordMainPage extends Component {
                 changed={this.valuePlannedChangedBill}
                 value={this.state.bill_value}
               />
-              <div className={bill_color}>{bill_message}</div>
               <div className={bill_color2}>{bill_message2}</div>
 
               <RecordInputSpent

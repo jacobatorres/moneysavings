@@ -29,6 +29,7 @@ class toolbar extends Component {
       .then(response => {
         console.log('finish na (delete');
         console.log(response);
+        this.setState({ clearedData: true });
 
         // get the running total for bill, food, transportation, leisure
       })
