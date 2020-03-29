@@ -28,7 +28,7 @@ const modal = props => (
     {props.longmessage == '1' ? (
       <div className="Modal" onClick={props.clicked}>
         <p style={{ 'margin-bottom': '1em' }}>
-          <strong>Deleted Record</strong>
+          <strong>{props.message}</strong>
         </p>
         {printlist(props.values_list)}
       </div>

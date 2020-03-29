@@ -231,14 +231,16 @@ app.delete('/deleteAll', function(req, res) {
   Day.deleteMany({}, function(err, result) {
     if (err) {
       console.log('something wrong with deleting the days');
+      res.end('');
     } else {
       // then remove months
       Month.deleteMany({}, function(err, result) {
         if (err) {
           console.log('wrong with months');
+          res.end('');
         } else {
           console.log('returning...');
-          res.end();
+          res.end('');
         }
       });
     }

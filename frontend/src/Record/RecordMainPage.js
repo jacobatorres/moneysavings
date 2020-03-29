@@ -44,7 +44,8 @@ class RecordMainPage extends Component {
       leisure: 0
     },
 
-    clickSaveRecord: false
+    clickSaveRecord: false,
+    modalDisplay: {}
   };
 
   componentDidMount() {
@@ -238,6 +239,23 @@ class RecordMainPage extends Component {
         console.log('tumama i guess');
 
         console.log(response);
+
+        let forDisplay = {
+          bill_value: this.state.bill_value,
+          bill_label: this.state.bill_label,
+
+          food_value: this.state.food_value,
+          food_label: this.state.food_label,
+
+          tr_value: this.state.tr_value,
+          tr_label: this.state.tr_label,
+
+          leisure_value: this.state.leisure_value,
+          leisure_label: this.state.leisure_label,
+          timestamp: this.state.startDate
+        };
+
+        this.state.modalDisplay = { ...forDisplay };
 
         this.setState({
           bill_value: 0,
@@ -517,17 +535,28 @@ class RecordMainPage extends Component {
     let showBackdropSaved = null;
 
     if (this.state.clickSaveRecord) {
+      let list_for_modal = [];
+      Object.keys(this.state.modalDisplay).map(item =>
+        list_for_modal.push(this.state.modalDisplay[item])
+      );
+      console.log('printiong');
+
       showBackdropSaved = (
         <div>
           <Backdrop clicked={this.unshowBackdrop} />
-          <Modal clicked={this.unshowBackdrop} message="Record Saved" />
+          <Modal
+            clicked={this.unshowBackdrop}
+            message="Record Saved"
+            longmessage="1"
+            values_list={list_for_modal}
+          />
         </div>
       );
     }
 
     return (
       <div>
-        {showBackdropSaved}
+        {this.state.clickSaveRecord ? showBackdropSaved : null}
         {this.state.doesMonthPlanexist ? (
           <main style={{ marginTop: '100px' }}>
             <form onSubmit={this.saveRecordtoDB} id="textalign">

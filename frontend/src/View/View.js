@@ -228,7 +228,9 @@ class View extends Component {
               .then(response => {
                 console.log(response.data);
                 // get the timestamp, only the YYYY-MM-DD
-                let list_to_return_local = [['data', 'label', 'value']];
+                let list_to_return_local = [
+                  ['data', 'category', 'label', 'value']
+                ];
                 for (let i = 0; i < response.data.length; i++) {
                   // timestamp
                   // label and data
@@ -246,6 +248,7 @@ class View extends Component {
                     let entry = [];
                     entry.push(
                       timestamp,
+                      'bill',
                       response.data[i].bill_label,
                       response.data[i].bill_value
                     );
@@ -258,6 +261,7 @@ class View extends Component {
                     let entry = [];
                     entry.push(
                       timestamp,
+                      'food',
                       response.data[i].food_label,
                       response.data[i].food_value
                     );
@@ -270,6 +274,7 @@ class View extends Component {
                     let entry = [];
                     entry.push(
                       timestamp,
+                      'transportation',
                       response.data[i].tr_label,
                       response.data[i].tr_value
                     );
@@ -282,6 +287,7 @@ class View extends Component {
                     let entry = [];
                     entry.push(
                       timestamp,
+                      'leisure',
                       response.data[i].leisure_label,
                       response.data[i].leisure_value
                     );
@@ -605,21 +611,21 @@ class View extends Component {
 
     let showBackdropSaved = null;
 
-    let message_modal = 'where are you\n and im so sorry\n i cannot sleep';
-
     let list_for_modal = [];
     Object.keys(this.state.value_to_delete).map(item =>
       list_for_modal.push(this.state.value_to_delete[item])
     );
 
     if (this.state.clickDelete) {
+      console.log(list_for_modal);
+      console.log('printiong');
+
       showBackdropSaved = (
         <div>
           <Backdrop clicked={this.unshowBackdrop} />
           <Modal
             clicked={this.unshowBackdrop}
-            lis
-            message={message_modal}
+            message="Deleted Record"
             longmessage="1"
             values_list={list_for_modal}
           />
