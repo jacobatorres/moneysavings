@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import './View.css';
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import Backdrop from '../components/Backdrop/Backdrop';
 import Modal from '../components/Modal/modal';
 import { CSVLink, CSVDownload } from 'react-csv';
@@ -57,7 +57,8 @@ class View extends Component {
     },
 
     readyforDownload: false,
-    list_for_CSV: []
+    list_for_CSV: [],
+    redirect: false
   };
 
   ConcatLabelValue(list1, list2, list_ids) {
@@ -320,12 +321,12 @@ class View extends Component {
 
   unshowBackdrop = () => {
     this.setState({ clickDelete: false });
-    window.location.reload(true);
+    this.setState(prevState => {
+      return { redirect: !prevState.redirect };
+    });
   };
 
-  deleteRecord = value_id => {
-    console.log(value_id);
-    console.log('WAWIJAWDLKAWW');
+  getRecordToDelete = value_id => {
     let axios_url = 'https://moneysavings.herokuapp.com';
     console.log(process.env.NODE_ENV);
     if (process.env.NODE_ENV === 'development') {
@@ -356,7 +357,19 @@ class View extends Component {
         console.log('nagkamali sa get day totals');
         console.log(error.response);
       });
+  };
 
+  deleteRecord = value_id => {
+    console.log(value_id);
+    console.log('WAWIJAWDLKAWW');
+    let axios_url = 'https://moneysavings.herokuapp.com';
+    console.log(process.env.NODE_ENV);
+    if (process.env.NODE_ENV === 'development') {
+      axios_url = 'http://localhost:3001';
+    }
+    console.log(axios_url);
+
+    this.getRecordToDelete(value_id);
     axios
       .delete(axios_url + '/deleteRecord?' + 'id=' + value_id)
       .then(response => {

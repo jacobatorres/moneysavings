@@ -21,7 +21,7 @@ import View from './View/View';
 
 import DeleteConfirmation from './View/DeleteRecord';
 
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom';
 
 class App extends Component {
   state = {
@@ -234,12 +234,15 @@ class App extends Component {
                 <button id="viewbutton">View</button>
               </Link>
             </div>
-            <Route path="/record" component={RecordMainPage} />
-            <Route path="/plan" component={Plan} />
-            <Route path="/view" component={View} />
-            <Route path="/editrecord" component={EditRecord} />
-            <Route path="/delete" component={DeleteConfirmation} />
-            <Route path="/" exact component={RecordMainPage} />
+            <Switch>
+              <Route path="/record" component={RecordMainPage} />
+              <Route path="/plan" component={Plan} />
+              <Route path="/view" component={View} />
+              <Route path="/editrecord" component={EditRecord} />
+              <Route path="/delete" component={DeleteConfirmation} />
+              <Route path="/" exact component={RecordMainPage} />
+              <Route component={View} />
+            </Switch>
           </main>
         </div>
       </Router>
