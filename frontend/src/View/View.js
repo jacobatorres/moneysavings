@@ -320,7 +320,7 @@ class View extends Component {
 
   unshowBackdrop = () => {
     this.setState({ clickDelete: false });
-    window.location.reload(false);
+    window.history.go(0);
   };
 
   deleteRecord = value_id => {

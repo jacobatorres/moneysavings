@@ -254,7 +254,7 @@ app.get('/getDay', function(req, res) {
       console.log('something wrong with day');
     } else {
       // get the day
-      // res.end(JSON.stringify(day));
+      res.end(JSON.stringify(day));
     }
   });
 });
