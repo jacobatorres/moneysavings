@@ -11,6 +11,11 @@ const path = require('path');
 
 const cors = require('cors');
 
+// for auth
+const passport = require('passport');
+const LocalStrategy = require('passport-local');
+const User = require('./Schemas/user');
+
 let API_PORT = process.env.PORT || 3001;
 app = express();
 app.use(bodyparser.json());
