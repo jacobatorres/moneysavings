@@ -52,9 +52,9 @@ class DeleteConfirmation extends Component {
 
   unshowBackdrop = event => {
     this.setState({ clickSaveRecord: false });
-    setTimeout(function() {
-      window.location.reload();
-    });
+    // setTimeout(function() {
+    //   window.location.reload();
+    // });
   };
 
   render() {

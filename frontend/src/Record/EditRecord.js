@@ -326,7 +326,7 @@ class RecordMainPage extends Component {
 
   unshowBackdrop = event => {
     this.setState({ clickSaveRecord: false });
-    window.location.reload(false);
+    // window.location.reload(false);
   };
 
   //
