@@ -3,6 +3,8 @@ import React, { Component } from 'react';
 import DrawerToggleButton from '../SideDrawer/DrawerToggleButton';
 import './Toolbar.css';
 
+import { browserHistory } from 'react-router';
+
 import Backdrop from '../Backdrop/Backdrop';
 
 import Modal from '../Modal/modal';
@@ -43,6 +45,7 @@ class toolbar extends Component {
   unshowBackdrop = event => {
     this.setState({ clearedData: false });
     // window.location.reload(false);
+    window.location.reload(true);
   };
 
   render() {

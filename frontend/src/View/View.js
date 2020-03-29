@@ -320,6 +320,7 @@ class View extends Component {
 
   unshowBackdrop = () => {
     this.setState({ clickDelete: false });
+    window.location.reload(true);
   };
 
   deleteRecord = value_id => {
@@ -336,34 +337,33 @@ class View extends Component {
       .get(axios_url + '/getDay?' + 'id=' + value_id)
       .then(response => {
         console.log('iv of speads');
-
-        axios
-          .delete(axios_url + '/deleteRecord?' + 'id=' + value_id)
-          .then(response => {
-            console.log('doneeee');
-
-            this.setState({
-              value_to_delete: {
-                bill_value: response.data.bill_value,
-                bill_label: response.data.bill_label,
-                food_value: response.data.food_value,
-                food_label: response.data.food_label,
-                tr_value: response.data.tr_value,
-                tr_label: response.data.tr_label,
-                leisure_value: response.data.leisure_value,
-                leisure_label: response.data.leisure_label,
-                startDate: Date.parse(response.data.timestamp)
-              },
-              clickDelete: true
-            });
-          })
-          .catch(error => {
-            console.log('nagkamali sa delete totals');
-            console.log(error.response);
-          });
+        this.setState({
+          value_to_delete: {
+            bill_value: response.data.bill_value,
+            bill_label: response.data.bill_label,
+            food_value: response.data.food_value,
+            food_label: response.data.food_label,
+            tr_value: response.data.tr_value,
+            tr_label: response.data.tr_label,
+            leisure_value: response.data.leisure_value,
+            leisure_label: response.data.leisure_label,
+            startDate: Date.parse(response.data.timestamp)
+          },
+          clickDelete: true
+        });
       })
       .catch(error => {
         console.log('nagkamali sa get day totals');
+        console.log(error.response);
+      });
+
+    axios
+      .delete(axios_url + '/deleteRecord?' + 'id=' + value_id)
+      .then(response => {
+        console.log('doneeee');
+      })
+      .catch(error => {
+        console.log('nagkamali sa delete totals');
         console.log(error.response);
       });
   };
@@ -638,7 +638,10 @@ class View extends Component {
                     ) : (
                       big_4_data[key][2].map(i => (
                         <ul>
-                          <li className="alignleft">{i[0]}</li>
+                          <li className="alignleft">
+                            {'> '}
+                            {i[0]}
+                          </li>
                           <li className="alignright">
                             <Link
                               to={{

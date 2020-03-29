@@ -53,6 +53,7 @@ class App extends Component {
   backdropClickHandler = () => {
     this.setState({ isSideDrawerOpen: false, clearedData: false });
     // window.location.reload(false);
+    window.location.reload(true);
   };
 
   handleChange = date => {

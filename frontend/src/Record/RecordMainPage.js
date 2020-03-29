@@ -238,7 +238,22 @@ class RecordMainPage extends Component {
         console.log('tumama i guess');
 
         console.log(response);
-        this.setState({ clickSaveRecord: true });
+
+        this.setState({
+          bill_value: 0,
+          bill_label: '',
+          food_value: 0,
+          food_label: '',
+          tr_value: 0,
+          tr_label: '',
+          leisure_value: 0,
+          leisure_label: '',
+          toggled_bill_value: false,
+          toggled_food_value: false,
+          toggled_tr_value: false,
+          toggled_leisure_value: false,
+          clickSaveRecord: true
+        });
       })
       .catch(error => {
         console.log('nagkamali');
