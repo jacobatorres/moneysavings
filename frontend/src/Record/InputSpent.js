@@ -30,6 +30,16 @@ const RecordInputSpent = props => {
     );
   }
 
+  if (props.inputtype == 'password') {
+    input_result = (
+      <input
+        type="password"
+        value={props.value}
+        onChange={props.changed}
+      ></input>
+    );
+  }
+
   return (
     <div className="font">
       <p>{props.label}</p>

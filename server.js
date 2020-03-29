@@ -22,19 +22,20 @@ app.use(bodyparser.json());
 
 app.use(cors());
 
-// // Enable CORS
-// app.use(function(req, res, next) {
-//   res.header('Access-Control-Allow-Origin', '*');
-//   res.header(
-//     'Access-Control-Allow-Methods',
-//     'GET,HEAD,OPTIONS,POST,PUT,DELETE'
-//   );
-//   res.header(
-//     'Access-Control-Allow-Headers',
-//     'Origin, X-Requested-With, Content-Type, Accept, Authorization'
-//   );
-//   next();
-// });
+// passport configuration for auth
+app.use(
+  require('express-session')({
+    secret: 'sikreto-para-sa-auth',
+    resave: false,
+    saveUninitialized: false
+  })
+);
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
 const dbRoute =
   process.env.MONGODB_URI || 'mongodb://localhost:27017/moneysavingsapp';
 
@@ -315,6 +316,28 @@ app.get('/getAllDaysfromUser', function(req, res) {
     } else {
       console.log('got tem!!!');
       res.end(JSON.stringify(allDaysforUser));
+    }
+  });
+});
+
+// for auth
+
+// show register
+app.get('/register', function(req, res) {
+  res.end('register');
+});
+
+app.post('/printregister', function(req, res) {
+  let newUser = new User({ username: req.body.username });
+
+  User.register(newUser, req.body.password, function(err, user) {
+    if (err) {
+      console.log(err);
+      return res.end(JSON.stringify({ error: 'UserExistsError' }));
+    } else {
+      passport.authenticate('local')(req, res, function() {
+        return res.end(JSON.stringify(user));
+      });
     }
   });
 });
