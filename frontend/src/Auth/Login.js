@@ -5,15 +5,15 @@ import Backdrop from '../components/Backdrop/Backdrop';
 import Modal from '../components/Modal/modal';
 import { Redirect } from 'react-router-dom';
 
-class Register extends Component {
+class Login extends Component {
   state = {
     name: '',
     password: '',
-    clickRegister: false,
+    clickLogin: false,
     modalMessage: ''
   };
 
-  registertoDB = event => {
+  logintoDB = event => {
     event.preventDefault();
 
     // Send a POST request
@@ -24,32 +24,29 @@ class Register extends Component {
       axios_url = 'http://localhost:3001';
     }
     console.log(axios_url);
-    console.log('boom auth');
+    console.log('boom auth login');
     console.log(axios_url);
     axios
-      .post(axios_url + '/printregister', {
+      .post(axios_url + '/login', {
         username: this.state.name,
         password: this.state.password
       })
       .then(response => {
-        if (response.data.error == 'UserExistsError') {
+        // reponse.data == Unauthorized, means invalid
+        // else, it's good
+
+        if (response.data == 'Unauthorized') {
           this.setState({
-            name: '',
-            password: '',
-            clickRegister: true,
-            modalMessage: 'User Already Exists'
+            modalMessage: 'Unauthorized User',
+            clickLogin: true
           });
         } else {
           this.setState({
-            name: '',
-            password: '',
-            clickRegister: true,
-            modalMessage: 'User Registered!'
+            modalMessage:
+              'Successful Login! Welcome ' + response.data.username + '!',
+            clickLogin: true
           });
         }
-        console.log('tumama anssd auth ');
-        console.log(response);
-        console.log(response.data);
       })
       .catch(error => {
         console.log('nagkamali');
@@ -69,12 +66,12 @@ class Register extends Component {
   };
 
   unshowBackdrop = () => {
-    this.setState({ clickRegister: false });
+    this.setState({ clickLogin: false });
   };
 
   render() {
     let showRegisterOk = null;
-    if (this.state.clickRegister) {
+    if (this.state.clickLogin) {
       showRegisterOk = (
         <div>
           <Backdrop clicked={this.unshowBackdrop} />
@@ -87,8 +84,9 @@ class Register extends Component {
     }
     return (
       <main style={{ marginTop: '100px' }}>
+        I am at login....
         {showRegisterOk}
-        <form onSubmit={this.registertoDB} id="textalign">
+        <form onSubmit={this.logintoDB} id="textalign">
           <p style={{ marginTop: '50px' }}></p>
           <RecordInputSpent
             label="Name"
@@ -104,11 +102,11 @@ class Register extends Component {
             inputtype="password"
           />
           <p style={{ marginTop: '30px' }}></p>
-          <button type="Submit">Register</button>
+          <button type="Submit">Login</button>
         </form>
       </main>
     );
   }
 }
 
-export default Register;
+export default Login;

@@ -323,9 +323,6 @@ app.get('/getAllDaysfromUser', function(req, res) {
 // for auth
 
 // show register
-app.get('/register', function(req, res) {
-  res.end('register');
-});
 
 app.post('/printregister', function(req, res) {
   let newUser = new User({ username: req.body.username });
@@ -341,6 +338,24 @@ app.post('/printregister', function(req, res) {
     }
   });
 });
+
+// show login form
+app.post(
+  '/login',
+
+  function(req, res, next) {
+    console.log('middleware...');
+    console.log(req.body);
+    next();
+  },
+
+  passport.authenticate('local'),
+  (req, res) => {
+    console.log('logged in');
+    console.log(req.body);
+    return res.end(JSON.stringify(req.body));
+  }
+);
 
 // step 3 from https://www.youtube.com/watch?v=e1LaekAnVIM&t=579s
 if (process.env.NODE_ENV === 'production') {

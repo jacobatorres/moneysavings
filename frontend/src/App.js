@@ -16,6 +16,7 @@ import './App.css';
 import RecordMainPage from './Record/RecordMainPage';
 import EditRecord from './Record/EditRecord';
 import Register from './Auth/Register';
+import Login from './Auth/Login';
 
 import Plan from './Plan/Plan';
 import View from './View/View';
@@ -252,6 +253,8 @@ class App extends Component {
             </div>
             <Switch>
               <Route path="/register" component={Register} />
+              <Route path="/login" component={Login} />
+
               <Route path="/record" component={RecordMainPage} />
               <Route path="/plan" component={Plan} />
               <Route path="/view" component={View} />
