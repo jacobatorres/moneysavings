@@ -10,7 +10,9 @@ class Login extends Component {
     name: '',
     password: '',
     clickLogin: false,
-    modalMessage: ''
+    modalMessage: '',
+    redirecttoPlan: false,
+    loginSuccess: false
   };
 
   logintoDB = event => {
@@ -38,17 +40,25 @@ class Login extends Component {
         if (response.data == 'Unauthorized') {
           this.setState({
             modalMessage: 'Unauthorized User',
-            clickLogin: true
+            clickLogin: true,
+            loginSuccess: false
           });
         } else {
           this.setState({
             modalMessage:
               'Successful Login! Welcome ' + response.data.username + '!',
-            clickLogin: true
+            clickLogin: true,
+            loginSuccess: true
           });
         }
       })
       .catch(error => {
+        this.setState({
+          modalMessage: 'Unauthorized User',
+          clickLogin: true,
+          loginSuccess: false
+        });
+
         console.log('nagkamali');
         console.log(error.response);
       });
@@ -66,7 +76,13 @@ class Login extends Component {
   };
 
   unshowBackdrop = () => {
-    this.setState({ clickLogin: false });
+    this.setState({ clickLogin: false, redirecttoPlan: true });
+  };
+
+  goToPlan = () => {
+    if (this.state.redirecttoPlan && this.state.loginSuccess) {
+      return <Redirect to="/plan" />;
+    }
   };
 
   render() {
@@ -85,6 +101,7 @@ class Login extends Component {
     return (
       <main style={{ marginTop: '100px' }}>
         I am at login....
+        {this.goToPlan()}
         {showRegisterOk}
         <form onSubmit={this.logintoDB} id="textalign">
           <p style={{ marginTop: '50px' }}></p>
