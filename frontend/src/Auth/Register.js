@@ -88,6 +88,8 @@ class Register extends Component {
       <main style={{ marginTop: '100px' }}>
         {showRegisterOk}
         <form onSubmit={this.registertoDB} id="textalign">
+          <strong>Register</strong>
+
           <p style={{ marginTop: '50px' }}></p>
           <RecordInputSpent
             label="Name"

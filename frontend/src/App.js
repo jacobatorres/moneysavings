@@ -13,8 +13,6 @@ import 'react-datepicker/dist/react-datepicker.css';
 import './App.css';
 
 // import the other files
-import RecordMainPage from './Record/RecordMainPage';
-import EditRecord from './Record/EditRecord';
 import Register from './Auth/Register';
 import Login from './Auth/Login';
 
@@ -22,6 +20,10 @@ import Plan from './Plan/Plan';
 import View from './View/View';
 
 import DeleteConfirmation from './View/DeleteRecord';
+
+import RecordMainPage from './Record/RecordMainPage';
+
+import EditRecord from './Record/EditRecord';
 
 import {
   BrowserRouter as Router,
@@ -216,7 +218,28 @@ class App extends Component {
           <nav className={drawerClasses}>
             <ul>
               <li>
-                <button onClick={this.clearData}>Clear Data</button>
+                {' '}
+                <Link to="/login">
+                  <a>Login</a>
+                </Link>
+              </li>
+              <li>
+                {' '}
+                <Link to="/register">
+                  <a>Register</a>
+                </Link>
+              </li>
+              <li>
+                {' '}
+                <Link to="/login">
+                  <a>Logout</a>
+                </Link>
+              </li>
+
+              <li>
+                <a onClick={this.clearData} style={{ cursor: 'pointer' }}>
+                  Clear Data
+                </a>
               </li>
             </ul>
           </nav>

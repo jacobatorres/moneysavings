@@ -8,6 +8,8 @@ import Backdrop from '../Backdrop/Backdrop';
 
 import Modal from '../Modal/modal';
 
+import { Link } from 'react-router-dom';
+
 class sideDrawer extends Component {
   state = {
     clearedData: false

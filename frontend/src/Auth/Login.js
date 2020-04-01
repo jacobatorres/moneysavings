@@ -3,7 +3,7 @@ import axios from 'axios';
 import RecordInputSpent from '../Record/InputSpent';
 import Backdrop from '../components/Backdrop/Backdrop';
 import Modal from '../components/Modal/modal';
-import { Redirect } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
 
 class Login extends Component {
   state = {
@@ -100,10 +100,11 @@ class Login extends Component {
     }
     return (
       <main style={{ marginTop: '100px' }}>
-        I am at login....
         {this.goToPlan()}
         {showRegisterOk}
         <form onSubmit={this.logintoDB} id="textalign">
+          <strong>Login</strong>
+
           <p style={{ marginTop: '50px' }}></p>
           <RecordInputSpent
             label="Name"

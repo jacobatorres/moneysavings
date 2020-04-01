@@ -11,6 +11,8 @@ import Modal from '../Modal/modal';
 
 import axios from 'axios';
 
+import { Link } from 'react-router-dom';
+
 class toolbar extends Component {
   state = {
     clearedData: false,
@@ -78,7 +80,28 @@ class toolbar extends Component {
           <div className="toolbar_navitems">
             <ul>
               <li>
-                <button onClick={this.clearData}>Clear Data</button>
+                {' '}
+                <Link to="/login">
+                  <a>Login</a>
+                </Link>
+              </li>
+              <li>
+                {' '}
+                <Link to="/register">
+                  <a>Register</a>
+                </Link>
+              </li>
+              <li>
+                {' '}
+                <Link to="/login">
+                  <a>Logout</a>
+                </Link>
+              </li>
+
+              <li>
+                <a onClick={this.clearData} style={{ cursor: 'pointer' }}>
+                  Clear Data
+                </a>
                 {hasClearedData}
               </li>
             </ul>

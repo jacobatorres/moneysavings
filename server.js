@@ -346,6 +346,13 @@ app.post('/login', passport.authenticate('local'), (req, res) => {
   return res.end(JSON.stringify(req.body));
 });
 
+// log out
+
+app.get('/logout', function(req, res) {
+  req.logout();
+  return res.end(JSON.stringify({ result: 'logged out' }));
+});
+
 // step 3 from https://www.youtube.com/watch?v=e1LaekAnVIM&t=579s
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static('frontend/build'));
