@@ -25,6 +25,8 @@ import RecordMainPage from './Record/RecordMainPage';
 
 import EditRecord from './Record/EditRecord';
 
+import Aux from './hoc/Auxillary';
+
 import {
   BrowserRouter as Router,
   Route,
@@ -32,6 +34,8 @@ import {
   Switch,
   Redirect
 } from 'react-router-dom';
+
+const LoggedInValue = React.createContext('light');
 
 class App extends Component {
   state = {
@@ -52,7 +56,8 @@ class App extends Component {
 
     isSideDrawerOpen: false,
     clearedData: false,
-    redirect: false
+    redirect: false,
+    loggedIn: false
   };
 
   drawerToggleClickHandler = () => {
@@ -117,42 +122,42 @@ class App extends Component {
     this.setState({ leisure_label: event.target.value });
   };
 
-  saveRecordtoDB = event => {
-    event.preventDefault();
-    console.log('i made it here');
+  // saveRecordtoDB = event => {
+  //   event.preventDefault();
+  //   console.log('i made it here');
 
-    // Send a POST request
+  //   // Send a POST request
 
-    console.log(this.state);
-    axios
-      .post('http://localhost:3001/saveRecord', {
-        bill_value: this.state.bill_value,
-        food_value: this.state.food_value,
-        tr_value: this.state.tr_value,
-        leisure_value: this.state.leisure_value,
+  //   console.log(this.state);
+  //   axios
+  //     .post('http://localhost:3001/saveRecord', {
+  //       bill_value: this.state.bill_value,
+  //       food_value: this.state.food_value,
+  //       tr_value: this.state.tr_value,
+  //       leisure_value: this.state.leisure_value,
 
-        bill_label: this.state.bill_label,
-        food_label: this.state.food_label,
-        tr_label: this.state.tr_label,
-        leisure_label: this.state.leisure_label,
-        timestamp: this.state.startDate
-      })
-      .then(response => {
-        console.log('tumama i guess');
-        console.log(response);
-      })
-      .catch(error => {
-        console.log('nagkamali');
-        console.log(error.response);
-      });
+  //       bill_label: this.state.bill_label,
+  //       food_label: this.state.food_label,
+  //       tr_label: this.state.tr_label,
+  //       leisure_label: this.state.leisure_label,
+  //       timestamp: this.state.startDate
+  //     })
+  //     .then(response => {
+  //       console.log('tumama i guess');
+  //       console.log(response);
+  //     })
+  //     .catch(error => {
+  //       console.log('nagkamali');
+  //       console.log(error.response);
+  //     });
 
-    // console.log(this.state);
-    // axios({
-    //   method: 'post',
-    //   url: 'http://localhost:3001/saveRecord',
-    //   data: this.state
-    // });
-  };
+  //   // console.log(this.state);
+  //   // axios({
+  //   //   method: 'post',
+  //   //   url: 'http://localhost:3001/saveRecord',
+  //   //   data: this.state
+  //   // });
+  // };
 
   clearData = event => {
     console.log('hello');
@@ -180,7 +185,32 @@ class App extends Component {
   };
 
   goToPlan = () => {
-    return <Redirect to="/" />;
+    return <Redirect to="/login" />;
+  };
+
+  logout = () => {
+    console.log('hello');
+    let axios_url = 'https://moneysavings.herokuapp.com';
+    console.log(process.env.NODE_ENV);
+    if (process.env.NODE_ENV === 'development') {
+      axios_url = 'http://localhost:3001';
+    }
+    console.log(axios_url);
+
+    axios
+      .get(axios_url + '/logout')
+      .then(response => {
+        console.log('logout');
+        console.log(response);
+
+        // this.setState({ clearedData: true, redirect: true });
+        console.log('bye logout');
+      })
+      .catch(error => {
+        console.log('nagkamali sa delete dito sa clear data');
+        console.log(error.response);
+        this.setState({ clearedData: true });
+      });
   };
 
   render() {
@@ -217,24 +247,30 @@ class App extends Component {
         <div>
           <nav className={drawerClasses}>
             <ul>
-              <li>
-                {' '}
-                <Link to="/login">
-                  <a>Login</a>
-                </Link>
-              </li>
-              <li>
-                {' '}
-                <Link to="/register">
-                  <a>Register</a>
-                </Link>
-              </li>
-              <li>
-                {' '}
-                <Link to="/login">
-                  <a>Logout</a>
-                </Link>
-              </li>
+              {this.state.loggedIn ? (
+                <li>
+                  {' '}
+                  <a onClick={this.logout} style={{ cursor: 'pointer' }}>
+                    Logout
+                  </a>
+                </li>
+              ) : (
+                <Aux>
+                  {' '}
+                  <li>
+                    {' '}
+                    <Link to="/login">
+                      <a>Login</a>
+                    </Link>
+                  </li>
+                  <li>
+                    {' '}
+                    <Link to="/register">
+                      <a>Register</a>
+                    </Link>
+                  </li>
+                </Aux>
+              )}
 
               <li>
                 <a onClick={this.clearData} style={{ cursor: 'pointer' }}>
@@ -253,7 +289,10 @@ class App extends Component {
       <Router>
         {this.state.redirect ? this.goToPlan() : null}
         <div className="container">
-          <Toolbar changesidedrawerstate={this.drawerToggleClickHandler} />
+          <Toolbar
+            changesidedrawerstate={this.drawerToggleClickHandler}
+            isLoggedIn={this.state.isLoggedIn}
+          />
           {/* <SideDrawer show={this.state.isSideDrawerOpen} /> */}
           {sd_and_backdrop}
           {deleteConfirm}
@@ -283,8 +322,9 @@ class App extends Component {
               <Route path="/view" component={View} />
               <Route path="/editrecord" component={EditRecord} />
               <Route path="/delete" component={DeleteConfirmation} />
+
               <Route path="/" exact component={RecordMainPage} />
-              <Route component={Plan} />
+              <Route component={Login} />
             </Switch>
           </main>
         </div>

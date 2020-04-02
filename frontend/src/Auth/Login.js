@@ -3,7 +3,7 @@ import axios from 'axios';
 import RecordInputSpent from '../Record/InputSpent';
 import Backdrop from '../components/Backdrop/Backdrop';
 import Modal from '../components/Modal/modal';
-import { Redirect, Link } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 
 class Login extends Component {
   state = {

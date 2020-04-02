@@ -353,6 +353,14 @@ app.get('/logout', function(req, res) {
   return res.end(JSON.stringify({ result: 'logged out' }));
 });
 
+function isLoggedIn(req, res, next) {
+  if (req.isAuthenticated()) {
+    return next();
+  }
+
+  return 'Unauthorized';
+}
+
 // step 3 from https://www.youtube.com/watch?v=e1LaekAnVIM&t=579s
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static('frontend/build'));

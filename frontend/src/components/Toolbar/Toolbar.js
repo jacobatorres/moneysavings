@@ -13,6 +13,8 @@ import axios from 'axios';
 
 import { Link } from 'react-router-dom';
 
+import Aux from '../../hoc/Auxillary';
+
 class toolbar extends Component {
   state = {
     clearedData: false,
@@ -54,6 +56,31 @@ class toolbar extends Component {
     // window.location.reload(false);
   };
 
+  logout = () => {
+    console.log('hello');
+    let axios_url = 'https://moneysavings.herokuapp.com';
+    console.log(process.env.NODE_ENV);
+    if (process.env.NODE_ENV === 'development') {
+      axios_url = 'http://localhost:3001';
+    }
+    console.log(axios_url);
+
+    axios
+      .get(axios_url + '/logout')
+      .then(response => {
+        console.log('logout');
+        console.log(response);
+
+        // this.setState({ clearedData: true, redirect: true });
+        console.log('bye logout');
+      })
+      .catch(error => {
+        console.log('nagkamali sa delete dito sa clear data');
+        console.log(error.response);
+        this.setState({ clearedData: true });
+      });
+  };
+
   render() {
     let hasClearedData = null;
 
@@ -79,25 +106,29 @@ class toolbar extends Component {
           <div className="space-right"></div>
           <div className="toolbar_navitems">
             <ul>
-              <li>
-                {' '}
-                <Link to="/login">
-                  <a>Login</a>
-                </Link>
-              </li>
-              <li>
-                {' '}
-                <Link to="/register">
-                  <a>Register</a>
-                </Link>
-              </li>
-              <li>
-                {' '}
-                <Link to="/login">
-                  <a>Logout</a>
-                </Link>
-              </li>
-
+              {this.props.isLoggedIn ? (
+                <li>
+                  <a onClick={this.logout} style={{ cursor: 'pointer' }}>
+                    Logout
+                  </a>
+                </li>
+              ) : (
+                <Aux>
+                  {' '}
+                  <li>
+                    {' '}
+                    <Link to="/login">
+                      <a>Login</a>
+                    </Link>
+                  </li>
+                  <li>
+                    {' '}
+                    <Link to="/register">
+                      <a>Register</a>
+                    </Link>
+                  </li>
+                </Aux>
+              )}{' '}
               <li>
                 <a onClick={this.clearData} style={{ cursor: 'pointer' }}>
                   Clear Data
