@@ -93,6 +93,13 @@ class toolbar extends Component {
           <Modal clicked={this.unshowBackdrop} message="Deleted Data" />
         </div>
       );
+    } else if (this.props.justLoggedOut) {
+      hasClearedData = (
+        <div>
+          <Backdrop clicked={this.unshowBackdrop} showafterSD="true" />
+          <Modal clicked={this.unshowBackdrop} message="Logged Out" />
+        </div>
+      );
     }
 
     return (

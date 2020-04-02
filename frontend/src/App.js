@@ -29,6 +29,8 @@ import Aux from './hoc/Auxillary';
 
 import RecordInputSpent from './Record/InputSpent';
 
+import DrawerToggleButton from './components/SideDrawer/DrawerToggleButton';
+
 import {
   BrowserRouter as Router,
   Route,
@@ -65,8 +67,8 @@ class App extends Component {
     password: '',
     clickLogin: false,
     modalMessage: '',
-    redirecttoPlan: false,
-    loginSuccess: false
+
+    justLoggedOut: false
   };
 
   drawerToggleClickHandler = () => {
@@ -212,8 +214,13 @@ class App extends Component {
         console.log('logout');
         console.log(response);
 
-        // this.setState({ clearedData: true, redirect: true });
         console.log('bye logout');
+        this.setState({
+          loggedIn: false,
+          clickLogin: true,
+          modalMessage: 'Logged out',
+          justLoggedOut: true
+        });
       })
       .catch(error => {
         console.log('nagkamali sa delete dito sa clear data');
@@ -380,13 +387,74 @@ class App extends Component {
       toolbar_login = false;
     }
 
+    let hasClearedData = null;
+
+    if (this.state.clearedData) {
+      hasClearedData = (
+        <div>
+          <Backdrop clicked={this.unshowBackdrop} showafterSD="true" />
+          <Modal clicked={this.unshowBackdrop} message="Deleted Data" />
+        </div>
+      );
+    } else if (this.props.justLoggedOut) {
+      hasClearedData = (
+        <div>
+          <Backdrop clicked={this.unshowBackdrop} showafterSD="true" />
+          <Modal clicked={this.unshowBackdrop} message="Logged Out" />
+        </div>
+      );
+    }
     return (
       <Router>
         <div className="container">
-          <Toolbar
-            changesidedrawerstate={this.drawerToggleClickHandler}
-            isLoggedIn={toolbar_login}
-          />
+          <header className="toolbar">
+            {/* {this.state.redirect ? this.goToPlan() : null} */}
+            <nav className="toolbar_nav">
+              <div className="toolbar-togglebutton">
+                <DrawerToggleButton click={this.drawerToggleClickHandler} />
+              </div>
+              <div className="toolbar_logo">
+                <a href="/">LOGO</a>
+              </div>
+              <div className="space-right"></div>
+              <div className="toolbar_navitems">
+                <ul>
+                  {this.state.loggedIn ? (
+                    <li>
+                      <a onClick={this.logout} style={{ cursor: 'pointer' }}>
+                        Logout
+                      </a>
+                    </li>
+                  ) : (
+                    <Aux>
+                      {' '}
+                      <li>
+                        {' '}
+                        <Link to="/login">
+                          <a>Login</a>
+                        </Link>
+                      </li>
+                      <li>
+                        {' '}
+                        <Link to="/register">
+                          <a>Register</a>
+                        </Link>
+                      </li>
+                    </Aux>
+                  )}{' '}
+                  <li>
+                    <a onClick={this.clearData} style={{ cursor: 'pointer' }}>
+                      Clear Data
+                    </a>
+                    {hasClearedData}
+                  </li>
+                </ul>
+              </div>
+            </nav>
+          </header>
+
+          {/* end of header */}
+
           {/* <SideDrawer show={this.state.isSideDrawerOpen} /> */}
           {sd_and_backdrop}
           {deleteConfirm}
@@ -411,9 +479,9 @@ class App extends Component {
           </main>
         </div>
 
-        <Switch>
-          {this.state.isLoggedIn ? (
-            <Aux>
+        {this.state.loggedIn ? (
+          <Aux>
+            <Switch>
               <Route path="/record" component={RecordMainPage} />
               <Route path="/plan" component={Plan} />
               <Route path="/view" component={View} />
@@ -421,35 +489,35 @@ class App extends Component {
               <Route path="/delete" component={DeleteConfirmation} />
               {/* <Route path="/" exact component={RecordMainPage} /> */}
               <Route component={Plan} />
-            </Aux>
-          ) : (
-            <Aux>
-              <Switch>
-                <Route path="/register" component={Register} />
-                <form onSubmit={this.logintoDB} id="textalign">
-                  <strong>Login</strong>
+            </Switch>
+          </Aux>
+        ) : (
+          <Aux>
+            <Switch>
+              <Route path="/register" component={Register} />
+              <form onSubmit={this.logintoDB} id="textalign">
+                <strong>Login</strong>
 
-                  <p style={{ marginTop: '50px' }}></p>
-                  <RecordInputSpent
-                    label="Name"
-                    changed={this.changename}
-                    value={this.state.name}
-                  />
-                  <p style={{ marginTop: '10px' }}></p>
+                <p style={{ marginTop: '50px' }}></p>
+                <RecordInputSpent
+                  label="Name"
+                  changed={this.changename}
+                  value={this.state.name}
+                />
+                <p style={{ marginTop: '10px' }}></p>
 
-                  <RecordInputSpent
-                    label="Password"
-                    changed={this.changepassword}
-                    value={this.state.password}
-                    inputtype="password"
-                  />
-                  <p style={{ marginTop: '30px' }}></p>
-                  <button type="Submit">Login</button>
-                </form>
-              </Switch>
-            </Aux>
-          )}
-        </Switch>
+                <RecordInputSpent
+                  label="Password"
+                  changed={this.changepassword}
+                  value={this.state.password}
+                  inputtype="password"
+                />
+                <p style={{ marginTop: '30px' }}></p>
+                <button type="Submit">Login</button>
+              </form>
+            </Switch>
+          </Aux>
+        )}
       </Router>
     );
   }
