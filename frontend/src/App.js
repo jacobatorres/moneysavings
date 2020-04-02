@@ -219,7 +219,9 @@ class App extends Component {
           loggedIn: false,
           clickLogin: true,
           modalMessage: 'Logged out',
-          justLoggedOut: true
+          justLoggedOut: true,
+          name: '',
+          password: ''
         });
       })
       .catch(error => {
@@ -267,14 +269,18 @@ class App extends Component {
           this.setState({
             modalMessage: 'Unauthorized User',
             clickLogin: true,
-            loggedIn: false
+            loggedIn: false,
+            name: '',
+            password: ''
           });
         } else {
           this.setState({
             modalMessage:
               'Successful Login! Welcome ' + response.data.username + '!',
             clickLogin: true,
-            loggedIn: true
+            loggedIn: true,
+            name: '',
+            password: ''
           });
         }
       })
@@ -285,7 +291,9 @@ class App extends Component {
         this.setState({
           modalMessage: 'Unauthorized User',
           clickLogin: true,
-          loggedIn: false
+          loggedIn: false,
+          name: '',
+          password: ''
         });
       });
   };
