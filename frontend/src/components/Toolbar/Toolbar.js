@@ -23,6 +23,8 @@ class toolbar extends Component {
 
   clearData = event => {
     console.log('hello');
+    console.log('pahiream');
+    console.log(this.props);
 
     let axios_url = 'https://moneysavings.herokuapp.com';
     console.log(process.env.NODE_ENV);

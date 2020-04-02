@@ -43,7 +43,8 @@ class Register extends Component {
             name: '',
             password: '',
             clickRegister: true,
-            modalMessage: 'User Registered!'
+            modalMessage:
+              'User Registered! Please log in using your credentials.'
           });
         }
         console.log('tumama anssd auth ');

@@ -27,6 +27,8 @@ import EditRecord from './Record/EditRecord';
 
 import Aux from './hoc/Auxillary';
 
+import RecordInputSpent from './Record/InputSpent';
+
 import {
   BrowserRouter as Router,
   Route,
@@ -57,7 +59,14 @@ class App extends Component {
     isSideDrawerOpen: false,
     clearedData: false,
     redirect: false,
-    loggedIn: false
+    loggedIn: false,
+
+    name: '',
+    password: '',
+    clickLogin: false,
+    modalMessage: '',
+    redirecttoPlan: false,
+    loginSuccess: false
   };
 
   drawerToggleClickHandler = () => {
@@ -213,6 +222,71 @@ class App extends Component {
       });
   };
 
+  changename = event => {
+    this.setState({
+      name: event.target.value
+    });
+  };
+  changepassword = event => {
+    this.setState({
+      password: event.target.value
+    });
+  };
+
+  logintoDB = event => {
+    event.preventDefault();
+
+    // Send a POST request
+
+    let axios_url = 'https://moneysavings.herokuapp.com';
+    console.log(process.env.NODE_ENV);
+    if (process.env.NODE_ENV === 'development') {
+      axios_url = 'http://localhost:3001';
+    }
+    console.log(axios_url);
+    console.log('boom auth login');
+    console.log(axios_url);
+    axios
+      .post(axios_url + '/login', {
+        username: this.state.name,
+        password: this.state.password
+      })
+      .then(response => {
+        // reponse.data == Unauthorized, means invalid
+        // else, it's good
+        console.log('aaadsasdas');
+        console.log(response.data);
+        if (response.data == 'Unauthorized' || response.data == 'Bad Request') {
+          this.setState({
+            modalMessage: 'Unauthorized User',
+            clickLogin: true,
+            loggedIn: false
+          });
+        } else {
+          this.setState({
+            modalMessage:
+              'Successful Login! Welcome ' + response.data.username + '!',
+            clickLogin: true,
+            loggedIn: true
+          });
+        }
+      })
+      .catch(error => {
+        console.log('nagkamali asdkaskdaskd');
+        console.log(error.response);
+
+        this.setState({
+          modalMessage: 'Unauthorized User',
+          clickLogin: true,
+          loggedIn: false
+        });
+      });
+  };
+
+  unshowBackdrop = () => {
+    this.setState({ clickLogin: false });
+  };
+
   render() {
     // let saved_val =
     //   parseFloat(this.state.planned) >= parseFloat(this.state.spent)
@@ -285,17 +359,38 @@ class App extends Component {
       );
     }
 
+    let showRegisterOk = null;
+    if (this.state.clickLogin) {
+      showRegisterOk = (
+        <div>
+          <Backdrop clicked={this.unshowBackdrop} />
+          <Modal
+            clicked={this.unshowBackdrop}
+            message={this.state.modalMessage}
+          />
+        </div>
+      );
+    }
+
+    let toolbar_login = null;
+
+    if (this.state.loggedIn) {
+      toolbar_login = true;
+    } else {
+      toolbar_login = false;
+    }
+
     return (
       <Router>
-        {this.state.redirect ? this.goToPlan() : null}
         <div className="container">
           <Toolbar
             changesidedrawerstate={this.drawerToggleClickHandler}
-            isLoggedIn={this.state.isLoggedIn}
+            isLoggedIn={toolbar_login}
           />
           {/* <SideDrawer show={this.state.isSideDrawerOpen} /> */}
           {sd_and_backdrop}
           {deleteConfirm}
+          {showRegisterOk}
 
           <main style={{ marginTop: '100px' }}>
             {/* <Plan />
@@ -313,21 +408,48 @@ class App extends Component {
                 <button id="viewbutton">View</button>
               </Link>
             </div>
-            <Switch>
-              <Route path="/register" component={Register} />
-              <Route path="/login" component={Login} />
+          </main>
+        </div>
 
+        <Switch>
+          {this.state.isLoggedIn ? (
+            <Aux>
               <Route path="/record" component={RecordMainPage} />
               <Route path="/plan" component={Plan} />
               <Route path="/view" component={View} />
               <Route path="/editrecord" component={EditRecord} />
               <Route path="/delete" component={DeleteConfirmation} />
+              {/* <Route path="/" exact component={RecordMainPage} /> */}
+              <Route component={Plan} />
+            </Aux>
+          ) : (
+            <Aux>
+              <Switch>
+                <Route path="/register" component={Register} />
+                <form onSubmit={this.logintoDB} id="textalign">
+                  <strong>Login</strong>
 
-              <Route path="/" exact component={RecordMainPage} />
-              <Route component={Login} />
-            </Switch>
-          </main>
-        </div>
+                  <p style={{ marginTop: '50px' }}></p>
+                  <RecordInputSpent
+                    label="Name"
+                    changed={this.changename}
+                    value={this.state.name}
+                  />
+                  <p style={{ marginTop: '10px' }}></p>
+
+                  <RecordInputSpent
+                    label="Password"
+                    changed={this.changepassword}
+                    value={this.state.password}
+                    inputtype="password"
+                  />
+                  <p style={{ marginTop: '30px' }}></p>
+                  <button type="Submit">Login</button>
+                </form>
+              </Switch>
+            </Aux>
+          )}
+        </Switch>
       </Router>
     );
   }
