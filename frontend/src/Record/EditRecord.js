@@ -45,7 +45,8 @@ class RecordMainPage extends Component {
       leisure: 0
     },
 
-    clickSaveRecord: false
+    clickSaveRecord: false,
+    loggedInName: this.props.loggedInName
   };
 
   componentDidMount() {
@@ -65,7 +66,7 @@ class RecordMainPage extends Component {
     }
     console.log(axios_url);
     axios
-      .get(axios_url + '/getMonthPlan')
+      .get(axios_url + '/getMonthPlan?' + 'username=' + this.state.loggedInName)
       .then(response => {
         console.log('I got the month');
         console.log(response);

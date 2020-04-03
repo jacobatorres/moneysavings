@@ -495,15 +495,36 @@ class App extends Component {
         {this.state.loggedIn ? (
           <Aux>
             <Switch>
-              <Route path="/record" component={RecordMainPage} />
+              <Route
+                path="/record"
+                render={props => (
+                  <RecordMainPage
+                    {...props}
+                    loggedInName={this.state.loggedInName}
+                  />
+                )}
+              />
               <Route
                 path="/plan"
                 render={props => (
                   <Plan {...props} loggedInName={this.state.loggedInName} />
                 )}
               />
-              <Route path="/view" component={View} />
-              <Route path="/editrecord" component={EditRecord} />
+              <Route
+                path="/view"
+                render={props => (
+                  <View {...props} loggedInName={this.state.loggedInName} />
+                )}
+              />
+              <Route
+                path="/editrecord"
+                render={props => (
+                  <EditRecord
+                    {...props}
+                    loggedInName={this.state.loggedInName}
+                  />
+                )}
+              />
               <Route path="/delete" component={DeleteConfirmation} />
               {/* <Route path="/" exact component={RecordMainPage} /> */}
               <Route component={Plan} />

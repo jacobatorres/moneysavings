@@ -58,7 +58,8 @@ class View extends Component {
 
     readyforDownload: false,
     list_for_CSV: [],
-    redirect: false
+    redirect: false,
+    loggedInName: this.props.loggedInName
   };
 
   ConcatLabelValue(list1, list2, list_ids) {
@@ -97,7 +98,7 @@ class View extends Component {
     }
     console.log(axios_url);
     axios
-      .get(axios_url + '/getMonthPlan')
+      .get(axios_url + '/getMonthPlan?' + 'username=' + this.state.loggedInName)
       .then(response => {
         console.log('I got the month');
         console.log(response);
