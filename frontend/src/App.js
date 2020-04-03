@@ -65,6 +65,9 @@ class App extends Component {
 
     name: '',
     password: '',
+
+    loggedInName: '',
+
     clickLogin: false,
     modalMessage: '',
 
@@ -221,7 +224,8 @@ class App extends Component {
           modalMessage: 'Logged out',
           justLoggedOut: true,
           name: '',
-          password: ''
+          password: '',
+          loggedInName: ''
         });
       })
       .catch(error => {
@@ -280,7 +284,8 @@ class App extends Component {
             clickLogin: true,
             loggedIn: true,
             name: '',
-            password: ''
+            password: '',
+            loggedInName: response.data.username
           });
         }
       })
@@ -491,7 +496,12 @@ class App extends Component {
           <Aux>
             <Switch>
               <Route path="/record" component={RecordMainPage} />
-              <Route path="/plan" component={Plan} />
+              <Route
+                path="/plan"
+                render={props => (
+                  <Plan {...props} loggedInName={this.state.loggedInName} />
+                )}
+              />
               <Route path="/view" component={View} />
               <Route path="/editrecord" component={EditRecord} />
               <Route path="/delete" component={DeleteConfirmation} />

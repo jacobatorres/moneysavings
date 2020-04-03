@@ -97,7 +97,7 @@ class toolbar extends Component {
       hasClearedData = (
         <div>
           <Backdrop clicked={this.unshowBackdrop} showafterSD="true" />
-          <Modal clicked={this.unshowBackdrop} message="Logged Out" />
+          <Modal clicked={this.unshowBackdrop} message="Logged Our" />
         </div>
       );
     }

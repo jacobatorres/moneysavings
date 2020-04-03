@@ -58,16 +58,23 @@ console.log('aaa2');
 
 app.get('/getMonthPlan', (req, res) => {
   console.log('I made it here na');
+
+  const username = req.query.username;
   const month_number_rn = parseFloat(new Date().getMonth() + 1);
   const year_number_rn = parseFloat(new Date().getFullYear());
-
+  console.log(username);
   console.log(month_number_rn);
   console.log(year_number_rn);
 
   // check the existense of month-plan given the two arguments
+  // also include user of course
 
   Month.findOne(
-    { month_number: month_number_rn, year_number: year_number_rn },
+    {
+      month_number: month_number_rn,
+      year_number: year_number_rn,
+      'user_parent.username': username
+    },
     function(err, month) {
       if (err) {
         console.log(err);
@@ -156,8 +163,14 @@ app.post('/saveRecord', (req, res) => {
 // }
 
 app.post('/saveMonthPlan', (req, res) => {
+  // get the needed data from the month
   console.log('got here month');
   console.log(req.body);
+
+  const username_of_loggedin = req.body.username;
+  console.log(username_of_loggedin);
+
+  console.log('ikaw na ngaaaa');
   const time_dmy = moment(
     req.body.timestamp,
     moment.HTML5_FMT.DATETIME_LOCAL_MS
@@ -177,17 +190,34 @@ app.post('/saveMonthPlan', (req, res) => {
     timestamp: new Date(year, month, day)
   };
 
-  console.log('MONTH DATA:');
-  console.log(month_data);
-
-  // save the Record
-  Month.create(month_data, function(err, newMonth) {
+  User.findOne({ username: username_of_loggedin }, function(err, foundUser) {
     if (err) {
       console.log(err);
     } else {
-      console.log('saved properly (month)');
-      console.log(newMonth);
-      res.end(JSON.stringify(newMonth));
+      // you found it!
+      console.log('bonchon');
+      console.log(foundUser);
+      if (foundUser == null) {
+        res.end(JSON.stringify(foundUser));
+      }
+      month_data.user_parent = {
+        id: foundUser._id,
+        username: username_of_loggedin
+      };
+
+      console.log('MONTH DATA:');
+      console.log(month_data);
+
+      // save the Record
+      Month.create(month_data, function(err, newMonth) {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log('saved properly (month)');
+          console.log(newMonth);
+          res.end(JSON.stringify(newMonth));
+        }
+      });
     }
   });
 });
@@ -353,6 +383,8 @@ app.get('/logout', function(req, res) {
   return res.end(JSON.stringify({ result: 'logged out' }));
 });
 
+// this may be used for logging in
+// POST requests
 function isLoggedIn(req, res, next) {
   if (req.isAuthenticated()) {
     return next();

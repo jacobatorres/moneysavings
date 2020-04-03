@@ -22,7 +22,8 @@ class Plan extends Component {
       leisure: 0
     },
 
-    clearedData: false
+    clearedData: false,
+    loggedInName: this.props.loggedInName
   };
 
   getMonthIndex = () => {
@@ -85,66 +86,61 @@ class Plan extends Component {
   //   // }
   // };
 
-  doesMonthPlanExist = event => {
-    // Send a POST request
-    const month_number_rn = new Date().getMonth() + 1;
-    const year_number_rn = new Date().getFullYear();
-    let end_result = null;
+  // doesMonthPlanExist = event => {
+  //   // Send a POST request
+  //   const month_number_rn = new Date().getMonth() + 1;
+  //   const year_number_rn = new Date().getFullYear();
+  //   let end_result = null;
 
-    let axios_url = 'https://moneysavings.herokuapp.com';
-    console.log(process.env.NODE_ENV);
-    if (process.env.NODE_ENV === 'development') {
-      axios_url = 'http://localhost:3001';
-    }
-    console.log(axios_url);
-    console.log('i am here at doesmonth plan');
+  //   let axios_url = 'https://moneysavings.herokuapp.com';
+  //   console.log(process.env.NODE_ENV);
+  //   if (process.env.NODE_ENV === 'development') {
+  //     axios_url = 'http://localhost:3001';
+  //   }
+  //   console.log(axios_url);
+  //   console.log('i am here at doesmonth plan');
 
-    axios
-      .get('/getMonthPlan', {
-        params: {
-          month_number: month_number_rn,
-          year_number: year_number_rn
-        }
-      })
-      .then(response => {
-        console.log(response);
-        console.log('success');
-        if (response.data == null) {
-          this.setState({ doesMonthPlanExiststate: false });
-        } else {
-          this.setState({ doesMonthPlanExiststate: true });
-          this.setState({
-            month_record: {
-              bills: parseFloat(response.data.total_bill),
-              food: parseFloat(response.data.total_food),
-              transportation: parseFloat(response.data.total_tr),
-              leisure: parseFloat(response.data.total_leisure)
-            }
-          });
-        }
-      })
-      .catch(function(error) {
-        console.log(error);
-        end_result = error;
-        return false;
-      });
+  //   axios
+  //     .get(axios_url + '/getMonthPlan')
+  //     .then(response => {
+  //       console.log(response);
+  //       console.log('success');
+  //       if (response.data == null) {
+  //         this.setState({ doesMonthPlanExiststate: false });
+  //       } else {
+  //         this.setState({ doesMonthPlanExiststate: true });
+  //         this.setState({
+  //           month_record: {
+  //             bills: parseFloat(response.data.total_bill),
+  //             food: parseFloat(response.data.total_food),
+  //             transportation: parseFloat(response.data.total_tr),
+  //             leisure: parseFloat(response.data.total_leisure)
+  //           }
+  //         });
+  //       }
+  //     })
+  //     .catch(function(error) {
+  //       console.log(error);
+  //       end_result = error;
+  //       return false;
+  //     });
 
-    return true;
-    // event.preventDefault();
+  //   return true;
+  //   // event.preventDefault();
 
-    // const month_number_rn = new Date().getMonth() + 1;
-    // const year_number_rn = new Date().getFullYear();
+  //   // const month_number_rn = new Date().getMonth() + 1;
+  //   // const year_number_rn = new Date().getFullYear();
 
-    // console.log(month_number_rn);
-    // console.log(year_number_rn);
-    // // Optionally the request above could also be done as
-    // let axios_url = 'https://moneysavings.herokuapp.com';
-    // console.log(process.env.NODE_ENV);
-    // if (process.env.NODE_ENV === 'development') {
-    //   axios_url = 'http://localhost:3001';
-    // }
-    // console.log(axios_url);
-  };
+  //   // console.log(month_number_rn);
+  //   // console.log(year_number_rn);
+  //   // // Optionally the request above could also be done as
+  //   // let axios_url = 'https://moneysavings.herokuapp.com';
+  //   // console.log(process.env.NODE_ENV);
+  //   // if (process.env.NODE_ENV === 'development') {
+  //   //   axios_url = 'http://localhost:3001';
+  //   // }
+  //   // console.log(axios_url);
+  // };
 
   saveMonthPlantoDB = event => {
     event.preventDefault();
@@ -156,6 +152,7 @@ class Plan extends Component {
       axios_url = 'http://localhost:3001';
     }
     console.log(axios_url);
+    console.log(this.state.loggedInName);
 
     axios
       .post(axios_url + '/saveMonthPlan', {
@@ -165,10 +162,19 @@ class Plan extends Component {
         total_leisure: this.state.leisure,
         month_number: this.getMonthIndex(),
         year_number: this.getYear(),
-        timestamp: new Date(this.getYear(), this.getMonthIndex(), 1, 0, 0, 0, 0)
+        timestamp: new Date(
+          this.getYear(),
+          this.getMonthIndex(),
+          1,
+          0,
+          0,
+          0,
+          0
+        ),
+        username: this.state.loggedInName
       })
       .then(response => {
-        console.log('tumama i guess');
+        console.log('tumama i guess!!!!');
         console.log(response);
         this.setState({ doesMonthPlanExiststate: true });
         this.setState({
@@ -198,7 +204,6 @@ class Plan extends Component {
     // Send a POST request
 
     window.scrollTo(0, 0);
-
     const month_number_rn = new Date().getMonth() + 1;
     const year_number_rn = new Date().getFullYear();
     let end_result = null;
@@ -212,22 +217,19 @@ class Plan extends Component {
     console.log('i am here at doesmonth plan');
 
     axios
-      .get('/getMonthPlan', {
-        params: {
-          month_number: month_number_rn,
-          year_number: year_number_rn
-        }
-      })
+      .get(axios_url + '/getMonthPlan?' + 'username=' + this.state.loggedInName)
       .then(response => {
         console.log(response);
         console.log('success');
         if (response.data == null) {
-          this.setState({ doesMonthPlanExiststate: false });
+          this.setState({
+            doesMonthPlanExiststate: false
+          });
 
           console.log('im false');
         } else {
-          this.setState({ doesMonthPlanExiststate: true });
           this.setState({
+            doesMonthPlanExiststate: true,
             month_record: {
               bills: parseFloat(response.data.total_bill),
               food: parseFloat(response.data.total_food),
