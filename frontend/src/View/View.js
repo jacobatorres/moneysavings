@@ -536,9 +536,6 @@ class View extends Component {
 
     let year_result = this.getYear();
 
-    console.log(big_4_data);
-    console.log('HE RRRRR');
-
     let showBackdropSaved = null;
 
     let list_for_modal = [];
@@ -548,7 +545,6 @@ class View extends Component {
 
     if (this.state.clickDelete) {
       console.log(list_for_modal);
-      console.log('printiong');
 
       showBackdropSaved = (
         <div>
@@ -567,7 +563,8 @@ class View extends Component {
       <CSVLink data={this.state.list_for_CSV}>Get CSV File</CSVLink>
     );
 
-    // month
+    console.log('Big 4 Data:');
+    console.log(big_4_data);
 
     return (
       <div>
@@ -577,6 +574,8 @@ class View extends Component {
           <div className="middle">
             <div className="menu">
               {Object.keys(big_4_data).map((key, index) => (
+                // generate the Li's per category
+                //
                 <li className="item" id={big_4_data[key][0]}>
                   <a
                     href={'#' + big_4_data[key][0]}
@@ -585,6 +584,7 @@ class View extends Component {
                     {big_4_data[key][1]}
                   </a>
                   <div className="smenu">
+                    {/* big_4_data[key][2] are the day records. If length == 0 then that means the day records don't exist, so dont show anything. Else, show them.  */}
                     {big_4_data[key][2].length == 0 ? (
                       <div></div>
                     ) : (
@@ -595,6 +595,7 @@ class View extends Component {
                             {i[0]}
                           </li>
                           <li className="alignright">
+                            {/* Edit link */}
                             <Link
                               to={{
                                 pathname: '/editrecord',
@@ -603,7 +604,7 @@ class View extends Component {
                             >
                               <a className="link_color">edit</a>
                             </Link>{' '}
-                            |{' '}
+                            | {/* Delete link */}
                             <p
                               style={{ display: 'inline', cursor: 'pointer' }}
                               onClick={() => this.deleteRecord(i[1])}
