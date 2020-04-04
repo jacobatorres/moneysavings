@@ -27,7 +27,7 @@ app.use(
   require('express-session')({
     secret: 'sikreto-para-sa-auth',
     resave: false,
-    saveUninitialized: false
+    saveUninitialized: false,
   })
 );
 app.use(passport.initialize());
@@ -57,7 +57,7 @@ app.get('/sayHi', (req, res) => {
 console.log('aaa2');
 
 app.get('/getMonthPlan', (req, res) => {
-  console.log('I made it here entered /getmonthplan');
+  console.log('[/getmonthplan] I made it here entered /getmonthplan');
 
   const username = req.query.username;
   const month_number_rn = parseFloat(new Date().getMonth() + 1);
@@ -73,13 +73,13 @@ app.get('/getMonthPlan', (req, res) => {
     {
       month_number: month_number_rn,
       year_number: year_number_rn,
-      'user_parent.username': username
+      'user_parent.username': username,
     },
-    function(err, month) {
+    function (err, month) {
       if (err) {
         console.log(err);
       } else {
-        console.log('[/getmonthplan] success in else');
+        console.log('[/getmonthplan] success in else. exiting');
         console.log(month);
         res.end(JSON.stringify(month));
       }
@@ -108,7 +108,7 @@ app.post('/saveRecord', (req, res) => {
     tr_label: req.body.tr_label,
     leisure_value: parseFloat(req.body.leisure_value),
     leisure_label: req.body.leisure_label,
-    timestamp: new Date(year, month, day)
+    timestamp: new Date(year, month, day),
   };
 
   // get the correct month where this is from, and save it using that id
@@ -117,7 +117,7 @@ app.post('/saveRecord', (req, res) => {
 
   Month.findOne(
     { month_number: month_number_rn, year_number: year_number_rn },
-    function(err, month) {
+    function (err, month) {
       if (err) {
         console.log(err);
       } else {
@@ -126,7 +126,7 @@ app.post('/saveRecord', (req, res) => {
         day_data.month_parent = {
           id: month._id,
           month_number: month_number_rn,
-          year_number: year_number_rn
+          year_number: year_number_rn,
         };
 
         console.log('wagi');
@@ -134,7 +134,7 @@ app.post('/saveRecord', (req, res) => {
         console.log(day_data);
 
         // save the Record
-        Day.create(day_data, function(err, newRecord) {
+        Day.create(day_data, function (err, newRecord) {
           if (err) {
             console.log(err);
           } else {
@@ -174,18 +174,18 @@ app.post('/saveMonthPlan', (req, res) => {
     total_leisure: parseFloat(req.body.total_leisure),
     month_number: parseFloat(req.body.month_number) + 1,
     year_number: parseFloat(req.body.year_number),
-    timestamp: new Date(year, month, day)
+    timestamp: new Date(year, month, day),
   };
 
   // get the user
   // save the month
 
-  User.findOne({ username: username_of_loggedin }, function(err, foundUser) {
+  User.findOne({ username: username_of_loggedin }, function (err, foundUser) {
     if (err) {
       console.log(err);
     } else {
       // user found
-      console.log('successfully entered else');
+      console.log('[User] successfully entered else');
       console.log('found user: ');
       console.log(foundUser);
       if (foundUser == null) {
@@ -193,18 +193,18 @@ app.post('/saveMonthPlan', (req, res) => {
       }
       month_data.user_parent = {
         id: foundUser._id,
-        username: username_of_loggedin
+        username: username_of_loggedin,
       };
 
       console.log('month data:');
       console.log(month_data);
 
       // save the Record
-      Month.create(month_data, function(err, newMonth) {
+      Month.create(month_data, function (err, newMonth) {
         if (err) {
           console.log(err);
         } else {
-          console.log('[save month plan] else saved properly (month)');
+          console.log('[save month plan] else saved properly (month). exiting');
           console.log(newMonth);
           res.end(JSON.stringify(newMonth));
         }
@@ -213,16 +213,16 @@ app.post('/saveMonthPlan', (req, res) => {
   });
 });
 
-app.delete('/deleteAll', function(req, res) {
+app.delete('/deleteAll', function (req, res) {
   //  remove all days and remove all months (probably only one record),
   console.log('entered here');
-  Day.deleteMany({}, function(err, result) {
+  Day.deleteMany({}, function (err, result) {
     if (err) {
       console.log('something wrong with deleting the days');
       res.end('');
     } else {
       // then remove months
-      Month.deleteMany({}, function(err, result) {
+      Month.deleteMany({}, function (err, result) {
         if (err) {
           console.log('wrong with months');
           res.end('');
@@ -236,10 +236,10 @@ app.delete('/deleteAll', function(req, res) {
 });
 
 // given the ID, get the needed information
-app.get('/getDay', function(req, res) {
+app.get('/getDay', function (req, res) {
   console.log('whos that girl?');
 
-  Day.findById(req.query.id, function(err, day) {
+  Day.findById(req.query.id, function (err, day) {
     if (err) {
       console.log('something wrong with day');
     } else {
@@ -249,7 +249,7 @@ app.get('/getDay', function(req, res) {
   });
 });
 
-app.put('/updateDay', function(req, res) {
+app.put('/updateDay', function (req, res) {
   console.log('PUTTTTa');
   console.log(req.body.timestamp);
   let d4 = moment(req.body.timestamp);
@@ -264,12 +264,12 @@ app.put('/updateDay', function(req, res) {
     tr_label: req.body.tr_label,
     leisure_value: parseFloat(req.body.leisure_value),
     leisure_label: req.body.leisure_label,
-    timestamp: d4
+    timestamp: d4,
   };
 
   console.log(req.body.id);
 
-  Day.findByIdAndUpdate(req.body.id, day_data, function(err, updatedDay) {
+  Day.findByIdAndUpdate(req.body.id, day_data, function (err, updatedDay) {
     if (err) {
       console.log(err);
     } else {
@@ -280,8 +280,8 @@ app.put('/updateDay', function(req, res) {
   });
 });
 
-app.delete('/deleteRecord', function(req, res) {
-  Day.deleteOne({ _id: req.query.id }, function(err) {
+app.delete('/deleteRecord', function (req, res) {
+  Day.deleteOne({ _id: req.query.id }, function (err) {
     if (err) {
       console.log(err);
     } else {
@@ -302,7 +302,7 @@ app.get('/getAllFourCurrentTotal', (req, res) => {
 
   Month.findOne(
     { month_number: month_number_rn, year_number: year_number_rn },
-    function(err, month) {
+    function (err, month) {
       if (err) {
         console.log(err);
       } else {
@@ -316,7 +316,7 @@ app.get('/getAllFourCurrentTotal', (req, res) => {
         } else {
           let month_id = month._id;
 
-          Day.find({ 'month_parent.id': month_id }, function(err, allDays) {
+          Day.find({ 'month_parent.id': month_id }, function (err, allDays) {
             if (err) {
               console.log(err);
             } else {
@@ -330,7 +330,7 @@ app.get('/getAllFourCurrentTotal', (req, res) => {
   );
 });
 
-app.get('/getDaysfromUsersMP', function(req, res) {
+app.get('/getDaysfromUsersMP', function (req, res) {
   // get month
   const month_number_rn = parseFloat(new Date().getMonth() + 1);
   const year_number_rn = parseFloat(new Date().getFullYear());
@@ -340,16 +340,16 @@ app.get('/getDaysfromUsersMP', function(req, res) {
     {
       month_number: month_number_rn,
       year_number: year_number_rn,
-      'user_parent.username': username
+      'user_parent.username': username,
     },
-    function(err, month) {
+    function (err, month) {
       if (month == null) {
         // no record found, return blank
         res.end(JSON.stringify(month));
       } else {
         let month_id = month._id;
 
-        Day.find({ 'month_parent.id': month_id }, function(
+        Day.find({ 'month_parent.id': month_id }, function (
           err,
           allDaysforUser
         ) {
@@ -369,15 +369,15 @@ app.get('/getDaysfromUsersMP', function(req, res) {
 
 // show register
 
-app.post('/printregister', function(req, res) {
+app.post('/printregister', function (req, res) {
   let newUser = new User({ username: req.body.username });
 
-  User.register(newUser, req.body.password, function(err, user) {
+  User.register(newUser, req.body.password, function (err, user) {
     if (err) {
       console.log(err);
       return res.end(JSON.stringify({ error: 'UserExistsError' }));
     } else {
-      passport.authenticate('local')(req, res, function() {
+      passport.authenticate('local')(req, res, function () {
         return res.end(JSON.stringify(user));
       });
     }
@@ -386,14 +386,16 @@ app.post('/printregister', function(req, res) {
 
 // show login form
 app.post('/login', passport.authenticate('local'), (req, res) => {
-  console.log('logged in');
+  console.log('[/login] logged in');
   console.log(req.body);
   return res.end(JSON.stringify(req.body));
 });
 
 // log out
 
-app.get('/logout', function(req, res) {
+app.get('/logout', function (req, res) {
+  console.log('[/logout] logged out');
+
   req.logout();
   return res.end(JSON.stringify({ result: 'logged out' }));
 });

@@ -8,6 +8,11 @@ import Modal from '../components/Modal/modal';
 
 import 'react-datepicker/dist/react-datepicker.css';
 
+// two main server calls:
+
+// when componentDidMount, check if the user already has a plan-month
+// when hitting save, make sure it's only for this user
+
 class Plan extends Component {
   state = {
     bill: 0,
@@ -19,11 +24,11 @@ class Plan extends Component {
       bills: 0,
       food: 0,
       transportation: 0,
-      leisure: 0
+      leisure: 0,
     },
 
     clearedData: false,
-    loggedInName: this.props.loggedInName
+    loggedInName: this.props.loggedInName,
   };
 
   getMonthIndex = () => {
@@ -34,28 +39,44 @@ class Plan extends Component {
     return new Date().getFullYear();
   };
 
-  valueChangedTotalBill = event => {
+  valueChangedTotalBill = (event) => {
     this.setState({
-      bill: event.target.value
+      bill: event.target.value,
     });
   };
-  valueChangedTotalFood = event => {
+  valueChangedTotalFood = (event) => {
     this.setState({
-      food: event.target.value
+      food: event.target.value,
     });
   };
-  valueChangedTotalTr = event => {
+  valueChangedTotalTr = (event) => {
     this.setState({
-      transportation: event.target.value
+      transportation: event.target.value,
     });
   };
-  valueChangedTotalLeisure = event => {
+  valueChangedTotalLeisure = (event) => {
     this.setState({
-      leisure: event.target.value
+      leisure: event.target.value,
     });
   };
 
-  saveMonthPlantoDB = event => {
+  getNumDaysinMonthYear = () => {
+    const month_number_rn = parseFloat(new Date().getMonth() + 1);
+    const year_number_rn = parseFloat(new Date().getFullYear());
+
+    return new Date(year_number_rn, month_number_rn, 0).getDate();
+  };
+
+  adivideb = (a, b) => {
+    let ans = (a * 1.0) / b;
+    return ans.toFixed(2);
+  };
+
+  unshowBackdrop = (event) => {
+    this.setState({ clearedData: false });
+  };
+
+  saveMonthPlantoDB = (event) => {
     event.preventDefault();
 
     // Send a POST request
@@ -85,9 +106,9 @@ class Plan extends Component {
           0,
           0
         ),
-        username: this.state.loggedInName
+        username: this.state.loggedInName,
       })
-      .then(response => {
+      .then((response) => {
         console.log('[plan] i saved properly!');
         console.log(response);
         this.setState({ doesMonthPlanExiststate: true });
@@ -96,12 +117,12 @@ class Plan extends Component {
             bills: parseFloat(response.data.total_bill),
             food: parseFloat(response.data.total_food),
             transportation: parseFloat(response.data.total_tr),
-            leisure: parseFloat(response.data.total_leisure)
+            leisure: parseFloat(response.data.total_leisure),
           },
-          clearedData: true
+          clearedData: true,
         });
       })
-      .catch(error => {
+      .catch((error) => {
         console.log('[plan] i did not save properly!');
         console.log(error.response);
       });
@@ -124,12 +145,12 @@ class Plan extends Component {
 
     axios
       .get(axios_url + '/getMonthPlan?' + 'username=' + this.state.loggedInName)
-      .then(response => {
+      .then((response) => {
         console.log(response);
         console.log('[plan] good response at /getmonthplan get');
         if (response.data == null) {
           this.setState({
-            doesMonthPlanExiststate: false
+            doesMonthPlanExiststate: false,
           });
 
           console.log('[plan]  monthplan doesnt exists');
@@ -140,33 +161,17 @@ class Plan extends Component {
               bills: parseFloat(response.data.total_bill),
               food: parseFloat(response.data.total_food),
               transportation: parseFloat(response.data.total_tr),
-              leisure: parseFloat(response.data.total_leisure)
-            }
+              leisure: parseFloat(response.data.total_leisure),
+            },
           });
           console.log('[plan]  monthplan exists');
         }
       })
-      .catch(function(error) {
+      .catch(function (error) {
         console.log(error);
         console.log('[plan] bad.. this is catch');
       });
   }
-
-  getNumDaysinMonthYear = () => {
-    const month_number_rn = parseFloat(new Date().getMonth() + 1);
-    const year_number_rn = parseFloat(new Date().getFullYear());
-
-    return new Date(year_number_rn, month_number_rn, 0).getDate();
-  };
-
-  adivideb = (a, b) => {
-    let ans = (a * 1.0) / b;
-    return ans.toFixed(2);
-  };
-
-  unshowBackdrop = event => {
-    this.setState({ clearedData: false });
-  };
 
   render() {
     let months = [
@@ -181,7 +186,7 @@ class Plan extends Component {
       'September',
       'October',
       'November',
-      'December'
+      'December',
     ];
     let month_index = this.getMonthIndex();
 
