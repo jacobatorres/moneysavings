@@ -9,6 +9,10 @@ import Backdrop from '../components/Backdrop/Backdrop';
 import Modal from '../components/Modal/modal';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 
+// two main server calls:
+// component did mount
+// save record to db
+
 class RecordMainPage extends Component {
   state = {
     bill_value: 0,
@@ -172,8 +176,8 @@ class RecordMainPage extends Component {
   saveRecordtoDB = (event) => {
     event.preventDefault();
 
+    console.log('[save record to DB] entered here');
     // Send a POST request
-    console.log('testtt');
 
     let axios_url = 'https://moneysavings.herokuapp.com';
     console.log(process.env.NODE_ENV);
@@ -181,8 +185,8 @@ class RecordMainPage extends Component {
       axios_url = 'http://localhost:3001';
     }
     console.log(axios_url);
-    console.log('boom');
-    console.log(axios_url);
+
+    console.log('Saving record using /saveRecord post call.');
     axios
       .post(axios_url + '/saveRecord', {
         bill_value: this.state.bill_value,
@@ -197,11 +201,11 @@ class RecordMainPage extends Component {
         timestamp: this.state.startDate,
         month_num: new Date().getMonth() + 1,
         year_num: new Date().getFullYear(),
+
+        username: this.state.loggedInName,
       })
       .then((response) => {
-        console.log('tumama i guess');
-
-        console.log(response);
+        console.log('At this point, Day record has been saved.');
 
         let forDisplay = {
           bill_value: this.state.bill_value,
@@ -237,18 +241,10 @@ class RecordMainPage extends Component {
         });
       })
       .catch((error) => {
-        console.log('nagkamali');
+        console.log('Something went wrong in saving day record.');
         console.log(error.response);
         this.setState({ clickSaveRecord: true });
       });
-
-    console.log('maggg');
-    // console.log(this.state);
-    // axios({
-    //   method: 'post',
-    //   url: 'http://localhost:3001/saveRecord',
-    //   data: this.state
-    // });
   };
 
   componentDidMount() {

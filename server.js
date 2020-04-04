@@ -90,70 +90,8 @@ app.get('/getMonthPlan', (req, res) => {
   );
 });
 
-app.post('/saveRecord', (req, res) => {
-  console.log('i have entered here');
-  console.log(req.body);
-  const time_dmy = moment(
-    req.body.timestamp,
-    moment.HTML5_FMT.DATETIME_LOCAL_MS
-  );
-
-  const month = time_dmy.format('MM') - 1; // minus 1 because month is 0 based
-  const day = time_dmy.format('DD') - 1; // minus 1 because for some reason it adds one.
-  const year = time_dmy.format('YYYY');
-
-  const day_data = {
-    bill_value: parseFloat(req.body.bill_value),
-    bill_label: req.body.bill_label,
-    food_value: parseFloat(req.body.food_value),
-    food_label: req.body.food_label,
-    tr_value: parseFloat(req.body.tr_value),
-    tr_label: req.body.tr_label,
-    leisure_value: parseFloat(req.body.leisure_value),
-    leisure_label: req.body.leisure_label,
-    timestamp: new Date(year, month, day),
-  };
-
-  // get the correct month where this is from, and save it using that id
-  const month_number_rn = parseFloat(new Date().getMonth() + 1);
-  const year_number_rn = parseFloat(new Date().getFullYear());
-
-  Month.findOne(
-    { month_number: month_number_rn, year_number: year_number_rn },
-    function (err, month) {
-      if (err) {
-        console.log(err);
-      } else {
-        // success -- we got the correct month
-
-        day_data.month_parent = {
-          id: month._id,
-          month_number: month_number_rn,
-          year_number: year_number_rn,
-        };
-
-        console.log('wagi');
-        console.log(month);
-        console.log(day_data);
-
-        // save the Record
-        Day.create(day_data, function (err, newRecord) {
-          if (err) {
-            console.log(err);
-          } else {
-            console.log('saved properly');
-            console.log(newRecord);
-            res.end('');
-          }
-        });
-      }
-    }
-  );
-});
-
 app.post('/saveMonthPlan', (req, res) => {
   // plan
-
   // save the month info (4) from the user
 
   console.log('[/save month plan] starting to save');
@@ -215,6 +153,81 @@ app.post('/saveMonthPlan', (req, res) => {
       });
     }
   });
+});
+
+app.post('/saveRecord', (req, res) => {
+  // Record Component
+
+  // get the corresponding month,
+  // then save the Day. You will need the month ID.
+
+  console.log('[/saveRecord] just entered. Req.body seen below:');
+  console.log(req.body);
+  const time_dmy = moment(
+    req.body.timestamp,
+    moment.HTML5_FMT.DATETIME_LOCAL_MS
+  );
+
+  const month = time_dmy.format('MM') - 1; // minus 1 because month is 0 based
+  const day = time_dmy.format('DD') - 1; // minus 1 because for some reason it adds one.
+  const year = time_dmy.format('YYYY');
+
+  const username = req.body.username;
+  console.log('user name is : ' + username);
+
+  const day_data = {
+    bill_value: parseFloat(req.body.bill_value),
+    bill_label: req.body.bill_label,
+    food_value: parseFloat(req.body.food_value),
+    food_label: req.body.food_label,
+    tr_value: parseFloat(req.body.tr_value),
+    tr_label: req.body.tr_label,
+    leisure_value: parseFloat(req.body.leisure_value),
+    leisure_label: req.body.leisure_label,
+    timestamp: new Date(year, month, day),
+  };
+
+  // get the correct month where this is from, and save it using that id
+  const month_number_rn = parseFloat(new Date().getMonth() + 1);
+  const year_number_rn = parseFloat(new Date().getFullYear());
+
+  console.log('fetching Month');
+  Month.findOne(
+    {
+      month_number: month_number_rn,
+      year_number: year_number_rn,
+      'user_parent.username': username,
+    },
+    function (err, month) {
+      if (err) {
+        console.log(err);
+      } else {
+        // got the month (at this point it should exist)
+
+        console.log('fetched month properly in Else.');
+
+        day_data.month_parent = {
+          id: month._id,
+          month_number: month_number_rn,
+          year_number: year_number_rn,
+        };
+
+        // save the Record
+        console.log('Saving day record...');
+        Day.create(day_data, function (err, newRecord) {
+          if (err) {
+            console.log(err);
+          } else {
+            console.log(
+              '[Day / savemonthPlan] Saved the record. Below is the new record. Exiting...'
+            );
+            console.log(newRecord);
+            res.end('');
+          }
+        });
+      }
+    }
+  );
 });
 
 app.delete('/deleteAll', function (req, res) {
