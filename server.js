@@ -59,6 +59,7 @@ console.log('aaa2');
 app.get('/getMonthPlan', (req, res) => {
   // plan
   // record
+  // view
 
   console.log('[/getmonthplan] I made it here entered /getmonthplan');
 
@@ -230,6 +231,55 @@ app.post('/saveRecord', (req, res) => {
   );
 });
 
+app.get('/getDaysFromMonthPlan', (req, res) => {
+  // Record
+  // View
+
+  // get the month-plan (at this point, it should exist)
+  // get the corresponding days from this month-plan
+
+  console.log('[/getDaysFromMonthPlan] Just entered here');
+  const month_number_rn = parseFloat(new Date().getMonth() + 1);
+  const year_number_rn = parseFloat(new Date().getFullYear());
+  const username = req.query.username;
+
+  Month.findOne(
+    {
+      month_number: month_number_rn,
+      year_number: year_number_rn,
+      'user_parent.username': username,
+    },
+    function (err, month) {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log('[Month] entered else of month. Heres what i found:');
+        console.log(month);
+
+        // given the found month-plan, check all corresponding day records
+
+        if (month == null) {
+          // no record found, return blank
+          console.log('found no month. returning...');
+          res.end(JSON.stringify(month));
+        } else {
+          console.log('found month. Finding all days corresponding');
+          let month_id = month._id;
+
+          Day.find({ 'month_parent.id': month_id }, function (err, allDays) {
+            if (err) {
+              console.log(err);
+            } else {
+              console.log('[Day] Found all days. exiting...');
+              res.end(JSON.stringify(allDays));
+            }
+          });
+        }
+      }
+    }
+  );
+});
+
 app.delete('/deleteAll', function (req, res) {
   //  remove all days and remove all months (probably only one record),
   console.log('entered here');
@@ -306,54 +356,6 @@ app.delete('/deleteRecord', function (req, res) {
       res.end('');
     }
   });
-});
-
-app.get('/getDaysFromMonthPlan', (req, res) => {
-  // Record
-
-  // get the month-plan (at this point, it should exist)
-  // get the corresponding days from this month-plan
-
-  console.log('[/getDaysFromMonthPlan] Just entered here');
-  const month_number_rn = parseFloat(new Date().getMonth() + 1);
-  const year_number_rn = parseFloat(new Date().getFullYear());
-  const username = req.query.username;
-
-  Month.findOne(
-    {
-      month_number: month_number_rn,
-      year_number: year_number_rn,
-      'user_parent.username': username,
-    },
-    function (err, month) {
-      if (err) {
-        console.log(err);
-      } else {
-        console.log('[Month] entered else of month. Heres what i found:');
-        console.log(month);
-
-        // given the found month-plan, check all corresponding day records
-
-        if (month == null) {
-          // no record found, return blank
-          console.log('found no month. returning...');
-          res.end(JSON.stringify(month));
-        } else {
-          console.log('found month. Finding all days corresponding');
-          let month_id = month._id;
-
-          Day.find({ 'month_parent.id': month_id }, function (err, allDays) {
-            if (err) {
-              console.log(err);
-            } else {
-              console.log('[Day] Found all days. exiting...');
-              res.end(JSON.stringify(allDays));
-            }
-          });
-        }
-      }
-    }
-  );
 });
 
 app.get('/getDaysfromUsersMP', function (req, res) {

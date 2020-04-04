@@ -13,13 +13,13 @@ class View extends Component {
       bills: 0,
       food: 0,
       transportation: 0,
-      leisure: 0
+      leisure: 0,
     },
     running_totals: {
       bill: 0,
       food: 0,
       transportation: 0,
-      leisure: 0
+      leisure: 0,
     },
 
     day_by_day: {
@@ -31,14 +31,14 @@ class View extends Component {
       bills_list_label: [],
       food_list_label: [],
       transportation_list_label: [],
-      leisure_list_label: []
+      leisure_list_label: [],
     },
 
     id_list: {
       bills: [],
       food: [],
       transportation: [],
-      leisure: []
+      leisure: [],
     },
 
     doesMonthPlanExiststate: false,
@@ -53,13 +53,13 @@ class View extends Component {
       tr_label: '',
       leisure_value: 0,
       leisure_label: '',
-      startDate: new Date()
+      startDate: new Date(),
     },
 
     readyforDownload: false,
     list_for_CSV: [],
     redirect: false,
-    loggedInName: this.props.loggedInName
+    loggedInName: this.props.loggedInName,
   };
 
   ConcatLabelValue(list1, list2, list_ids) {
@@ -67,7 +67,7 @@ class View extends Component {
     // [[label, id],[label, id]]
     let list3 = [];
 
-    list1.map(function(key, index) {
+    list1.map(function (key, index) {
       let templist = [];
       templist.push(list1[index] + '  (' + list2[index] + ')');
       templist.push(list_ids[index]);
@@ -88,243 +88,6 @@ class View extends Component {
     }
   }
 
-  componentDidMount() {
-    window.scrollTo(0, 0);
-
-    let axios_url = 'https://moneysavings.herokuapp.com';
-    console.log(process.env.NODE_ENV);
-    if (process.env.NODE_ENV === 'development') {
-      axios_url = 'http://localhost:3001';
-    }
-    console.log(axios_url);
-    axios
-      .get(axios_url + '/getMonthPlan?' + 'username=' + this.state.loggedInName)
-      .then(response => {
-        console.log('I got the month');
-        console.log(response);
-
-        // get the bill, food, transportation, leisure
-
-        if (response.data == null) {
-          this.setState({ doesMonthPlanExiststate: false });
-        } else {
-          this.setState({ doesMonthPlanExiststate: true });
-
-          this.setState({
-            month_record: {
-              bills: parseFloat(response.data.total_bill),
-              food: parseFloat(response.data.total_food),
-              transportation: parseFloat(response.data.total_tr),
-              leisure: parseFloat(response.data.total_leisure)
-            }
-          });
-          console.log(this.state);
-        }
-
-        // once you get the totals, then get the day records
-        let axios_url = 'https://moneysavings.herokuapp.com';
-        console.log(process.env.NODE_ENV);
-        if (process.env.NODE_ENV === 'development') {
-          axios_url = 'http://localhost:3001';
-        }
-        console.log(axios_url);
-
-        axios
-          .get(axios_url + '/getAllFourCurrentTotal')
-          .then(response => {
-            console.log('I got the all four!!!');
-            console.log(response);
-
-            // get the running total for bill, food, transportation, leisure
-
-            let running_totals = {
-              bill: 0,
-              food: 0,
-              transportation: 0,
-              leisure: 0
-            };
-
-            let day_by_day = {
-              bills_list_value: [],
-              food_list_value: [],
-              transportation_list_value: [],
-              leisure_list_value: [],
-
-              bills_list_label: [],
-              food_list_label: [],
-              transportation_list_label: [],
-              leisure_list_label: []
-            };
-
-            let id_list = {
-              bills: [],
-              food: [],
-              transportation: [],
-              leisure: []
-            };
-
-            Object.keys(response.data).map(function(key, index) {
-              running_totals.bill += response.data[key].bill_value;
-              running_totals.food += response.data[key].food_value;
-              running_totals.transportation += response.data[key].tr_value;
-              running_totals.leisure += response.data[key].leisure_value;
-
-              if (parseFloat(response.data[key].bill_value) != 0) {
-                day_by_day.bills_list_label.push(response.data[key].bill_label);
-
-                day_by_day.bills_list_value.push(
-                  parseFloat(response.data[key].bill_value)
-                );
-
-                id_list.bills.push(response.data[key]._id);
-              }
-
-              if (parseFloat(response.data[key].food_value) != 0) {
-                day_by_day.food_list_label.push(response.data[key].food_label);
-
-                day_by_day.food_list_value.push(
-                  parseFloat(response.data[key].food_value)
-                );
-
-                id_list.food.push(response.data[key]._id);
-              }
-
-              if (parseFloat(response.data[key].tr_value) != 0) {
-                day_by_day.transportation_list_label.push(
-                  response.data[key].tr_label
-                );
-
-                day_by_day.transportation_list_value.push(
-                  parseFloat(response.data[key].tr_value)
-                );
-                id_list.transportation.push(response.data[key]._id);
-              }
-
-              if (parseFloat(response.data[key].leisure_value) != 0) {
-                day_by_day.leisure_list_label.push(
-                  response.data[key].leisure_label
-                );
-
-                day_by_day.leisure_list_value.push(
-                  parseFloat(response.data[key].leisure_value)
-                );
-                id_list.leisure.push(response.data[key]._id);
-              }
-            });
-
-            this.state.running_totals = running_totals;
-            this.state.day_by_day = day_by_day;
-            this.state.id_list = id_list;
-
-            console.log(this.state);
-            console.log('watch:');
-            console.log(this.state.day_by_day);
-            // get the day-by-day here
-
-            ///
-            ///
-            ///
-            axios
-
-              .get(
-                axios_url +
-                  '/getDaysfromUsersMP?' +
-                  'username=' +
-                  this.state.loggedInName
-              )
-
-              .then(response => {
-                console.log(response.data);
-                // get the timestamp, only the YYYY-MM-DD
-                let list_to_return_local = [
-                  ['data', 'category', 'label', 'value']
-                ];
-                for (let i = 0; i < response.data.length; i++) {
-                  // timestamp
-                  // label and data
-
-                  // bill
-
-                  // food
-                  // tr
-                  // leisure
-                  let timestamp = moment(response.data[i].timestamp).format(
-                    'YYYY-MM-DD'
-                  );
-
-                  if (response.data[i].bill_value != 0) {
-                    let entry = [];
-                    entry.push(
-                      timestamp,
-                      'bill',
-                      response.data[i].bill_label,
-                      response.data[i].bill_value
-                    );
-
-                    list_to_return_local.push(entry);
-                  }
-
-                  // food
-                  if (response.data[i].food_value != 0) {
-                    let entry = [];
-                    entry.push(
-                      timestamp,
-                      'food',
-                      response.data[i].food_label,
-                      response.data[i].food_value
-                    );
-
-                    list_to_return_local.push(entry);
-                  }
-
-                  // tr
-                  if (response.data[i].tr_value != 0) {
-                    let entry = [];
-                    entry.push(
-                      timestamp,
-                      'transportation',
-                      response.data[i].tr_label,
-                      response.data[i].tr_value
-                    );
-
-                    list_to_return_local.push(entry);
-                  }
-
-                  // leisure
-                  if (response.data[i].leisure_value != 0) {
-                    let entry = [];
-                    entry.push(
-                      timestamp,
-                      'leisure',
-                      response.data[i].leisure_label,
-                      response.data[i].leisure_value
-                    );
-
-                    list_to_return_local.push(entry);
-                  }
-                  console.log(list_to_return_local);
-                  console.log('plsss');
-                  this.state.list_for_CSV = list_to_return_local;
-                  this.setState({ readyforDownload: true });
-                  console.log(this.state.list_for_CSV);
-                }
-              })
-              .catch(error => {
-                console.log('nagkamali sa get day totals');
-                console.log(error.response);
-              });
-          })
-          .catch(error => {
-            console.log('nagkamali sa running totals');
-            console.log(error.response);
-          });
-      })
-      .catch(error => {
-        console.log('nagkamali sa get month');
-        console.log(error.response);
-      });
-  }
-
   getMonthIndex = () => {
     return new Date().getMonth();
   };
@@ -343,7 +106,7 @@ class View extends Component {
     }
   };
 
-  getRecordToDelete = value_id => {
+  getRecordToDelete = (value_id) => {
     let axios_url = 'https://moneysavings.herokuapp.com';
     console.log(process.env.NODE_ENV);
     if (process.env.NODE_ENV === 'development') {
@@ -353,7 +116,7 @@ class View extends Component {
 
     axios
       .get(axios_url + '/getDay?' + 'id=' + value_id)
-      .then(response => {
+      .then((response) => {
         console.log('iv of speads');
         this.setState({
           value_to_delete: {
@@ -365,18 +128,18 @@ class View extends Component {
             tr_label: response.data.tr_label,
             leisure_value: response.data.leisure_value,
             leisure_label: response.data.leisure_label,
-            startDate: Date.parse(response.data.timestamp)
+            startDate: Date.parse(response.data.timestamp),
           },
-          clickDelete: true
+          clickDelete: true,
         });
       })
-      .catch(error => {
+      .catch((error) => {
         console.log('nagkamali sa get day totals');
         console.log(error.response);
       });
   };
 
-  deleteRecord = value_id => {
+  deleteRecord = (value_id) => {
     console.log(value_id);
     console.log('WAWIJAWDLKAWW');
     let axios_url = 'https://moneysavings.herokuapp.com';
@@ -389,108 +152,267 @@ class View extends Component {
     this.getRecordToDelete(value_id);
     axios
       .delete(axios_url + '/deleteRecord?' + 'id=' + value_id)
-      .then(response => {
+      .then((response) => {
         console.log('doneeee');
       })
-      .catch(error => {
+      .catch((error) => {
         console.log('nagkamali sa delete totals');
         console.log(error.response);
       });
   };
 
-  // generateCSVfile = () => {
-  //   // return a list of list, each row is a list
-  //   // date, label, value
-  //   // get the days (for all since there's no user)
+  componentDidMount() {
+    // get the month-plan (it should exist. if not, then go make one)
+    // get the day records from the month-plan
+    // generate the list of list for the CSV
 
-  //   this.state.list_for_CSV.push(['date', 'label', 'value']);
-  //   console.log('WAWIJAWDLKAWW');
-  //   let axios_url = 'https://moneysavings.herokuapp.com';
-  //   console.log(process.env.NODE_ENV);
-  //   if (process.env.NODE_ENV === 'development') {
-  //     axios_url = 'http://localhost:3001';
-  //   }
-  //   console.log(axios_url);
+    window.scrollTo(0, 0);
 
-  //   axios
-  //     .get(axios_url + '/getAllDaysfromUser')
-  //     .then(response => {
-  //       console.log(response.data);
-  //       // get the timestamp, only the YYYY-MM-DD
+    console.log('[View] Component did mount');
 
-  //       for (let i = 0; i < response.data.length; i++) {
-  //         // timestamp
-  //         // label and data
+    let axios_url = 'https://moneysavings.herokuapp.com';
+    console.log(process.env.NODE_ENV);
+    if (process.env.NODE_ENV === 'development') {
+      axios_url = 'http://localhost:3001';
+    }
+    console.log(axios_url);
 
-  //         // bill
+    // get the month-plan
+    console.log('Getting month-plan');
+    axios
+      .get(axios_url + '/getMonthPlan?' + 'username=' + this.state.loggedInName)
+      .then((response) => {
+        console.log('Heres the month: ');
+        console.log(response);
 
-  //         // food
-  //         // tr
-  //         // leisure
-  //         let timestamp = moment(response.data[i].timestamp).format(
-  //           'YYYY-MM-DD'
-  //         );
+        // get the bill, food, transportation, leisure
 
-  //         if (response.data[i].bill_value != 0) {
-  //           let entry = [];
-  //           entry.push(
-  //             timestamp,
-  //             response.data[i].bill_label,
-  //             response.data[i].bill_value
-  //           );
+        if (response.data == null) {
+          this.setState({ doesMonthPlanExiststate: false });
+        } else {
+          console.log('Month exists. Now we get the day records');
+          this.setState({ doesMonthPlanExiststate: true });
 
-  //           this.state.list_for_CSV.push(entry);
-  //         }
+          this.setState({
+            month_record: {
+              bills: parseFloat(response.data.total_bill),
+              food: parseFloat(response.data.total_food),
+              transportation: parseFloat(response.data.total_tr),
+              leisure: parseFloat(response.data.total_leisure),
+            },
+          });
 
-  //         // food
-  //         if (response.data[i].food_value != 0) {
-  //           let entry = [];
-  //           entry.push(
-  //             timestamp,
-  //             response.data[i].food_label,
-  //             response.data[i].food_value
-  //           );
+          // once you get the totals, then get the day records
 
-  //           this.state.list_for_CSV.push(entry);
-  //         }
+          // let axios_url = 'https://moneysavings.herokuapp.com';
+          // console.log(process.env.NODE_ENV);
+          // if (process.env.NODE_ENV === 'development') {
+          //   axios_url = 'http://localhost:3001';
+          // }
+          // console.log(axios_url);
 
-  //         // tr
-  //         if (response.data[i].tr_value != 0) {
-  //           let entry = [];
-  //           entry.push(
-  //             timestamp,
-  //             response.data[i].tr_label,
-  //             response.data[i].tr_value
-  //           );
+          axios
+            .get(
+              axios_url +
+                '/getDaysFromMonthPlan?' +
+                'username=' +
+                this.state.loggedInName
+            )
+            .then((response) => {
+              console.log('I just got the day records. Here they are:');
+              console.log(response);
 
-  //           this.state.list_for_CSV.push(entry);
-  //         }
+              // get the running total for bill, food, transportation, leisure
 
-  //         // leisure
-  //         if (response.data[i].leisure_value != 0) {
-  //           let entry = [];
-  //           entry.push(
-  //             timestamp,
-  //             response.data[i].leisure_label,
-  //             response.data[i].leisure_value
-  //           );
+              let running_totals = {
+                bill: 0,
+                food: 0,
+                transportation: 0,
+                leisure: 0,
+              };
 
-  //           this.state.list_for_CSV.push(entry);
-  //         }
-  //       }
-  //     })
-  //     .catch(error => {
-  //       console.log('nagkamali sa get day totals');
-  //       console.log(error.response);
-  //     });
-  // };
+              let day_by_day = {
+                bills_list_value: [],
+                food_list_value: [],
+                transportation_list_value: [],
+                leisure_list_value: [],
+
+                bills_list_label: [],
+                food_list_label: [],
+                transportation_list_label: [],
+                leisure_list_label: [],
+              };
+
+              let id_list = {
+                bills: [],
+                food: [],
+                transportation: [],
+                leisure: [],
+              };
+
+              console.log('Computing the running totals per category');
+              console.log('Getting the Ids as well for edit and delete');
+
+              Object.keys(response.data).map(function (key, index) {
+                running_totals.bill += response.data[key].bill_value;
+                running_totals.food += response.data[key].food_value;
+                running_totals.transportation += response.data[key].tr_value;
+                running_totals.leisure += response.data[key].leisure_value;
+
+                if (parseFloat(response.data[key].bill_value) != 0) {
+                  day_by_day.bills_list_label.push(
+                    response.data[key].bill_label
+                  );
+
+                  day_by_day.bills_list_value.push(
+                    parseFloat(response.data[key].bill_value)
+                  );
+
+                  id_list.bills.push(response.data[key]._id);
+                }
+
+                if (parseFloat(response.data[key].food_value) != 0) {
+                  day_by_day.food_list_label.push(
+                    response.data[key].food_label
+                  );
+
+                  day_by_day.food_list_value.push(
+                    parseFloat(response.data[key].food_value)
+                  );
+
+                  id_list.food.push(response.data[key]._id);
+                }
+
+                if (parseFloat(response.data[key].tr_value) != 0) {
+                  day_by_day.transportation_list_label.push(
+                    response.data[key].tr_label
+                  );
+
+                  day_by_day.transportation_list_value.push(
+                    parseFloat(response.data[key].tr_value)
+                  );
+                  id_list.transportation.push(response.data[key]._id);
+                }
+
+                if (parseFloat(response.data[key].leisure_value) != 0) {
+                  day_by_day.leisure_list_label.push(
+                    response.data[key].leisure_label
+                  );
+
+                  day_by_day.leisure_list_value.push(
+                    parseFloat(response.data[key].leisure_value)
+                  );
+                  id_list.leisure.push(response.data[key]._id);
+                }
+              });
+
+              this.state.running_totals = running_totals;
+              this.state.day_by_day = day_by_day;
+              this.state.id_list = id_list;
+
+              console.log('Finished doing those. This is now the state:');
+              console.log(this.state);
+
+              // list of list for CSV file
+              // i am still using the response from the getDaysFromMonthPlan
+              console.log('Generating the list of list for CSV');
+              let list_to_return_local = [
+                ['data', 'category', 'label', 'value'],
+              ];
+              for (let i = 0; i < response.data.length; i++) {
+                // timestamp
+                // label and data
+                // bill
+                // food
+                // tr
+                // leisure
+                let timestamp = moment(response.data[i].timestamp).format(
+                  'YYYY-MM-DD'
+                );
+
+                if (response.data[i].bill_value != 0) {
+                  let entry = [];
+                  entry.push(
+                    timestamp,
+                    'bill',
+                    response.data[i].bill_label,
+                    response.data[i].bill_value
+                  );
+
+                  list_to_return_local.push(entry);
+                }
+
+                // food
+                if (response.data[i].food_value != 0) {
+                  let entry = [];
+                  entry.push(
+                    timestamp,
+                    'food',
+                    response.data[i].food_label,
+                    response.data[i].food_value
+                  );
+
+                  list_to_return_local.push(entry);
+                }
+
+                // tr
+                if (response.data[i].tr_value != 0) {
+                  let entry = [];
+                  entry.push(
+                    timestamp,
+                    'transportation',
+                    response.data[i].tr_label,
+                    response.data[i].tr_value
+                  );
+
+                  list_to_return_local.push(entry);
+                }
+
+                // leisure
+                if (response.data[i].leisure_value != 0) {
+                  let entry = [];
+                  entry.push(
+                    timestamp,
+                    'leisure',
+                    response.data[i].leisure_label,
+                    response.data[i].leisure_value
+                  );
+
+                  list_to_return_local.push(entry);
+                }
+
+                this.state.list_for_CSV = list_to_return_local;
+                this.setState({ readyforDownload: true });
+
+                console.log(
+                  'Finished the CSV thing. Here is what the list looks like:'
+                );
+                console.log(this.state.list_for_CSV);
+
+                // how the data looks like in the csv:
+                // "data","category","label","value"
+                // "2020-03-30","bill","asdasd ","21"
+                // "2020-03-30","food","asd as d","33"
+              }
+            })
+            .catch((error) => {
+              console.log('Error when doing /getDaysFromMonthPlan');
+              console.log(error.response);
+            });
+        }
+      })
+      .catch((error) => {
+        console.log('Error in the /getMonth part');
+        console.log(error.response);
+      });
+  }
 
   render() {
     let big_4_data = {
       bill_values: [],
       food_values: [],
       tr_values: [],
-      leisure_values: []
+      leisure_values: [],
     };
 
     // bill
@@ -606,7 +528,7 @@ class View extends Component {
       'September',
       'October',
       'November',
-      'December'
+      'December',
     ];
     let month_index = this.getMonthIndex();
 
@@ -620,7 +542,7 @@ class View extends Component {
     let showBackdropSaved = null;
 
     let list_for_modal = [];
-    Object.keys(this.state.value_to_delete).map(item =>
+    Object.keys(this.state.value_to_delete).map((item) =>
       list_for_modal.push(this.state.value_to_delete[item])
     );
 
@@ -666,7 +588,7 @@ class View extends Component {
                     {big_4_data[key][2].length == 0 ? (
                       <div></div>
                     ) : (
-                      big_4_data[key][2].map(i => (
+                      big_4_data[key][2].map((i) => (
                         <ul>
                           <li className="alignleft">
                             {'> '}
@@ -676,7 +598,7 @@ class View extends Component {
                             <Link
                               to={{
                                 pathname: '/editrecord',
-                                day_id: i[1]
+                                day_id: i[1],
                               }}
                             >
                               <a className="link_color">edit</a>
