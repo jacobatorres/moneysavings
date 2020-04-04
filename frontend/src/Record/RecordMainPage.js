@@ -34,103 +34,20 @@ class RecordMainPage extends Component {
       bills: 0,
       food: 0,
       transportation: 0,
-      leisure: 0
+      leisure: 0,
     },
 
     running_totals: {
       bill: 0,
       food: 0,
       transportation: 0,
-      leisure: 0
+      leisure: 0,
     },
 
     clickSaveRecord: false,
     modalDisplay: {},
-    loggedInName: this.props.loggedInName
+    loggedInName: this.props.loggedInName,
   };
-
-  componentDidMount() {
-    // given the month and year,
-    // get the plan of the month
-    window.scrollTo(0, 0);
-
-    let axios_url = 'https://moneysavings.herokuapp.com';
-    console.log(process.env.NODE_ENV);
-    if (process.env.NODE_ENV === 'development') {
-      axios_url = 'http://localhost:3001';
-    }
-    console.log(axios_url);
-    axios
-      .get(axios_url + '/getMonthPlan?' + 'username=' + this.state.loggedInName)
-
-      .then(response => {
-        console.log('I got the month');
-        console.log(response);
-
-        if (response.data == null) {
-          this.setState({ doesMonthPlanexist: false });
-        } else {
-          this.setState({ doesMonthPlanexist: true });
-          this.setState({
-            month_record: {
-              bills: parseFloat(response.data.total_bill),
-              food: parseFloat(response.data.total_food),
-              transportation: parseFloat(response.data.total_tr),
-              leisure: parseFloat(response.data.total_leisure)
-            }
-          });
-        }
-        // get the bill, food, transportation, leisure
-
-        console.log(this.state);
-
-        // once you get the totals, then get the day records
-
-        let axios_url = 'https://moneysavings.herokuapp.com';
-        console.log(process.env.NODE_ENV);
-        if (process.env.NODE_ENV === 'development') {
-          axios_url = 'http://localhost:3001';
-        }
-        console.log(axios_url);
-        axios
-          .get(axios_url + '/getAllFourCurrentTotal')
-          .then(response => {
-            console.log('I got the all four!!!');
-            console.log(response);
-
-            // get the running total for bill, food, transportation, leisure
-
-            let running_totals = {
-              bill: 0,
-              food: 0,
-              transportation: 0,
-              leisure: 0
-            };
-
-            Object.keys(response.data).map(function(key, index) {
-              running_totals.bill += response.data[key].bill_value;
-              running_totals.food += response.data[key].food_value;
-              running_totals.transportation += response.data[key].tr_value;
-              running_totals.leisure += response.data[key].leisure_value;
-            });
-
-            this.state.running_totals = running_totals;
-
-            console.log('pls word');
-            console.log(this.state.running_totals);
-          })
-          .catch(error => {
-            console.log('nagkamali sa running totals');
-            console.log(error.response);
-          });
-      })
-      .catch(error => {
-        console.log('nagkamali sa get month');
-        console.log(error.response);
-      });
-
-    // get total
-  }
 
   getNumDaysinMonthYear = () => {
     const month_number_rn = parseFloat(new Date().getMonth() + 1);
@@ -152,7 +69,7 @@ class RecordMainPage extends Component {
   };
 
   drawerToggleClickHandler = () => {
-    this.setState(prevState => {
+    this.setState((prevState) => {
       return { isSideDrawerOpen: !prevState.isSideDrawerOpen };
     });
   };
@@ -161,133 +78,51 @@ class RecordMainPage extends Component {
     this.setState({ isSideDrawerOpen: false });
   };
 
-  handleChange = date => {
+  handleChange = (date) => {
     console.log(date);
     this.setState({
-      startDate: date
+      startDate: date,
     });
   };
-  valuePlannedChangedBill = event => {
+  valuePlannedChangedBill = (event) => {
     this.setState({
       bill_value: event.target.value,
-      toggled_bill_value: true
+      toggled_bill_value: true,
     });
   };
 
-  valuePlannedChangedFood = event => {
+  valuePlannedChangedFood = (event) => {
     this.setState({
       food_value: event.target.value,
-      toggled_food_value: true
+      toggled_food_value: true,
     });
   };
 
-  valuePlannedChangedTr = event => {
+  valuePlannedChangedTr = (event) => {
     this.setState({
       tr_value: event.target.value,
-      toggled_tr_value: true
+      toggled_tr_value: true,
     });
   };
 
-  valuePlannedChangedLeisure = event => {
+  valuePlannedChangedLeisure = (event) => {
     this.setState({
       leisure_value: event.target.value,
-      toggled_leisure_value: true
+      toggled_leisure_value: true,
     });
   };
 
-  labelPlannedChangedBill = event => {
+  labelPlannedChangedBill = (event) => {
     this.setState({ bill_label: event.target.value });
   };
-  labelPlannedChangedFood = event => {
+  labelPlannedChangedFood = (event) => {
     this.setState({ food_label: event.target.value });
   };
-  labelPlannedChangedTr = event => {
+  labelPlannedChangedTr = (event) => {
     this.setState({ tr_label: event.target.value });
   };
-  labelPlannedChangedleisure = event => {
+  labelPlannedChangedleisure = (event) => {
     this.setState({ leisure_label: event.target.value });
-  };
-
-  saveRecordtoDB = event => {
-    event.preventDefault();
-
-    // Send a POST request
-    console.log('testtt');
-
-    let axios_url = 'https://moneysavings.herokuapp.com';
-    console.log(process.env.NODE_ENV);
-    if (process.env.NODE_ENV === 'development') {
-      axios_url = 'http://localhost:3001';
-    }
-    console.log(axios_url);
-    console.log('boom');
-    console.log(axios_url);
-    axios
-      .post(axios_url + '/saveRecord', {
-        bill_value: this.state.bill_value,
-        food_value: this.state.food_value,
-        tr_value: this.state.tr_value,
-        leisure_value: this.state.leisure_value,
-
-        bill_label: this.state.bill_label,
-        food_label: this.state.food_label,
-        tr_label: this.state.tr_label,
-        leisure_label: this.state.leisure_label,
-        timestamp: this.state.startDate,
-        month_num: new Date().getMonth() + 1,
-        year_num: new Date().getFullYear()
-      })
-      .then(response => {
-        console.log('tumama i guess');
-
-        console.log(response);
-
-        let forDisplay = {
-          bill_value: this.state.bill_value,
-          bill_label: this.state.bill_label,
-
-          food_value: this.state.food_value,
-          food_label: this.state.food_label,
-
-          tr_value: this.state.tr_value,
-          tr_label: this.state.tr_label,
-
-          leisure_value: this.state.leisure_value,
-          leisure_label: this.state.leisure_label,
-          timestamp: this.state.startDate
-        };
-
-        this.state.modalDisplay = { ...forDisplay };
-
-        this.setState({
-          bill_value: 0,
-          bill_label: '',
-          food_value: 0,
-          food_label: '',
-          tr_value: 0,
-          tr_label: '',
-          leisure_value: 0,
-          leisure_label: '',
-          toggled_bill_value: false,
-          toggled_food_value: false,
-          toggled_tr_value: false,
-          toggled_leisure_value: false,
-          clickSaveRecord: true
-        });
-      })
-      .catch(error => {
-        console.log('nagkamali');
-        console.log(error.response);
-        this.setState({ clickSaveRecord: true });
-      });
-
-    console.log('maggg');
-    // console.log(this.state);
-    // axios({
-    //   method: 'post',
-    //   url: 'http://localhost:3001/saveRecord',
-    //   data: this.state
-    // });
   };
 
   showMessage = (average, user_input) => {
@@ -329,10 +164,197 @@ class RecordMainPage extends Component {
     return new Date().getFullYear();
   };
 
-  unshowBackdrop = event => {
+  unshowBackdrop = (event) => {
     this.setState({ clickSaveRecord: false });
     // window.location.reload(false);
   };
+
+  saveRecordtoDB = (event) => {
+    event.preventDefault();
+
+    // Send a POST request
+    console.log('testtt');
+
+    let axios_url = 'https://moneysavings.herokuapp.com';
+    console.log(process.env.NODE_ENV);
+    if (process.env.NODE_ENV === 'development') {
+      axios_url = 'http://localhost:3001';
+    }
+    console.log(axios_url);
+    console.log('boom');
+    console.log(axios_url);
+    axios
+      .post(axios_url + '/saveRecord', {
+        bill_value: this.state.bill_value,
+        food_value: this.state.food_value,
+        tr_value: this.state.tr_value,
+        leisure_value: this.state.leisure_value,
+
+        bill_label: this.state.bill_label,
+        food_label: this.state.food_label,
+        tr_label: this.state.tr_label,
+        leisure_label: this.state.leisure_label,
+        timestamp: this.state.startDate,
+        month_num: new Date().getMonth() + 1,
+        year_num: new Date().getFullYear(),
+      })
+      .then((response) => {
+        console.log('tumama i guess');
+
+        console.log(response);
+
+        let forDisplay = {
+          bill_value: this.state.bill_value,
+          bill_label: this.state.bill_label,
+
+          food_value: this.state.food_value,
+          food_label: this.state.food_label,
+
+          tr_value: this.state.tr_value,
+          tr_label: this.state.tr_label,
+
+          leisure_value: this.state.leisure_value,
+          leisure_label: this.state.leisure_label,
+          timestamp: this.state.startDate,
+        };
+
+        this.state.modalDisplay = { ...forDisplay };
+
+        this.setState({
+          bill_value: 0,
+          bill_label: '',
+          food_value: 0,
+          food_label: '',
+          tr_value: 0,
+          tr_label: '',
+          leisure_value: 0,
+          leisure_label: '',
+          toggled_bill_value: false,
+          toggled_food_value: false,
+          toggled_tr_value: false,
+          toggled_leisure_value: false,
+          clickSaveRecord: true,
+        });
+      })
+      .catch((error) => {
+        console.log('nagkamali');
+        console.log(error.response);
+        this.setState({ clickSaveRecord: true });
+      });
+
+    console.log('maggg');
+    // console.log(this.state);
+    // axios({
+    //   method: 'post',
+    //   url: 'http://localhost:3001/saveRecord',
+    //   data: this.state
+    // });
+  };
+
+  componentDidMount() {
+    // get the month-plan categories
+    // if it doesnt exist, ask them to make one
+    // if it does exist, then use it for the red-green labels. Store in state
+
+    console.log('[Record Main Page] Component did mount');
+    window.scrollTo(0, 0);
+
+    let axios_url = 'https://moneysavings.herokuapp.com';
+    console.log(process.env.NODE_ENV);
+    if (process.env.NODE_ENV === 'development') {
+      axios_url = 'http://localhost:3001';
+    }
+    console.log(axios_url);
+
+    // get month plan
+    console.log('[Record main page] getting month plan');
+    axios
+      .get(axios_url + '/getMonthPlan?' + 'username=' + this.state.loggedInName)
+
+      .then((response) => {
+        console.log("here's the response:");
+        console.log(response);
+
+        if (response.data == null) {
+          // month plan doesnt exist
+
+          console.log("Month-plan doesn't exist");
+          this.setState({ doesMonthPlanexist: false });
+        } else {
+          // month plan exists,
+          // store these 4 values in the state
+          // also, get the current records. Use for running total. Save in state.
+
+          console.log('Month-plan exists');
+
+          this.setState({ doesMonthPlanexist: true });
+          this.setState({
+            month_record: {
+              bills: parseFloat(response.data.total_bill),
+              food: parseFloat(response.data.total_food),
+              transportation: parseFloat(response.data.total_tr),
+              leisure: parseFloat(response.data.total_leisure),
+            },
+          });
+
+          // get the bill, food, transportation, leisure
+
+          console.log(this.state);
+
+          // once you get the totals, then get the day records
+
+          let axios_url = 'https://moneysavings.herokuapp.com';
+          console.log(process.env.NODE_ENV);
+          if (process.env.NODE_ENV === 'development') {
+            axios_url = 'http://localhost:3001';
+          }
+
+          console.log('Since it exists, getting the day records');
+          axios
+            .get(
+              axios_url +
+                '/getDaysFromMonthPlan?' +
+                'username=' +
+                this.state.loggedInName
+            )
+            .then((response) => {
+              console.log("here's the response:");
+              console.log(response);
+
+              // get the running total for bill, food, transportation, leisure
+
+              console.log('Getting the running totals...');
+
+              let running_totals = {
+                bill: 0,
+                food: 0,
+                transportation: 0,
+                leisure: 0,
+              };
+
+              Object.keys(response.data).map(function (key, index) {
+                running_totals.bill += response.data[key].bill_value;
+                running_totals.food += response.data[key].food_value;
+                running_totals.transportation += response.data[key].tr_value;
+                running_totals.leisure += response.data[key].leisure_value;
+              });
+
+              this.state.running_totals = running_totals;
+
+              console.log('Here are the running totals:');
+              console.log(this.state.running_totals);
+            })
+            .catch((error) => {
+              console.log('Error in fetching running totals');
+              console.log(error.response);
+            });
+        }
+      })
+      .catch((error) => {
+        console.log('Error in getting month-plan');
+        console.log(error.response);
+      });
+  }
 
   //
   //
@@ -521,7 +543,7 @@ class RecordMainPage extends Component {
       'September',
       'October',
       'November',
-      'December'
+      'December',
     ];
     let month_index = this.getMonthIndex();
 
@@ -538,7 +560,7 @@ class RecordMainPage extends Component {
 
     if (this.state.clickSaveRecord) {
       let list_for_modal = [];
-      Object.keys(this.state.modalDisplay).map(item =>
+      Object.keys(this.state.modalDisplay).map((item) =>
         list_for_modal.push(this.state.modalDisplay[item])
       );
       console.log('printiong');

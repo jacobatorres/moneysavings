@@ -57,6 +57,9 @@ app.get('/sayHi', (req, res) => {
 console.log('aaa2');
 
 app.get('/getMonthPlan', (req, res) => {
+  // plan
+  // record
+
   console.log('[/getmonthplan] I made it here entered /getmonthplan');
 
   const username = req.query.username;
@@ -149,8 +152,9 @@ app.post('/saveRecord', (req, res) => {
 });
 
 app.post('/saveMonthPlan', (req, res) => {
+  // plan
+
   // save the month info (4) from the user
-  // from Plan component
 
   console.log('[/save month plan] starting to save');
   console.log(req.body);
@@ -291,36 +295,45 @@ app.delete('/deleteRecord', function (req, res) {
   });
 });
 
-app.get('/getAllFourCurrentTotal', (req, res) => {
-  // get the ID of the current month
+app.get('/getDaysFromMonthPlan', (req, res) => {
+  // Record
 
-  // then return as a JSON the totals...
+  // get the month-plan (at this point, it should exist)
+  // get the corresponding days from this month-plan
 
-  // get the correct month where this is from, and save it using that id
+  console.log('[/getDaysFromMonthPlan] Just entered here');
   const month_number_rn = parseFloat(new Date().getMonth() + 1);
   const year_number_rn = parseFloat(new Date().getFullYear());
+  const username = req.query.username;
 
   Month.findOne(
-    { month_number: month_number_rn, year_number: year_number_rn },
+    {
+      month_number: month_number_rn,
+      year_number: year_number_rn,
+      'user_parent.username': username,
+    },
     function (err, month) {
       if (err) {
         console.log(err);
       } else {
-        // month found, use its ID
+        console.log('[Month] entered else of month. Heres what i found:');
+        console.log(month);
 
-        // get all record
+        // given the found month-plan, check all corresponding day records
 
         if (month == null) {
           // no record found, return blank
+          console.log('found no month. returning...');
           res.end(JSON.stringify(month));
         } else {
+          console.log('found month. Finding all days corresponding');
           let month_id = month._id;
 
           Day.find({ 'month_parent.id': month_id }, function (err, allDays) {
             if (err) {
               console.log(err);
             } else {
-              console.log('Goet em!!!');
+              console.log('[Day] Found all days. exiting...');
               res.end(JSON.stringify(allDays));
             }
           });
