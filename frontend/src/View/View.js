@@ -225,7 +225,14 @@ class View extends Component {
             ///
             ///
             axios
-              .get(axios_url + '/getAllDaysfromUser')
+
+              .get(
+                axios_url +
+                  '/getDaysfromUsersMP?' +
+                  'username=' +
+                  this.state.loggedInName
+              )
+
               .then(response => {
                 console.log(response.data);
                 // get the timestamp, only the YYYY-MM-DD

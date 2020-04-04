@@ -567,6 +567,7 @@ class RecordMainPage extends Component {
                 <DatePicker
                   selected={this.state.startDate}
                   onChange={this.handleChange}
+                  disabled
                 />
               </div>
               <p style={{ marginTop: '50px' }}></p>

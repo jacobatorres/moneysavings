@@ -526,8 +526,7 @@ class App extends Component {
                 )}
               />
               <Route path="/delete" component={DeleteConfirmation} />
-              {/* <Route path="/" exact component={RecordMainPage} /> */}
-              <Route component={Plan} />
+              <Route component={RecordMainPage} />
             </Switch>
           </Aux>
         ) : (

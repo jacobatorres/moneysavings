@@ -57,7 +57,7 @@ app.get('/sayHi', (req, res) => {
 console.log('aaa2');
 
 app.get('/getMonthPlan', (req, res) => {
-  console.log('I made it here na');
+  console.log('I made it here entered /getmonthplan');
 
   const username = req.query.username;
   const month_number_rn = parseFloat(new Date().getMonth() + 1);
@@ -79,7 +79,7 @@ app.get('/getMonthPlan', (req, res) => {
       if (err) {
         console.log(err);
       } else {
-        console.log('wagi');
+        console.log('[/getmonthplan] success in else');
         console.log(month);
         res.end(JSON.stringify(month));
       }
@@ -148,29 +148,16 @@ app.post('/saveRecord', (req, res) => {
   );
 });
 
-// month_record: {
-//   bills: 0,
-//   food: 0,
-//   transportation: 0,
-//   leisure: 0
-// },
-
-// running_totals: {
-//   bill: 0,
-//   food: 0,
-//   transportation: 0,
-//   leisure: 0
-// }
-
 app.post('/saveMonthPlan', (req, res) => {
-  // get the needed data from the month
-  console.log('got here month');
+  // save the month info (4) from the user
+  // from Plan component
+
+  console.log('[/save month plan] starting to save');
   console.log(req.body);
 
   const username_of_loggedin = req.body.username;
-  console.log(username_of_loggedin);
+  console.log('username' + username_of_loggedin);
 
-  console.log('ikaw na ngaaaa');
   const time_dmy = moment(
     req.body.timestamp,
     moment.HTML5_FMT.DATETIME_LOCAL_MS
@@ -190,12 +177,16 @@ app.post('/saveMonthPlan', (req, res) => {
     timestamp: new Date(year, month, day)
   };
 
+  // get the user
+  // save the month
+
   User.findOne({ username: username_of_loggedin }, function(err, foundUser) {
     if (err) {
       console.log(err);
     } else {
-      // you found it!
-      console.log('bonchon');
+      // user found
+      console.log('successfully entered else');
+      console.log('found user: ');
       console.log(foundUser);
       if (foundUser == null) {
         res.end(JSON.stringify(foundUser));
@@ -205,7 +196,7 @@ app.post('/saveMonthPlan', (req, res) => {
         username: username_of_loggedin
       };
 
-      console.log('MONTH DATA:');
+      console.log('month data:');
       console.log(month_data);
 
       // save the Record
@@ -213,52 +204,13 @@ app.post('/saveMonthPlan', (req, res) => {
         if (err) {
           console.log(err);
         } else {
-          console.log('saved properly (month)');
+          console.log('[save month plan] else saved properly (month)');
           console.log(newMonth);
           res.end(JSON.stringify(newMonth));
         }
       });
     }
   });
-});
-
-app.get('/getAllFourCurrentTotal', (req, res) => {
-  // get the ID of the current month
-
-  // then return as a JSON the totals...
-
-  // get the correct month where this is from, and save it using that id
-  const month_number_rn = parseFloat(new Date().getMonth() + 1);
-  const year_number_rn = parseFloat(new Date().getFullYear());
-
-  Month.findOne(
-    { month_number: month_number_rn, year_number: year_number_rn },
-    function(err, month) {
-      if (err) {
-        console.log(err);
-      } else {
-        // month found, use its ID
-
-        // get all record
-
-        if (month == null) {
-          // no record found, return blank
-          res.end(JSON.stringify(month));
-        } else {
-          let month_id = month._id;
-
-          Day.find({ 'month_parent.id': month_id }, function(err, allDays) {
-            if (err) {
-              console.log(err);
-            } else {
-              console.log('Goet em!!!');
-              res.end(JSON.stringify(allDays));
-            }
-          });
-        }
-      }
-    }
-  );
 });
 
 app.delete('/deleteAll', function(req, res) {
@@ -339,15 +291,78 @@ app.delete('/deleteRecord', function(req, res) {
   });
 });
 
-app.get('/getAllDaysfromUser', function(req, res) {
-  Day.find({}, function(err, allDaysforUser) {
-    if (err) {
-      console.log(err);
-    } else {
-      console.log('got tem!!!');
-      res.end(JSON.stringify(allDaysforUser));
+app.get('/getAllFourCurrentTotal', (req, res) => {
+  // get the ID of the current month
+
+  // then return as a JSON the totals...
+
+  // get the correct month where this is from, and save it using that id
+  const month_number_rn = parseFloat(new Date().getMonth() + 1);
+  const year_number_rn = parseFloat(new Date().getFullYear());
+
+  Month.findOne(
+    { month_number: month_number_rn, year_number: year_number_rn },
+    function(err, month) {
+      if (err) {
+        console.log(err);
+      } else {
+        // month found, use its ID
+
+        // get all record
+
+        if (month == null) {
+          // no record found, return blank
+          res.end(JSON.stringify(month));
+        } else {
+          let month_id = month._id;
+
+          Day.find({ 'month_parent.id': month_id }, function(err, allDays) {
+            if (err) {
+              console.log(err);
+            } else {
+              console.log('Goet em!!!');
+              res.end(JSON.stringify(allDays));
+            }
+          });
+        }
+      }
     }
-  });
+  );
+});
+
+app.get('/getDaysfromUsersMP', function(req, res) {
+  // get month
+  const month_number_rn = parseFloat(new Date().getMonth() + 1);
+  const year_number_rn = parseFloat(new Date().getFullYear());
+
+  const username = req.query.username;
+  Month.findOne(
+    {
+      month_number: month_number_rn,
+      year_number: year_number_rn,
+      'user_parent.username': username
+    },
+    function(err, month) {
+      if (month == null) {
+        // no record found, return blank
+        res.end(JSON.stringify(month));
+      } else {
+        let month_id = month._id;
+
+        Day.find({ 'month_parent.id': month_id }, function(
+          err,
+          allDaysforUser
+        ) {
+          if (err) {
+            console.log(err);
+          } else {
+            console.log('got tem!!!');
+            res.end(JSON.stringify(allDaysforUser));
+          }
+        });
+      }
+    }
+  );
 });
 
 // for auth
