@@ -331,6 +331,22 @@ app.put('/updateDay', function (req, res) {
   });
 });
 
+app.delete('/deleteRecord', function (req, res) {
+  // View - deleteRecord function
+
+  console.log('Deleting record...This is the ID to delete:');
+  console.log(req.query.id);
+
+  Day.deleteOne({ _id: req.query.id }, function (err) {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log('Record has been deleted.');
+      res.end('');
+    }
+  });
+});
+
 app.delete('/deleteAll', function (req, res) {
   //  remove all days and remove all months (probably only one record),
   console.log('entered here');
@@ -349,17 +365,6 @@ app.delete('/deleteAll', function (req, res) {
           res.end('');
         }
       });
-    }
-  });
-});
-
-app.delete('/deleteRecord', function (req, res) {
-  Day.deleteOne({ _id: req.query.id }, function (err) {
-    if (err) {
-      console.log(err);
-    } else {
-      console.log('gonee');
-      res.end('');
     }
   });
 });

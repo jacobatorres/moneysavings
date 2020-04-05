@@ -107,6 +107,7 @@ class View extends Component {
   };
 
   getRecordToDelete = (value_id) => {
+    console.log('Getting record to delete');
     let axios_url = 'https://moneysavings.herokuapp.com';
     console.log(process.env.NODE_ENV);
     if (process.env.NODE_ENV === 'development') {
@@ -117,7 +118,7 @@ class View extends Component {
     axios
       .get(axios_url + '/getDay?' + 'id=' + value_id)
       .then((response) => {
-        console.log('iv of speads');
+        console.log('I got the record. Updating state');
         this.setState({
           value_to_delete: {
             bill_value: response.data.bill_value,
@@ -134,14 +135,14 @@ class View extends Component {
         });
       })
       .catch((error) => {
-        console.log('nagkamali sa get day totals');
+        console.log('Something went wrong with getting day record');
         console.log(error.response);
       });
   };
 
   deleteRecord = (value_id) => {
-    console.log(value_id);
-    console.log('WAWIJAWDLKAWW');
+    console.log('[View] [deleteRecord function] Currently deleting record');
+
     let axios_url = 'https://moneysavings.herokuapp.com';
     console.log(process.env.NODE_ENV);
     if (process.env.NODE_ENV === 'development') {
@@ -150,13 +151,15 @@ class View extends Component {
     console.log(axios_url);
 
     this.getRecordToDelete(value_id);
+
+    console.log('Now deleting record...');
     axios
       .delete(axios_url + '/deleteRecord?' + 'id=' + value_id)
       .then((response) => {
-        console.log('doneeee');
+        console.log('Deleted Record.');
       })
       .catch((error) => {
-        console.log('nagkamali sa delete totals');
+        console.log('Error in deleting record');
         console.log(error.response);
       });
   };

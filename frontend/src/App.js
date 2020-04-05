@@ -36,7 +36,7 @@ import {
   Route,
   Link,
   Switch,
-  Redirect
+  Redirect,
 } from 'react-router-dom';
 
 const LoggedInValue = React.createContext('light');
@@ -71,11 +71,11 @@ class App extends Component {
     clickLogin: false,
     modalMessage: '',
 
-    justLoggedOut: false
+    justLoggedOut: false,
   };
 
   drawerToggleClickHandler = () => {
-    this.setState(prevState => {
+    this.setState((prevState) => {
       return { isSideDrawerOpen: !prevState.isSideDrawerOpen };
     });
   };
@@ -84,55 +84,55 @@ class App extends Component {
     this.setState({
       isSideDrawerOpen: false,
       clearedData: false,
-      redirect: true
+      redirect: true,
     });
     // window.location.reload(false);
   };
 
-  handleChange = date => {
+  handleChange = (date) => {
     console.log(date);
     this.setState({
-      startDate: date
+      startDate: date,
     });
   };
-  valuePlannedChangedBill = event => {
+  valuePlannedChangedBill = (event) => {
     this.setState({
       bill_value: event.target.value,
-      toggled_bill_value: true
+      toggled_bill_value: true,
     });
   };
 
-  valuePlannedChangedFood = event => {
+  valuePlannedChangedFood = (event) => {
     this.setState({
       food_value: event.target.value,
-      toggled_food_value: true
+      toggled_food_value: true,
     });
   };
 
-  valuePlannedChangedTr = event => {
+  valuePlannedChangedTr = (event) => {
     this.setState({
       tr_value: event.target.value,
-      toggled_tr_value: true
+      toggled_tr_value: true,
     });
   };
 
-  valuePlannedChangedLeisure = event => {
+  valuePlannedChangedLeisure = (event) => {
     this.setState({
       leisure_value: event.target.value,
-      toggled_leisure_value: true
+      toggled_leisure_value: true,
     });
   };
 
-  labelPlannedChangedBill = event => {
+  labelPlannedChangedBill = (event) => {
     this.setState({ bill_label: event.target.value });
   };
-  labelPlannedChangedFood = event => {
+  labelPlannedChangedFood = (event) => {
     this.setState({ food_label: event.target.value });
   };
-  labelPlannedChangedTr = event => {
+  labelPlannedChangedTr = (event) => {
     this.setState({ tr_label: event.target.value });
   };
-  labelPlannedChangedleisure = event => {
+  labelPlannedChangedleisure = (event) => {
     this.setState({ leisure_label: event.target.value });
   };
 
@@ -173,7 +173,7 @@ class App extends Component {
   //   // });
   // };
 
-  clearData = event => {
+  clearData = (event) => {
     console.log('hello');
     let axios_url = 'https://moneysavings.herokuapp.com';
     console.log(process.env.NODE_ENV);
@@ -184,14 +184,14 @@ class App extends Component {
 
     axios
       .delete(axios_url + '/deleteAll')
-      .then(response => {
+      .then((response) => {
         console.log('finish na (delete');
         console.log(response);
 
         this.setState({ clearedData: true, redirect: true });
         console.log('bye');
       })
-      .catch(error => {
+      .catch((error) => {
         console.log('nagkamali sa delete dito sa clear data');
         console.log(error.response);
         this.setState({ clearedData: true });
@@ -213,7 +213,7 @@ class App extends Component {
 
     axios
       .get(axios_url + '/logout')
-      .then(response => {
+      .then((response) => {
         console.log('logout');
         console.log(response);
 
@@ -225,28 +225,28 @@ class App extends Component {
           justLoggedOut: true,
           name: '',
           password: '',
-          loggedInName: ''
+          loggedInName: '',
         });
       })
-      .catch(error => {
+      .catch((error) => {
         console.log('nagkamali sa delete dito sa clear data');
         console.log(error.response);
         this.setState({ clearedData: true });
       });
   };
 
-  changename = event => {
+  changename = (event) => {
     this.setState({
-      name: event.target.value
+      name: event.target.value,
     });
   };
-  changepassword = event => {
+  changepassword = (event) => {
     this.setState({
-      password: event.target.value
+      password: event.target.value,
     });
   };
 
-  logintoDB = event => {
+  logintoDB = (event) => {
     event.preventDefault();
 
     // Send a POST request
@@ -262,9 +262,9 @@ class App extends Component {
     axios
       .post(axios_url + '/login', {
         username: this.state.name,
-        password: this.state.password
+        password: this.state.password,
       })
-      .then(response => {
+      .then((response) => {
         // reponse.data == Unauthorized, means invalid
         // else, it's good
         console.log('aaadsasdas');
@@ -275,7 +275,7 @@ class App extends Component {
             clickLogin: true,
             loggedIn: false,
             name: '',
-            password: ''
+            password: '',
           });
         } else {
           this.setState({
@@ -285,11 +285,11 @@ class App extends Component {
             loggedIn: true,
             name: '',
             password: '',
-            loggedInName: response.data.username
+            loggedInName: response.data.username,
           });
         }
       })
-      .catch(error => {
+      .catch((error) => {
         console.log('nagkamali asdkaskdaskd');
         console.log(error.response);
 
@@ -298,7 +298,7 @@ class App extends Component {
           clickLogin: true,
           loggedIn: false,
           name: '',
-          password: ''
+          password: '',
         });
       });
   };
@@ -497,7 +497,7 @@ class App extends Component {
             <Switch>
               <Route
                 path="/record"
-                render={props => (
+                render={(props) => (
                   <RecordMainPage
                     {...props}
                     loggedInName={this.state.loggedInName}
@@ -506,19 +506,19 @@ class App extends Component {
               />
               <Route
                 path="/plan"
-                render={props => (
+                render={(props) => (
                   <Plan {...props} loggedInName={this.state.loggedInName} />
                 )}
               />
               <Route
                 path="/view"
-                render={props => (
+                render={(props) => (
                   <View {...props} loggedInName={this.state.loggedInName} />
                 )}
               />
               <Route
                 path="/editrecord"
-                render={props => (
+                render={(props) => (
                   <EditRecord
                     {...props}
                     loggedInName={this.state.loggedInName}
@@ -526,7 +526,7 @@ class App extends Component {
                 )}
               />
               <Route path="/delete" component={DeleteConfirmation} />
-              <Route component={RecordMainPage} />
+              <Redirect exact from="/" to="record" />
             </Switch>
           </Aux>
         ) : (
