@@ -559,7 +559,6 @@ class RecordMainPage extends Component {
       Object.keys(this.state.modalDisplay).map((item) =>
         list_for_modal.push(this.state.modalDisplay[item])
       );
-      console.log('printiong');
 
       showBackdropSaved = (
         <div>

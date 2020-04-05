@@ -60,6 +60,7 @@ app.get('/getMonthPlan', (req, res) => {
   // plan
   // record
   // view
+  // editrecord
 
   console.log('[/getmonthplan] I made it here entered /getmonthplan');
 
@@ -234,6 +235,7 @@ app.post('/saveRecord', (req, res) => {
 app.get('/getDaysFromMonthPlan', (req, res) => {
   // Record
   // View
+  // EditRecord
 
   // get the month-plan (at this point, it should exist)
   // get the corresponding days from this month-plan
@@ -280,6 +282,55 @@ app.get('/getDaysFromMonthPlan', (req, res) => {
   );
 });
 
+// given the ID, get the needed information
+app.get('/getDay', function (req, res) {
+  // EditRecord
+  console.log('[/getDay] Here at get day.');
+
+  Day.findById(req.query.id, function (err, day) {
+    if (err) {
+      console.log('Error in getting the day record');
+    } else {
+      // get the day
+      console.log('I got the day record. Exiting...');
+      res.end(JSON.stringify(day));
+    }
+  });
+});
+
+app.put('/updateDay', function (req, res) {
+  // EditRecord component
+
+  console.log('[UpdateDay] Updating record. This is for EditRecord component');
+
+  let time_niceformat = moment(req.body.timestamp);
+  console.log(time_niceformat.format('ll'));
+
+  const day_data = {
+    bill_value: parseFloat(req.body.bill_value),
+    bill_label: req.body.bill_label,
+    food_value: parseFloat(req.body.food_value),
+    food_label: req.body.food_label,
+    tr_value: parseFloat(req.body.tr_value),
+    tr_label: req.body.tr_label,
+    leisure_value: parseFloat(req.body.leisure_value),
+    leisure_label: req.body.leisure_label,
+    timestamp: time_niceformat,
+  };
+
+  console.log(req.body.id);
+
+  Day.findByIdAndUpdate(req.body.id, day_data, function (err, updatedDay) {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log('Successfully updated day. Here is what it is:');
+      console.log(updatedDay);
+      res.end(JSON.stringify(updatedDay));
+    }
+  });
+});
+
 app.delete('/deleteAll', function (req, res) {
   //  remove all days and remove all months (probably only one record),
   console.log('entered here');
@@ -298,51 +349,6 @@ app.delete('/deleteAll', function (req, res) {
           res.end('');
         }
       });
-    }
-  });
-});
-
-// given the ID, get the needed information
-app.get('/getDay', function (req, res) {
-  console.log('whos that girl?');
-
-  Day.findById(req.query.id, function (err, day) {
-    if (err) {
-      console.log('something wrong with day');
-    } else {
-      // get the day
-      res.end(JSON.stringify(day));
-    }
-  });
-});
-
-app.put('/updateDay', function (req, res) {
-  console.log('PUTTTTa');
-  console.log(req.body.timestamp);
-  let d4 = moment(req.body.timestamp);
-  console.log(d4.format('ll'));
-
-  const day_data = {
-    bill_value: parseFloat(req.body.bill_value),
-    bill_label: req.body.bill_label,
-    food_value: parseFloat(req.body.food_value),
-    food_label: req.body.food_label,
-    tr_value: parseFloat(req.body.tr_value),
-    tr_label: req.body.tr_label,
-    leisure_value: parseFloat(req.body.leisure_value),
-    leisure_label: req.body.leisure_label,
-    timestamp: d4,
-  };
-
-  console.log(req.body.id);
-
-  Day.findByIdAndUpdate(req.body.id, day_data, function (err, updatedDay) {
-    if (err) {
-      console.log(err);
-    } else {
-      console.log('yes fm!');
-      console.log(updatedDay);
-      res.end(JSON.stringify(updatedDay));
     }
   });
 });
