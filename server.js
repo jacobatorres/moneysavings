@@ -347,61 +347,86 @@ app.delete('/deleteRecord', function (req, res) {
   });
 });
 
-app.delete('/deleteAll', function (req, res) {
+app.delete('/deleteCurrentMonth', function (req, res) {
   //  remove all days and remove all months (probably only one record),
-  console.log('entered here');
-  Day.deleteMany({}, function (err, result) {
-    if (err) {
-      console.log('something wrong with deleting the days');
-      res.end('');
-    } else {
-      // then remove months
-      Month.deleteMany({}, function (err, result) {
-        if (err) {
-          console.log('wrong with months');
-          res.end('');
-        } else {
-          console.log('returning...');
-          res.end('');
-        }
-      });
-    }
-  });
-});
 
-app.get('/getDaysfromUsersMP', function (req, res) {
-  // get month
-  const month_number_rn = parseFloat(new Date().getMonth() + 1);
-  const year_number_rn = parseFloat(new Date().getFullYear());
+  console.log('[/deleteCurrentMonth] Here at delete');
+
+  console.log('Username is ' + req.query.username);
+  res.end('');
+
+  // Get the user
+  // then get the month, then delete all days from the month
 
   const username = req.query.username;
-  Month.findOne(
+  const month_number_rn = parseFloat(new Date().getMonth() + 1);
+  const year_number_rn = parseFloat(new Date().getFullYear());
+  console.log(username);
+  console.log(month_number_rn);
+  console.log(year_number_rn);
+
+  // check the existense of month-plan given the two arguments
+  // also include user of course
+
+  console.log('Search for the current month plan of the logged in user');
+  Month.findOneAndDelete(
     {
       month_number: month_number_rn,
       year_number: year_number_rn,
       'user_parent.username': username,
     },
-    function (err, month) {
-      if (month == null) {
-        // no record found, return blank
-        res.end(JSON.stringify(month));
+    function (err, monthDeleted) {
+      if (err) {
+        console.log(err);
       } else {
-        let month_id = month._id;
-
-        Day.find({ 'month_parent.id': month_id }, function (
-          err,
-          allDaysforUser
-        ) {
-          if (err) {
-            console.log(err);
-          } else {
-            console.log('got tem!!!');
-            res.end(JSON.stringify(allDaysforUser));
-          }
-        });
+        // if there's no current month, handle it
+        // else, delete the corresponding day records
+        if (monthDeleted == null) {
+          // no record found, return blank
+          console.log('found no month. returning...');
+          res.end(JSON.stringify(monthDeleted));
+        } else {
+          console.log(
+            'found month and deleted it. Finding all days corresponding...'
+          );
+          let month_id = monthDeleted._id;
+          Day.deleteMany({ 'month_parent.id': month_id }, function (
+            err,
+            result
+          ) {
+            if (err) {
+              console.log('something went wrong with deleting the day records');
+            } else {
+              // successfully deleted day records.
+              console.log(
+                "Deleted all day records for this user's current month plan. exiting..."
+              );
+              res.end('');
+            }
+          });
+        }
       }
     }
   );
+
+  // old way
+  // Day.deleteMany({}, function (err, result) {
+  //   if (err) {
+  //     console.log('something wrong with deleting the days');
+  //     res.end('');
+  //   } else {
+  //     // then remove months
+  //     Month.deleteMany({}, function (err, result) {
+  //       if (err) {
+  //         console.log('wrong with months');
+  //         res.end('');
+  //       } else {
+  //         console.log('returning...');
+  //         res.end('');
+  //       }
+  //     });
+  //   }
+  // });
 });
 
 // for auth

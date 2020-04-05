@@ -18,12 +18,11 @@ import Aux from '../../hoc/Auxillary';
 class toolbar extends Component {
   state = {
     clearedData: false,
-    redirect: false
+    redirect: false,
   };
 
-  clearData = event => {
-    console.log('hello');
-    console.log('pahiream');
+  clearData = (event) => {
+    console.log('I am at clear data');
     console.log(this.props);
 
     let axios_url = 'https://moneysavings.herokuapp.com';
@@ -35,14 +34,14 @@ class toolbar extends Component {
 
     axios
       .delete(axios_url + '/deleteAll')
-      .then(response => {
+      .then((response) => {
         console.log('finish na (delete');
         console.log(response);
         this.setState({ clearedData: true, redirect: true });
 
         // get the running total for bill, food, transportation, leisure
       })
-      .catch(error => {
+      .catch((error) => {
         console.log('nagkamali sa delete toolbar clear');
         console.log(error.response);
         this.setState({ clearedData: true });
@@ -53,7 +52,7 @@ class toolbar extends Component {
     return <Redirect to="/" />;
   };
 
-  unshowBackdrop = event => {
+  unshowBackdrop = (event) => {
     this.setState({ clearedData: false, redirect: true });
     // window.location.reload(false);
   };
@@ -69,14 +68,14 @@ class toolbar extends Component {
 
     axios
       .get(axios_url + '/logout')
-      .then(response => {
+      .then((response) => {
         console.log('logout');
         console.log(response);
 
         // this.setState({ clearedData: true, redirect: true });
         console.log('bye logout');
       })
-      .catch(error => {
+      .catch((error) => {
         console.log('nagkamali sa delete dito sa clear data');
         console.log(error.response);
         this.setState({ clearedData: true });

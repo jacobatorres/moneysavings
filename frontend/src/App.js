@@ -174,7 +174,10 @@ class App extends Component {
   // };
 
   clearData = (event) => {
-    console.log('hello');
+    // this function is both used by the button on the Toolbar and on the SideDrawer
+
+    console.log('Clearing the data for ' + this.state.loggedInName);
+
     let axios_url = 'https://moneysavings.herokuapp.com';
     console.log(process.env.NODE_ENV);
     if (process.env.NODE_ENV === 'development') {
@@ -183,16 +186,20 @@ class App extends Component {
     console.log(axios_url);
 
     axios
-      .delete(axios_url + '/deleteAll')
+
+      .delete(
+        axios_url + '/deleteCurrentMonth?username=' + this.state.loggedInName
+      )
       .then((response) => {
-        console.log('finish na (delete');
+        console.log('Current month plan and its day records have been deleted');
         console.log(response);
 
         this.setState({ clearedData: true, redirect: true });
-        console.log('bye');
       })
       .catch((error) => {
-        console.log('nagkamali sa delete dito sa clear data');
+        console.log(
+          'Something went wrong in the DELETE request from /deleteCurrentMonth'
+        );
         console.log(error.response);
         this.setState({ clearedData: true });
       });
