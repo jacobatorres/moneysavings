@@ -482,18 +482,18 @@ if (process.env.NODE_ENV === 'production') {
 
   app.get('*', (req, res) => {
     console.log('grr');
-    console.log(path.join(__dirname, 'build', 'index.html'));
-    res.sendFile(path.join(__dirname, 'build', 'index.html'));
+    console.log(path.join(__dirname, 'frontend', 'build', 'index.html'));
+    res.sendFile(path.join(__dirname, 'frontend', 'build', 'index.html'));
   });
 }
 
-app.get('*', function (req, res) {
-  console.log('boomies');
-  res.sendFile(path.join(__dirname, 'index.html'), function (err) {
-    if (err) {
-      res.state(500).send(err);
-    }
-  });
-});
+// app.get('*', function (req, res) {
+//   console.log('boomies');
+//   res.sendFile(path.join(__dirname, 'index.html'), function (err) {
+//     if (err) {
+//       res.state(500).send(err);
+//     }
+//   });
+// });
 
 app.listen(API_PORT, () => console.log(`LISTENING ON UHH PORT ${API_PORT}`));
