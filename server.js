@@ -474,15 +474,6 @@ function isLoggedIn(req, res, next) {
   return 'Unauthorized';
 }
 
-app.get('/*', function (req, res) {
-  console.log('boomies');
-  res.sendFile(path.join(__dirname, 'index.html'), function (err) {
-    if (err) {
-      res.state(500).send(err);
-    }
-  });
-});
-
 // step 3 from https://www.youtube.com/watch?v=e1LaekAnVIM&t=579s
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static('frontend/build'));
@@ -490,8 +481,19 @@ if (process.env.NODE_ENV === 'production') {
   console.log(__dirname);
 
   app.get('*', (req, res) => {
+    console.log('grr');
+    console.log(path.join(__dirname, 'build', 'index.html'));
     res.sendFile(path.join(__dirname, 'build', 'index.html'));
   });
 }
+
+app.get('*', function (req, res) {
+  console.log('boomies');
+  res.sendFile(path.join(__dirname, 'index.html'), function (err) {
+    if (err) {
+      res.state(500).send(err);
+    }
+  });
+});
 
 app.listen(API_PORT, () => console.log(`LISTENING ON UHH PORT ${API_PORT}`));
