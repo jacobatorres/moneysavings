@@ -474,6 +474,15 @@ function isLoggedIn(req, res, next) {
   return 'Unauthorized';
 }
 
+app.get('/*', function (req, res) {
+  console.log('boomies');
+  res.sendFile(path.join(__dirname, 'index.html'), function (err) {
+    if (err) {
+      res.state(500).send(err);
+    }
+  });
+});
+
 // step 3 from https://www.youtube.com/watch?v=e1LaekAnVIM&t=579s
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static('frontend/build'));
