@@ -16,6 +16,8 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const User = require('./Schemas/user');
 
+const UserSession = require('./Schemas/usersession');
+
 let API_PORT = process.env.PORT || 3001;
 app = express();
 app.use(bodyparser.json());
@@ -451,8 +453,54 @@ app.post('/printregister', function (req, res) {
 // show login form
 app.post('/login', passport.authenticate('local'), (req, res) => {
   console.log('[/login] logged in');
-  console.log(req.body);
-  return res.end(JSON.stringify(req.body));
+
+  // we know it's a valid
+
+  // userId: {
+  //   type: Number,
+  //   default: -1,
+  // },
+  // timestamp: {
+  //   type: Date,
+  //   default: Date.now(),
+  // },
+  // isDeleted: {
+  //   type: Boolean,
+  //   default: false,
+  // },
+
+  // new userSession() = new UserSession();
+  // userSession.userId =
+
+  // find the user ID first, use that as token
+
+  User.find({ username: req.body.username }, function (err, foundUser) {
+    if (err) {
+      console.log('error on finding user');
+      // this should never happen because we have the middleware
+    } else {
+      // User found, now make a usersession
+
+      let userSessionObj = new UserSession();
+      userSessionObj.userId = foundUser._id;
+      userSessionObj.save((err, doc) => {
+        if (err) {
+          console.log('Error on saving the user session');
+        } else {
+          console.log('Successful user session ');
+          return res.end(
+            JSON.stringify({
+              success: true,
+              message: 'Log in Successful',
+              token: doc._id,
+            })
+          );
+        }
+      });
+
+      // return res.end(JSON.stringify(req.body));
+    }
+  });
 });
 
 // log out
