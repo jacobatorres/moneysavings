@@ -39,6 +39,8 @@ import {
   Redirect,
 } from 'react-router-dom';
 
+import { getFromStorage, setInStorage } from './Auth/storage';
+
 const LoggedInValue = React.createContext('light');
 
 class App extends Component {
@@ -61,17 +63,16 @@ class App extends Component {
     isSideDrawerOpen: false,
     clearedData: false,
     redirect: false,
-    loggedIn: false,
 
     name: '',
     password: '',
-
-    loggedInName: '',
 
     clickLogin: false,
     modalMessage: '',
 
     justLoggedOut: false,
+    loggedInName: '',
+    loggedIn: false,
   };
 
   drawerToggleClickHandler = () => {
@@ -219,10 +220,15 @@ class App extends Component {
     console.log(axios_url);
 
     axios
-      .get(axios_url + '/logout')
+
+      .get(axios_url + '/logout?' + 'username=' + this.state.loggedInName)
+
       .then((response) => {
         console.log('logout');
         console.log(response);
+
+        // clear token, no one is logged in anymore
+        setInStorage('moneysavingsapp', '');
 
         console.log('bye logout');
         this.setState({
@@ -276,6 +282,8 @@ class App extends Component {
         // else, it's good
         console.log('aaadsasdas');
         console.log(response.data);
+        console.log(response.data._id);
+
         if (response.data == 'Unauthorized' || response.data == 'Bad Request') {
           this.setState({
             modalMessage: 'Unauthorized User',
@@ -285,6 +293,8 @@ class App extends Component {
             password: '',
           });
         } else {
+          // update token
+
           this.setState({
             modalMessage:
               'Successful Login! Welcome ' + response.data.username + '!',
@@ -294,6 +304,8 @@ class App extends Component {
             password: '',
             loggedInName: response.data.username,
           });
+
+          setInStorage('moneysavingsapp', response.data._id);
         }
       })
       .catch((error) => {
@@ -313,6 +325,74 @@ class App extends Component {
   unshowBackdrop = () => {
     this.setState({ clickLogin: false });
   };
+
+  componentDidMount() {
+    // once component did mount, i want to know if someone's logged in
+    // if so, dont kick them out from the login state
+    console.log('token time');
+    const token = getFromStorage('moneysavingsapp');
+
+    // check if this token has a record
+    // if so, keep the ticket opened. This is the user Id's info...
+    console.log(token);
+    if (token) {
+      // set islogged in to true!
+      // fetch
+      console.log('its logged in!');
+
+      let axios_url = 'https://moneysavings.herokuapp.com';
+      console.log(process.env.NODE_ENV);
+      if (process.env.NODE_ENV === 'development') {
+        axios_url = 'http://localhost:3001';
+      }
+      console.log(axios_url);
+      console.log('fetching username for state');
+      axios
+        .get(axios_url + '/getUserName?' + 'id=' + token)
+        .then((response) => {
+          console.log('Just got a response from /getusernmae');
+          console.log(response.data);
+          console.log(this.state);
+          this.setState({
+            loggedInName: response.data.username,
+            loggedIn: true,
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } else {
+      this.setState({
+        loggedInName: '',
+
+        loggedIn: false,
+      });
+    }
+
+    // let axios_url = 'https://moneysavings.herokuapp.com';
+    // console.log(process.env.NODE_ENV);
+    // if (process.env.NODE_ENV === 'development') {
+    //   axios_url = 'http://localhost:3001';
+    // }
+    // console.log(axios_url);
+    // axios
+    //   .get(axios_url + '/checkUserSession?' + 'username=' + this.state.name)
+    //   .then((response) => {
+    //     console.log('I got a response from /checkUserSession');
+    //     console.log(response.data);
+
+    //     if (response.data.message == 'No user session.') {
+    //       console.log('no user logged in..');
+    //     } else {
+    //       console.log('bingo. will keep user logged in');
+    //     }
+    //     // either token is valid or not
+    //     // if token is the user logged in, keep them logged in
+    //   })
+    //   .catch((error) => {
+    //     console.log('catch error in token auth');
+    //   });
+  }
 
   render() {
     // let saved_val =
@@ -534,6 +614,7 @@ class App extends Component {
               />
               <Route path="/delete" component={DeleteConfirmation} />
               <Redirect exact from="/" to="record" />
+              <Redirect exact from="/login" to="record" />
             </Switch>
           </Aux>
         ) : (

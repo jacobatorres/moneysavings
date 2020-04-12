@@ -355,7 +355,6 @@ app.delete('/deleteCurrentMonth', function (req, res) {
   console.log('[/deleteCurrentMonth] Here at delete');
 
   console.log('Username is ' + req.query.username);
-  res.end('');
 
   // Get the user
   // then get the month, then delete all days from the month
@@ -456,22 +455,6 @@ app.post('/login', passport.authenticate('local'), (req, res) => {
 
   // we know it's a valid
 
-  // userId: {
-  //   type: Number,
-  //   default: -1,
-  // },
-  // timestamp: {
-  //   type: Date,
-  //   default: Date.now(),
-  // },
-  // isDeleted: {
-  //   type: Boolean,
-  //   default: false,
-  // },
-
-  // new userSession() = new UserSession();
-  // userSession.userId =
-
   // find the user ID first, use that as token
 
   User.find({ username: req.body.username }, function (err, foundUser) {
@@ -479,26 +462,65 @@ app.post('/login', passport.authenticate('local'), (req, res) => {
       console.log('error on finding user');
       // this should never happen because we have the middleware
     } else {
-      // User found, now make a usersession
+      // found user, returning the token / user iD
+      console.log(foundUser);
+      return res.end(JSON.stringify(foundUser[0]));
+    }
+  });
+});
 
-      let userSessionObj = new UserSession();
-      userSessionObj.userId = foundUser._id;
-      userSessionObj.save((err, doc) => {
-        if (err) {
-          console.log('Error on saving the user session');
-        } else {
+app.get('/getUserName', function (req, res) {
+  let userID = req.query.id;
+  console.log('[/getUsername] here at get username');
+  User.findById(userID, function (err, founduser) {
+    if (err) {
+      console.log('error in finding by id');
+    } else {
+      // found ID
+
+      res.send(JSON.stringify(founduser));
+    }
+  });
+});
+
+app.get('/checkUserSession', function (req, res) {
+  let username = req.query.username;
+
+  console.log('[/checkuserSession] for token validation');
+  // check if the token is the one currently logged in
+  User.find({ username: username }, function (err, foundUser) {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log('no err');
+
+      UserSession.find({ userId: foundUser._id, isDeleted: false }, function (
+        err,
+        foundusersession
+      ) {
+        console.log('Searched Usersession.');
+        console.log(foundusersession);
+
+        if (foundusersession.length == 0) {
+          // no user session found. so, save a user session
+          console.log('no Usersession found.');
+
           console.log('Successful user session ');
           return res.end(
             JSON.stringify({
-              success: true,
-              message: 'Log in Successful',
-              token: doc._id,
+              message: 'No user session.',
             })
           );
+        } else {
+          // user session found.
+          res.end(
+            JSON.stringify({
+              message: 'Found user session. This user is logged in',
+            })
+          );
+          // this user is already logged in
         }
       });
-
-      // return res.end(JSON.stringify(req.body));
     }
   });
 });
@@ -507,9 +529,32 @@ app.post('/login', passport.authenticate('local'), (req, res) => {
 
 app.get('/logout', function (req, res) {
   console.log('[/logout] logged out');
+  let username = req.query.username;
 
   req.logout();
+
   return res.end(JSON.stringify({ result: 'logged out' }));
+  // // also remove the user session id
+  // User.find({ user: username }, function (err, foundUser) {
+  //   if (err) {
+  //     console.log('Something wrong with finding user');
+  //   } else {
+  //     // it should exist
+
+  //     let userId = foundUser._id;
+
+  //     // now we remove the user session
+  //     UserSession.findOneAndDelete({ userId: userId }, function (
+  //       err,
+  //       usersessiondeleted
+  //     ) {
+  //       if (err) {
+  //         console.log('error in deleting find one and update');
+  //       } else {
+  //       }
+  //     });
+  //   }
+  // });
 });
 
 // this may be used for logging in
