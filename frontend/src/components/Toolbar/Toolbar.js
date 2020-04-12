@@ -115,11 +115,19 @@ class toolbar extends Component {
           <div className="toolbar_navitems">
             <ul>
               {this.props.isLoggedIn ? (
-                <li>
-                  <a onClick={this.logout} style={{ cursor: 'pointer' }}>
-                    Logout
-                  </a>
-                </li>
+                <Aux>
+                  <li>
+                    <a onClick={this.logout} style={{ cursor: 'pointer' }}>
+                      Logout
+                    </a>
+                  </li>
+                  <li>
+                    <a onClick={this.clearData} style={{ cursor: 'pointer' }}>
+                      Clear Data
+                    </a>
+                    {hasClearedData}
+                  </li>
+                </Aux>
               ) : (
                 <Aux>
                   {' '}
@@ -137,12 +145,6 @@ class toolbar extends Component {
                   </li>
                 </Aux>
               )}{' '}
-              <li>
-                <a onClick={this.clearData} style={{ cursor: 'pointer' }}>
-                  Clear Data
-                </a>
-                {hasClearedData}
-              </li>
             </ul>
           </div>
         </nav>
